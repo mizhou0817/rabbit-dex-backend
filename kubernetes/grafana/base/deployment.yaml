@@ -1,0 +1,39 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: grafana
+  name: grafana
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: grafana
+  template:
+    metadata:
+      labels:
+        app: grafana
+    spec:
+      securityContext:
+        # Grafana user id
+        fsGroup: 472
+        supplementalGroups:
+          - 0
+      containers:
+        - image: grafana/grafana:10.0.0-preview
+          imagePullPolicy: Always
+          name: grafana
+          ports:
+            - containerPort: 3000
+              protocol: TCP
+          resources: {}
+          volumeMounts:
+            - mountPath: /var/lib/grafana
+              name: grafana-pv
+          env:
+          - name: GF_FEATURE_TOGGLES_ENABLE
+            value: "publicDashboards"
+      volumes:
+        - name: grafana-pv
+          persistentVolumeClaim:
+            claimName: grafana-pvc

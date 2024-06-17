@@ -1,0 +1,342 @@
+{
+  "annotations": {
+    "list": [
+      {
+        "builtIn": 1,
+        "datasource": {
+          "type": "grafana",
+          "uid": "-- Grafana --"
+        },
+        "enable": true,
+        "hide": true,
+        "iconColor": "rgba(0, 211, 255, 1)",
+        "name": "Annotations & Alerts",
+        "target": {
+          "limit": 100,
+          "matchAny": false,
+          "tags": [],
+          "type": "dashboard"
+        },
+        "type": "dashboard"
+      }
+    ]
+  },
+  "editable": true,
+  "fiscalYearStartMonth": 0,
+  "graphTooltip": 0,
+  "id": 18,
+  "links": [],
+  "liveNow": false,
+  "panels": [
+    {
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 0
+      },
+      "id": 8,
+      "title": "Selini Metrics",
+      "type": "row"
+    },
+    {
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 1
+      },
+      "id": 6,
+      "title": "General Market Liquidity Metrics",
+      "type": "row"
+    },
+    {
+      "datasource": {
+        "type": "postgres",
+        "uid": "8PO0bcxVz"
+      },
+      "description": "",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          },
+          "unit": "percentunit"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 9,
+        "w": 12,
+        "x": 0,
+        "y": 2
+      },
+      "id": 2,
+      "options": {
+        "legend": {
+          "calcs": [
+            "last"
+          ],
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "pluginVersion": "9.3.2",
+      "targets": [
+        {
+          "datasource": {
+            "type": "postgres",
+            "uid": "8PO0bcxVz"
+          },
+          "editorMode": "code",
+          "format": "table",
+          "rawQuery": true,
+          "rawSql": "SELECT \n  time_bucket('15min'::interval, to_timestamp(last_update_time/1e6)) bucket, \n  id, \n  avg(market_spread) average_spread\nFROM app_market_spread\nWHERE last_update_time > $__from::bigint*1000\nGROUP BY bucket, id\nORDER BY bucket DESC",
+          "refId": "A",
+          "sql": {
+            "columns": [
+              {
+                "name": "MAX",
+                "parameters": [
+                  {
+                    "name": "best_bid",
+                    "type": "functionParameter"
+                  }
+                ],
+                "type": "function"
+              },
+              {
+                "name": "MIN",
+                "parameters": [
+                  {
+                    "name": "best_ask",
+                    "type": "functionParameter"
+                  }
+                ],
+                "type": "function"
+              },
+              {
+                "name": "MAX",
+                "parameters": [
+                  {
+                    "name": "last_update_time",
+                    "type": "functionParameter"
+                  }
+                ],
+                "type": "function"
+              }
+            ],
+            "groupBy": [
+              {
+                "property": {
+                  "name": "shard_id",
+                  "type": "string"
+                },
+                "type": "groupBy"
+              }
+            ],
+            "limit": 50
+          },
+          "table": "app_market"
+        }
+      ],
+      "title": "Average Bid/Ask Spread",
+      "transformations": [
+        {
+          "id": "partitionByValues",
+          "options": {
+            "fields": [
+              "id"
+            ]
+          }
+        }
+      ],
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "postgres",
+        "uid": "8PO0bcxVz"
+      },
+      "description": "",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "custom": {
+            "align": "auto",
+            "cellOptions": {
+              "type": "auto"
+            },
+            "inspect": false
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "percentunit"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 9,
+        "w": 12,
+        "x": 12,
+        "y": 2
+      },
+      "id": 4,
+      "options": {
+        "cellHeight": "sm",
+        "footer": {
+          "countRows": false,
+          "fields": "",
+          "reducer": [
+            "sum"
+          ],
+          "show": false
+        },
+        "showHeader": true
+      },
+      "pluginVersion": "10.0.0-preview",
+      "targets": [
+        {
+          "datasource": {
+            "type": "postgres",
+            "uid": "8PO0bcxVz"
+          },
+          "editorMode": "code",
+          "format": "table",
+          "rawQuery": true,
+          "rawSql": "WITH spread_table AS \n(\n  SELECT id, market_spread \n  FROM app_market_spread\n  WHERE last_update_time > $__from::bigint*1000\n),\ntotal_records as \n(\n    SELECT\n        id,\n        COUNT(*) AS total\n    FROM\n        spread_table\n    GROUP BY id\n),\nrecords_less_than_005 AS \n(\n  SELECT\n        id, \n        COUNT(*) AS count_less_than_005\n    FROM\n        spread_table\n    WHERE\n        market_spread < $minspread::float\n    GROUP BY id\n)\nSELECT \n    total_records.id, \n    avg((records_less_than_005.count_less_than_005::float / total_records.total::float)) AS percentage \nFROM \n    total_records\nJOIN \n    records_less_than_005\nON\n    total_records.id = records_less_than_005.id\nGROUP BY \n    total_records.id",
+          "refId": "A",
+          "sql": {
+            "columns": [
+              {
+                "parameters": [],
+                "type": "function"
+              }
+            ],
+            "groupBy": [
+              {
+                "property": {
+                  "type": "string"
+                },
+                "type": "groupBy"
+              }
+            ],
+            "limit": 50
+          }
+        }
+      ],
+      "title": "% time < market $minspread spread",
+      "type": "table"
+    }
+  ],
+  "refresh": "30s",
+  "schemaVersion": 38,
+  "style": "dark",
+  "tags": [],
+  "templating": {
+    "list": [
+      {
+        "current": {
+          "selected": true,
+          "text": "0.05%",
+          "value": "0.0005"
+        },
+        "hide": 0,
+        "includeAll": false,
+        "label": "Min Spread",
+        "multi": false,
+        "name": "minspread",
+        "options": [
+          {
+            "selected": false,
+            "text": "0.15%",
+            "value": "0.0015"
+          },
+          {
+            "selected": false,
+            "text": "0.010%",
+            "value": "0.0010"
+          },
+          {
+            "selected": true,
+            "text": "0.05%",
+            "value": "0.0005"
+          }
+        ],
+        "query": "0.15% : 0.0015, 0.010% : 0.0010, 0.05% : 0.0005",
+        "queryValue": "",
+        "skipUrlSync": false,
+        "type": "custom"
+      }
+    ]
+  },
+  "time": {
+    "from": "now-24h",
+    "to": "now"
+  },
+  "timepicker": {},
+  "timezone": "",
+  "title": "Liquidity Metrics",
+  "uid": "PLAWilP4k",
+  "version": 16,
+  "weekStart": ""
+}

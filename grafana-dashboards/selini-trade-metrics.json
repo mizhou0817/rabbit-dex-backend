@@ -1,0 +1,678 @@
+{
+  "annotations": {
+    "list": [
+      {
+        "builtIn": 1,
+        "datasource": {
+          "type": "grafana",
+          "uid": "-- Grafana --"
+        },
+        "enable": true,
+        "hide": true,
+        "iconColor": "rgba(0, 211, 255, 1)",
+        "name": "Annotations & Alerts",
+        "target": {
+          "limit": 100,
+          "matchAny": false,
+          "tags": [],
+          "type": "dashboard"
+        },
+        "type": "dashboard"
+      }
+    ]
+  },
+  "editable": true,
+  "fiscalYearStartMonth": 0,
+  "graphTooltip": 0,
+  "id": 20,
+  "links": [],
+  "liveNow": false,
+  "panels": [
+    {
+      "datasource": {
+        "type": "postgres",
+        "uid": "8PO0bcxVz"
+      },
+      "description": "",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "lineInterpolation": "stepAfter",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 11,
+        "w": 10,
+        "x": 0,
+        "y": 0
+      },
+      "id": 5,
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "pluginVersion": "9.3.2",
+      "targets": [
+        {
+          "datasource": {
+            "type": "postgres",
+            "uid": "8PO0bcxVz"
+          },
+          "editorMode": "code",
+          "format": "table",
+          "rawQuery": true,
+          "rawSql": "SELECT \n  to_timestamp(t2.timestamp/1e6), \n  t2.market_id, \n  SUM(CASE WHEN t2.side='long' THEN t2.price*t2.size ELSE -t2.price*t2.size END) AS net_notional\nFROM\n(\n  SELECT * \n  FROM app_fill \n  WHERE profile_id in (13,14,15,1561,11002,11007,704,11831) \n  and timestamp >= $__from::bigint*1000\n) t1,\n(\n  SELECT * \n  FROM app_fill\n  WHERE profile_id in ($counter_party) \n  and timestamp >= $__from::bigint*1000\n) t2\nWHERE t2.trade_id=t1.trade_id\nGROUP BY t2.market_id, t2.timestamp\n",
+          "refId": "A",
+          "sql": {
+            "columns": [
+              {
+                "parameters": [],
+                "type": "function"
+              }
+            ],
+            "groupBy": [
+              {
+                "property": {
+                  "type": "string"
+                },
+                "type": "groupBy"
+              }
+            ],
+            "limit": 50
+          }
+        }
+      ],
+      "title": "Selini notional traded against mm bot",
+      "transformations": [
+        {
+          "id": "partitionByValues",
+          "options": {
+            "fields": [
+              "market_id"
+            ]
+          }
+        }
+      ],
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "postgres",
+        "uid": "8PO0bcxVz"
+      },
+      "description": "",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "lineInterpolation": "stepAfter",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 11,
+        "w": 10,
+        "x": 10,
+        "y": 0
+      },
+      "id": 6,
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "pluginVersion": "9.3.2",
+      "targets": [
+        {
+          "datasource": {
+            "type": "postgres",
+            "uid": "8PO0bcxVz"
+          },
+          "editorMode": "code",
+          "format": "table",
+          "rawQuery": true,
+          "rawSql": "SELECT \n  to_timestamp(t1.timestamp/1e6), \n  t1.market_id, \n  SUM(CASE WHEN t1.side='long' THEN t1.price*t1.size ELSE -t1.price*t1.size END) AS net_notional\nFROM\n(\n  SELECT * \n  FROM app_fill \n  WHERE profile_id in (13,14,15,1561,11002,11007,704,11831) \n  and timestamp >= $__from::bigint*1000\n) t1,\n(\n  SELECT * \n  FROM app_fill\n  WHERE profile_id in ($counter_party) \n  and timestamp >= $__from::bigint*1000\n) t2\nWHERE t2.trade_id=t1.trade_id\nGROUP BY t1.market_id, t1.timestamp\n",
+          "refId": "A",
+          "sql": {
+            "columns": [
+              {
+                "parameters": [],
+                "type": "function"
+              }
+            ],
+            "groupBy": [
+              {
+                "property": {
+                  "type": "string"
+                },
+                "type": "groupBy"
+              }
+            ],
+            "limit": 50
+          }
+        }
+      ],
+      "title": "mm bot notional traded against Selini",
+      "transformations": [
+        {
+          "id": "partitionByValues",
+          "options": {
+            "fields": [
+              "market_id"
+            ]
+          }
+        }
+      ],
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "postgres",
+        "uid": "8PO0bcxVz"
+      },
+      "description": "",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "custom": {
+            "align": "auto",
+            "cellOptions": {
+              "type": "auto"
+            },
+            "inspect": false
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 13,
+        "w": 24,
+        "x": 0,
+        "y": 11
+      },
+      "id": 2,
+      "options": {
+        "cellHeight": "sm",
+        "footer": {
+          "countRows": false,
+          "fields": "",
+          "reducer": [
+            "sum"
+          ],
+          "show": false
+        },
+        "showHeader": true
+      },
+      "pluginVersion": "10.0.0-preview",
+      "targets": [
+        {
+          "datasource": {
+            "type": "postgres",
+            "uid": "8PO0bcxVz"
+          },
+          "editorMode": "code",
+          "format": "table",
+          "rawQuery": true,
+          "rawSql": "SELECT to_timestamp(t2.timestamp/1e6), t2.market_id, t2.profile_id, t2.price, t2.size, t2.price*t2.size AS notional, t2.side, t2.is_maker, t2.fee, t2.liquidation, t2.order_id, t2.trade_id \nfrom \n(\n  SELECT * \n  FROM app_fill \n  WHERE profile_id in (13,14,15,1561,11002,11007,704,11831) \n  and timestamp >= $__from::bigint*1000\n) t1,\n(\n  SELECT * \n  FROM app_fill\n  WHERE profile_id in ($counter_party) \n  and timestamp >= $__from::bigint*1000\n) t2\nWHERE t2.trade_id=t1.trade_id;",
+          "refId": "A",
+          "sql": {
+            "columns": [
+              {
+                "parameters": [],
+                "type": "function"
+              }
+            ],
+            "groupBy": [
+              {
+                "property": {
+                  "type": "string"
+                },
+                "type": "groupBy"
+              }
+            ],
+            "limit": 50
+          }
+        }
+      ],
+      "title": "Trades against Selini",
+      "type": "table"
+    },
+    {
+      "datasource": {
+        "type": "postgres",
+        "uid": "8PO0bcxVz"
+      },
+      "description": "",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "custom": {
+            "align": "auto",
+            "cellOptions": {
+              "type": "auto"
+            },
+            "inspect": false
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "notional"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "currencyUSD"
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 11,
+        "w": 7,
+        "x": 0,
+        "y": 24
+      },
+      "id": 3,
+      "options": {
+        "cellHeight": "sm",
+        "footer": {
+          "countRows": false,
+          "fields": "",
+          "reducer": [
+            "sum"
+          ],
+          "show": false
+        },
+        "showHeader": true
+      },
+      "pluginVersion": "10.0.0-preview",
+      "targets": [
+        {
+          "datasource": {
+            "type": "postgres",
+            "uid": "8PO0bcxVz"
+          },
+          "editorMode": "code",
+          "format": "table",
+          "rawQuery": true,
+          "rawSql": "SELECT t2.market_id, sum(t2.price*t2.size) AS notional \nfrom \n(\n  SELECT * \n  FROM app_fill \n  WHERE profile_id in (13,14,15,1561,11002,11007,704,11831) \n  and timestamp >= $__from::bigint*1000\n) t1,\n(\n  SELECT * \n  FROM app_fill\n  WHERE profile_id in ($counter_party) \n  and timestamp >= $__from::bigint*1000\n) t2\nWHERE t2.trade_id=t1.trade_id\nGROUP BY rollup(t2.market_id);\n",
+          "refId": "A",
+          "sql": {
+            "columns": [
+              {
+                "parameters": [],
+                "type": "function"
+              }
+            ],
+            "groupBy": [
+              {
+                "property": {
+                  "type": "string"
+                },
+                "type": "groupBy"
+              }
+            ],
+            "limit": 50
+          }
+        }
+      ],
+      "title": "Selini notional traded",
+      "type": "table"
+    },
+    {
+      "datasource": {
+        "type": "postgres",
+        "uid": "8PO0bcxVz"
+      },
+      "description": "",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "custom": {
+            "align": "auto",
+            "cellOptions": {
+              "type": "auto"
+            },
+            "inspect": false
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "notional"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "currencyUSD"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "net_notional"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "currencyUSD"
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 11,
+        "w": 7,
+        "x": 7,
+        "y": 24
+      },
+      "id": 4,
+      "options": {
+        "cellHeight": "sm",
+        "footer": {
+          "countRows": false,
+          "fields": "",
+          "reducer": [
+            "sum"
+          ],
+          "show": false
+        },
+        "frameIndex": 1,
+        "showHeader": true
+      },
+      "pluginVersion": "10.0.0-preview",
+      "targets": [
+        {
+          "datasource": {
+            "type": "postgres",
+            "uid": "8PO0bcxVz"
+          },
+          "editorMode": "code",
+          "format": "table",
+          "rawQuery": true,
+          "rawSql": "SELECT t2.market_id, t2.side, sum(t2.price*t2.size) AS notional,\n SUM(CASE WHEN t2.side='long' THEN t2.price*t2.size ELSE -t2.price*t2.size END) AS net_notional,\n SUM(CASE WHEN t2.side='long' THEN t2.size ELSE -t2.size END) as net_size \nfrom \n(\n  SELECT * \n  FROM app_fill \n  WHERE profile_id in (13,14,15,1561,11002,11007,704,11831) \n  and timestamp >= $__from::bigint*1000\n) t1,\n(\n  SELECT * \n  FROM app_fill\n  WHERE profile_id in ($counter_party) \n  and timestamp >= $__from::bigint*1000\n) t2\nWHERE t2.trade_id=t1.trade_id\nGROUP BY t2.market_id, t2.side;\n",
+          "refId": "A",
+          "sql": {
+            "columns": [
+              {
+                "parameters": [],
+                "type": "function"
+              }
+            ],
+            "groupBy": [
+              {
+                "property": {
+                  "type": "string"
+                },
+                "type": "groupBy"
+              }
+            ],
+            "limit": 50
+          }
+        }
+      ],
+      "title": "Selini notional traded",
+      "transformations": [
+        {
+          "id": "partitionByValues",
+          "options": {
+            "fields": [
+              "market_id"
+            ]
+          }
+        }
+      ],
+      "type": "table"
+    }
+  ],
+  "refresh": "30s",
+  "schemaVersion": 38,
+  "style": "dark",
+  "tags": [],
+  "templating": {
+    "list": [
+      {
+        "current": {
+          "selected": true,
+          "text": [
+            "SELINI_1",
+            "SELINI_2",
+            "SELINI_3",
+            "Moonvault_2",
+            "CrypPro",
+            "Moonvault_1"
+          ],
+          "value": [
+            "2104",
+            "12071",
+            "12072",
+            "12472",
+            "12483",
+            "13436"
+          ]
+        },
+        "description": "",
+        "hide": 0,
+        "includeAll": true,
+        "label": "counter_party",
+        "multi": true,
+        "name": "counter_party",
+        "options": [
+          {
+            "selected": false,
+            "text": "All",
+            "value": "$__all"
+          },
+          {
+            "selected": true,
+            "text": "SELINI_1",
+            "value": "2104"
+          },
+          {
+            "selected": true,
+            "text": "SELINI_2",
+            "value": "12071"
+          },
+          {
+            "selected": true,
+            "text": "SELINI_3",
+            "value": "12072"
+          },
+          {
+            "selected": true,
+            "text": "CrypPro",
+            "value": "12483"
+          },
+          {
+            "selected": true,
+            "text": "Moonvault_1",
+            "value": "13436"
+          },
+          {
+            "selected": true,
+            "text": "Moonvault_2",
+            "value": "12472"
+          },
+          {
+            "selected": false,
+            "text": "Vovega",
+            "value": "15679"
+          }
+        ],
+        "query": "SELINI_1 : 2104,  SELINI_2 : 12071, SELINI_3 : 12072, CrypPro : 12483, Moonvault_1 : 13436, Moonvault_2 : 12472, Vovega : 15679",
+        "queryValue": "",
+        "skipUrlSync": false,
+        "type": "custom"
+      }
+    ]
+  },
+  "time": {
+    "from": "now-2d",
+    "to": "now"
+  },
+  "timepicker": {},
+  "timezone": "",
+  "title": "Selini trade metrics",
+  "uid": "Aq6Ng2s4z",
+  "version": 20,
+  "weekStart": ""
+}

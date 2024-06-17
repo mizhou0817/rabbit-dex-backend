@@ -1,0 +1,1881 @@
+{
+  "annotations": {
+    "list": [
+      {
+        "builtIn": 1,
+        "datasource": {
+          "type": "grafana",
+          "uid": "-- Grafana --"
+        },
+        "enable": true,
+        "hide": true,
+        "iconColor": "rgba(0, 211, 255, 1)",
+        "name": "Annotations & Alerts",
+        "target": {
+          "limit": 100,
+          "matchAny": false,
+          "tags": [],
+          "type": "dashboard"
+        },
+        "type": "dashboard"
+      }
+    ]
+  },
+  "editable": true,
+  "fiscalYearStartMonth": 0,
+  "graphTooltip": 0,
+  "id": 8,
+  "links": [],
+  "liveNow": false,
+  "panels": [
+    {
+      "datasource": {
+        "type": "postgres",
+        "uid": "8PO0bcxVz"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 0,
+        "y": 0
+      },
+      "id": 19,
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "pluginVersion": "10.0.0-preview",
+      "targets": [
+        {
+          "datasource": {
+            "type": "postgres",
+            "uid": "8PO0bcxVz"
+          },
+          "editorMode": "code",
+          "format": "table",
+          "rawQuery": true,
+          "rawSql": "SELECT account_equity, to_timestamp(archive_timestamp/1e6)\r\nFROM\r\napp_profile_cache \r\nWHERE \r\nid IN ($profile_id)\r\nAND archive_timestamp > $__unixEpochFrom()::bigint*1000000",
+          "refId": "A",
+          "sql": {
+            "columns": [
+              {
+                "parameters": [],
+                "type": "function"
+              }
+            ],
+            "groupBy": [
+              {
+                "property": {
+                  "type": "string"
+                },
+                "type": "groupBy"
+              }
+            ],
+            "limit": 50
+          }
+        }
+      ],
+      "title": "Account Equity",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "postgres",
+        "uid": "8PO0bcxVz"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 12,
+        "y": 0
+      },
+      "id": 21,
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "postgres",
+            "uid": "8PO0bcxVz"
+          },
+          "editorMode": "code",
+          "format": "table",
+          "rawQuery": true,
+          "rawSql": "SELECT to_timestamp(timestamp/1e6), sum(amount)\r\nFROM app_balance_operation \r\nWHERE profile_id in ($profile_id) and timestamp > $__unixEpochFrom()::bigint*1000000 and status='success' and ops_type in ('pnl', 'funding', 'fee')\r\nGROUP BY timestamp\r\nORDER BY timestamp DESC",
+          "refId": "A",
+          "sql": {
+            "columns": [
+              {
+                "parameters": [],
+                "type": "function"
+              }
+            ],
+            "groupBy": [
+              {
+                "property": {
+                  "type": "string"
+                },
+                "type": "groupBy"
+              }
+            ],
+            "limit": 50
+          }
+        }
+      ],
+      "title": "Realised Pnl",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "postgres",
+        "uid": "8PO0bcxVz"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "custom": {
+            "align": "auto",
+            "cellOptions": {
+              "type": "auto"
+            },
+            "inspect": false
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "withdrawable_balance"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "currencyUSD"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "cum_trading_volume"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "currencyUSD"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "total_position_margin"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "currencyUSD"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "total_order_margin"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "currencyUSD"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "account_equity"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "currencyUSD"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "unrealized_pnl"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "currencyUSD"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "balance"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "currencyUSD"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "maintenance_margin"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "currencyUSD"
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 6,
+        "w": 24,
+        "x": 0,
+        "y": 8
+      },
+      "id": 11,
+      "options": {
+        "cellHeight": "sm",
+        "footer": {
+          "countRows": false,
+          "fields": "",
+          "reducer": [
+            "sum"
+          ],
+          "show": false
+        },
+        "showHeader": true
+      },
+      "pluginVersion": "10.0.0-preview",
+      "targets": [
+        {
+          "datasource": {
+            "type": "postgres",
+            "uid": "8PO0bcxVz"
+          },
+          "editorMode": "code",
+          "format": "table",
+          "rawQuery": true,
+          "rawSql": "SELECT\n  t1.id AS profile_id, t1.wallet, t1.balance, t1.account_equity, t1.cum_unrealized_pnl AS unrealized_pnl, t1.withdrawable_balance, t1.health, t1.account_leverage, t1.cum_trading_volume,\n  t1.total_position_margin, t1.total_notional*0.03 AS maintenance_margin, t1.total_order_margin, \n  TO_TIMESTAMP(t1.last_update/1000000::numeric) AS last_update\nFROM app_profile_cache t1\nWHERE t1.id IN ($profile_id)\n  AND t1.archive_timestamp >= (\n    EXTRACT(\n        EPOCH FROM CURRENT_TIMESTAMP - INTERVAL '2 minute'\n    ) * 1000000\n  )::bigint\n  ",
+          "refId": "A",
+          "sql": {
+            "columns": [
+              {
+                "parameters": [],
+                "type": "function"
+              }
+            ],
+            "groupBy": [
+              {
+                "property": {
+                  "type": "string"
+                },
+                "type": "groupBy"
+              }
+            ],
+            "limit": 50
+          }
+        }
+      ],
+      "title": "Profile account info",
+      "transformations": [
+        {
+          "id": "reduce",
+          "options": {
+            "includeTimeField": false,
+            "labelsToFields": false,
+            "mode": "reduceFields",
+            "reducers": [
+              "lastNotNull"
+            ]
+          }
+        }
+      ],
+      "type": "table"
+    },
+    {
+      "datasource": {
+        "type": "postgres",
+        "uid": "8PO0bcxVz"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "custom": {
+            "align": "auto",
+            "cellOptions": {
+              "type": "auto"
+            },
+            "inspect": false
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "unrealized_pnl"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "currencyUSD"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "notional"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "currencyUSD"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "margin"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "currencyUSD"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "maintenance_margin"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "currencyUSD"
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 10,
+        "w": 24,
+        "x": 0,
+        "y": 14
+      },
+      "id": 17,
+      "options": {
+        "cellHeight": "sm",
+        "footer": {
+          "countRows": false,
+          "fields": "",
+          "reducer": [
+            "sum"
+          ],
+          "show": false
+        },
+        "showHeader": true
+      },
+      "pluginVersion": "10.0.0-preview",
+      "targets": [
+        {
+          "datasource": {
+            "type": "postgres",
+            "uid": "8PO0bcxVz"
+          },
+          "editorMode": "code",
+          "format": "table",
+          "rawQuery": true,
+          "rawSql": "SELECT\n  t1.market_id, t1.profile_id, t1.size, t1.side, t1.entry_price, t1.unrealized_pnl, t1.notional, t1.margin, t1.notional*0.03 AS maintenance_margin, t1.liquidation_price, t1.fair_price,\n  to_timestamp(t1.archive_timestamp/1e6) AS archive_timestamp\nFROM\n  app_position t1\nWHERE\n  t1.profile_id in ($profile_id) AND t1.archive_timestamp IN (\n    (SELECT\n      MAX(archive_timestamp)\n    FROM\n      app_position\n    WHERE\n      shard_id='BTC-USD'),\n    (SELECT\n      MAX(archive_timestamp)\n    FROM\n      app_position\n    WHERE\n      shard_id='ETH-USD'),\n    (SELECT\n      MAX(archive_timestamp)\n    FROM\n      app_position\n    WHERE\n      shard_id='SOL-USD'),\n    (SELECT\n      MAX(archive_timestamp)\n    FROM\n      app_position\n    WHERE\n      shard_id='ARB-USD'),\n    (SELECT\n      MAX(archive_timestamp)\n    FROM\n      app_position\n    WHERE\n      shard_id='LDO-USD'),\n    (SELECT\n      MAX(archive_timestamp)\n    FROM\n      app_position\n    WHERE\n      shard_id='DOGE-USD'),\n    (SELECT\n      MAX(archive_timestamp)\n    FROM\n      app_position\n    WHERE\n      shard_id='SUI-USD'),\n    (SELECT\n      MAX(archive_timestamp)\n    FROM\n      app_position\n    WHERE\n      shard_id='PEPE1000-USD'),\n    (SELECT\n      MAX(archive_timestamp)\n    FROM\n      app_position\n    WHERE\n      shard_id='XRP-USD'),\n    (SELECT\n      MAX(archive_timestamp)\n    FROM\n      app_position\n    WHERE\n      shard_id='BCH-USD'),\n    (SELECT\n      MAX(archive_timestamp)\n    FROM\n      app_position\n    WHERE\n      shard_id='WLD-USD'),\n    (SELECT\n      MAX(archive_timestamp)\n    FROM\n      app_position\n    WHERE\n      shard_id='TON-USD'),\n    (SELECT\n      MAX(archive_timestamp)\n    FROM\n      app_position\n    WHERE\n      shard_id='STX-USD'),\n    (SELECT\n      MAX(archive_timestamp)\n    FROM\n      app_position\n    WHERE\n      shard_id='MATIC-USD'),\n    (SELECT\n      MAX(archive_timestamp)\n    FROM\n      app_position\n    WHERE\n      shard_id='TRB-USD'),\n    (SELECT\n      MAX(archive_timestamp)\n    FROM\n      app_position\n    WHERE\n      shard_id='APT-USD'),\n    (SELECT\n      MAX(archive_timestamp)\n    FROM\n      app_position\n    WHERE\n      shard_id='INJ-USD'),\n    (SELECT\n      MAX(archive_timestamp)\n    FROM\n      app_position\n    WHERE\n      shard_id='AAVE-USD'),\n    (SELECT\n      MAX(archive_timestamp)\n    FROM\n      app_position\n    WHERE\n      shard_id='LINK-USD'),\n    (SELECT\n      MAX(archive_timestamp)\n    FROM\n      app_position\n    WHERE\n      shard_id='BNB-USD'),\n    (SELECT\n      MAX(archive_timestamp)\n    FROM\n      app_position\n    WHERE\n      shard_id='RNDR-USD'),\n    (SELECT\n      MAX(archive_timestamp)\n    FROM\n      app_position\n    WHERE\n      shard_id='MKR-USD'),\n    (SELECT\n      MAX(archive_timestamp)\n    FROM\n      app_position\n    WHERE\n      shard_id='RLB-USD'),\n    (SELECT\n      MAX(archive_timestamp)\n    FROM\n      app_position\n    WHERE\n      shard_id='ORDI-USD'),\n    (SELECT\n      MAX(archive_timestamp)\n    FROM\n      app_position\n    WHERE\n      shard_id='STG-USD'),\n    (SELECT\n      MAX(archive_timestamp)\n    FROM\n      app_position\n    WHERE\n      shard_id='SATS1000000-USD'),\n    (\n      SELECT\n        MAX(archive_timestamp)\n      FROM\n        app_position\n      WHERE\n        shard_id = 'TIA-USD'\n    ),\n    (\n      SELECT\n        MAX(archive_timestamp)\n      FROM\n        app_position\n      WHERE\n        shard_id = 'BLUR-USD'\n    ),\n    (\n      SELECT\n        MAX(archive_timestamp)\n      FROM\n        app_position\n      WHERE\n        shard_id = 'JTO-USD'\n    ),\n    (\n      SELECT\n        MAX(archive_timestamp)\n      FROM\n        app_position\n      WHERE\n        shard_id = 'MEME-USD'\n    ),\n    (\n      SELECT\n        MAX(archive_timestamp)\n      FROM\n        app_position\n      WHERE\n        shard_id = 'SEI-USD'\n    )\n  )\n;\n",
+          "refId": "A",
+          "sql": {
+            "columns": [
+              {
+                "parameters": [],
+                "type": "function"
+              }
+            ],
+            "groupBy": [
+              {
+                "property": {
+                  "type": "string"
+                },
+                "type": "groupBy"
+              }
+            ],
+            "limit": 50
+          }
+        }
+      ],
+      "title": "Position Info",
+      "type": "table"
+    },
+    {
+      "datasource": {
+        "type": "postgres",
+        "uid": "8PO0bcxVz"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "custom": {
+            "align": "auto",
+            "cellOptions": {
+              "type": "auto"
+            },
+            "filterable": true,
+            "inspect": false
+          },
+          "decimals": 6,
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green"
+              }
+            ]
+          },
+          "unit": "short"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 10,
+        "w": 9,
+        "x": 0,
+        "y": 24
+      },
+      "id": 2,
+      "options": {
+        "cellHeight": "sm",
+        "footer": {
+          "countRows": false,
+          "fields": "",
+          "reducer": [
+            "sum"
+          ],
+          "show": false
+        },
+        "showHeader": true
+      },
+      "pluginVersion": "10.0.0-preview",
+      "targets": [
+        {
+          "datasource": {
+            "type": "postgres",
+            "uid": "8PO0bcxVz"
+          },
+          "editorMode": "code",
+          "format": "table",
+          "rawQuery": true,
+          "rawSql": "SELECT\r\n market_id, sum(price*size) as notional\r\n FROM app_fill\r\n WHERE profile_id IN ($profile_id) AND liquidation = TRUE\r\n GROUP BY rollup(market_id)\r\n",
+          "refId": "A",
+          "sql": {
+            "columns": [
+              {
+                "parameters": [
+                  {
+                    "name": "*",
+                    "type": "functionParameter"
+                  }
+                ],
+                "type": "function"
+              }
+            ],
+            "groupBy": [
+              {
+                "property": {
+                  "type": "string"
+                },
+                "type": "groupBy"
+              }
+            ],
+            "limit": 50,
+            "whereJsonTree": {
+              "children1": [
+                {
+                  "id": "ba9a899b-89ab-4cde-b012-318679cfc8f3",
+                  "properties": {
+                    "field": "profile_id",
+                    "operator": "equal",
+                    "value": [
+                      11968
+                    ],
+                    "valueSrc": [
+                      "value"
+                    ],
+                    "valueType": [
+                      "number"
+                    ]
+                  },
+                  "type": "rule"
+                }
+              ],
+              "id": "9a99ba98-89ab-4cde-b012-318679840626",
+              "type": "group"
+            },
+            "whereString": "profile_id = 11968"
+          },
+          "table": "app_fill"
+        }
+      ],
+      "title": "Liquidations",
+      "type": "table"
+    },
+    {
+      "datasource": {
+        "type": "postgres",
+        "uid": "8PO0bcxVz"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "custom": {
+            "align": "auto",
+            "cellOptions": {
+              "type": "auto"
+            },
+            "inspect": false
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green"
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "currencyUSD"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 10,
+        "w": 7,
+        "x": 9,
+        "y": 24
+      },
+      "id": 6,
+      "options": {
+        "cellHeight": "sm",
+        "footer": {
+          "countRows": false,
+          "fields": "",
+          "reducer": [
+            "sum"
+          ],
+          "show": false
+        },
+        "showHeader": true,
+        "sortBy": [
+          {
+            "desc": true,
+            "displayName": "time"
+          }
+        ]
+      },
+      "pluginVersion": "10.0.0-preview",
+      "targets": [
+        {
+          "datasource": {
+            "type": "postgres",
+            "uid": "8PO0bcxVz"
+          },
+          "editorMode": "code",
+          "format": "table",
+          "rawQuery": true,
+          "rawSql": "SELECT market_id, sum(-1*fee)\r\nFROM app_fill\r\nWHERE profile_id IN ($profile_id)\r\nGROUP BY rollup(market_id)",
+          "refId": "A",
+          "sql": {
+            "columns": [
+              {
+                "parameters": [
+                  {
+                    "name": "*",
+                    "type": "functionParameter"
+                  }
+                ],
+                "type": "function"
+              }
+            ],
+            "groupBy": [
+              {
+                "property": {
+                  "type": "string"
+                },
+                "type": "groupBy"
+              }
+            ],
+            "limit": 50,
+            "whereJsonTree": {
+              "children1": [
+                {
+                  "id": "ba9a899b-89ab-4cde-b012-318679cfc8f3",
+                  "properties": {
+                    "field": "profile_id",
+                    "operator": "equal",
+                    "value": [
+                      11968
+                    ],
+                    "valueSrc": [
+                      "value"
+                    ],
+                    "valueType": [
+                      "number"
+                    ]
+                  },
+                  "type": "rule"
+                }
+              ],
+              "id": "9a99ba98-89ab-4cde-b012-318679840626",
+              "type": "group"
+            },
+            "whereString": "profile_id = 11968"
+          },
+          "table": "app_fill"
+        }
+      ],
+      "title": "Trading Fees by Market",
+      "type": "table"
+    },
+    {
+      "datasource": {
+        "type": "postgres",
+        "uid": "8PO0bcxVz"
+      },
+      "description": "",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "custom": {
+            "align": "auto",
+            "cellOptions": {
+              "type": "auto"
+            },
+            "inspect": false
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green"
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 10,
+        "w": 8,
+        "x": 16,
+        "y": 24
+      },
+      "id": 20,
+      "options": {
+        "cellHeight": "sm",
+        "footer": {
+          "countRows": false,
+          "fields": "",
+          "reducer": [
+            "sum"
+          ],
+          "show": false
+        },
+        "showHeader": true,
+        "sortBy": [
+          {
+            "desc": true,
+            "displayName": "time"
+          }
+        ]
+      },
+      "pluginVersion": "10.0.0-preview",
+      "targets": [
+        {
+          "datasource": {
+            "type": "postgres",
+            "uid": "8PO0bcxVz"
+          },
+          "editorMode": "code",
+          "format": "table",
+          "rawQuery": true,
+          "rawSql": "SELECT time_bucket('1d'::interval, to_timestamp(timestamp/1e6)) as time, SUM(fee) as fee\r\nFROM app_fill\r\nWHERE profile_id = $profile_id and timestamp > $__from::bigint*1000\r\nGROUP BY time\r\nORDER BY time DESC\r\nLIMIT 100",
+          "refId": "A",
+          "sql": {
+            "columns": [
+              {
+                "parameters": [
+                  {
+                    "name": "*",
+                    "type": "functionParameter"
+                  }
+                ],
+                "type": "function"
+              }
+            ],
+            "groupBy": [
+              {
+                "property": {
+                  "type": "string"
+                },
+                "type": "groupBy"
+              }
+            ],
+            "limit": 50,
+            "whereJsonTree": {
+              "children1": [
+                {
+                  "id": "ba9a899b-89ab-4cde-b012-318679cfc8f3",
+                  "properties": {
+                    "field": "profile_id",
+                    "operator": "equal",
+                    "value": [
+                      11968
+                    ],
+                    "valueSrc": [
+                      "value"
+                    ],
+                    "valueType": [
+                      "number"
+                    ]
+                  },
+                  "type": "rule"
+                }
+              ],
+              "id": "9a99ba98-89ab-4cde-b012-318679840626",
+              "type": "group"
+            },
+            "whereString": "profile_id = 11968"
+          },
+          "table": "app_fill"
+        }
+      ],
+      "title": "Trading Fees by Time",
+      "type": "table"
+    },
+    {
+      "datasource": {
+        "type": "postgres",
+        "uid": "8PO0bcxVz"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "custom": {
+            "align": "auto",
+            "cellOptions": {
+              "type": "auto"
+            },
+            "filterable": true,
+            "inspect": false
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green"
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "string"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 9,
+        "w": 24,
+        "x": 0,
+        "y": 34
+      },
+      "id": 7,
+      "options": {
+        "cellHeight": "sm",
+        "footer": {
+          "countRows": false,
+          "fields": "",
+          "reducer": [
+            "sum"
+          ],
+          "show": false
+        },
+        "showHeader": true
+      },
+      "pluginVersion": "10.0.0-preview",
+      "targets": [
+        {
+          "datasource": {
+            "type": "postgres",
+            "uid": "8PO0bcxVz"
+          },
+          "editorMode": "code",
+          "expr": "",
+          "format": "table",
+          "legendFormat": "__auto",
+          "range": true,
+          "rawQuery": true,
+          "rawSql": "SELECT to_timestamp(timestamp/1e6), market_id, price, size, price*size notional, side, is_maker, fee, liquidation, order_id, trade_id\r\n FROM app_fill WHERE profile_id = $profile_id \r\n order by timestamp DESC",
+          "refId": "A",
+          "sql": {
+            "columns": [
+              {
+                "parameters": [
+                  {
+                    "name": "*",
+                    "type": "functionParameter"
+                  }
+                ],
+                "type": "function"
+              }
+            ],
+            "groupBy": [
+              {
+                "property": {
+                  "type": "string"
+                },
+                "type": "groupBy"
+              }
+            ],
+            "limit": 50,
+            "whereJsonTree": {
+              "children1": [
+                {
+                  "id": "ba9a899b-89ab-4cde-b012-318679cfc8f3",
+                  "properties": {
+                    "field": "profile_id",
+                    "operator": "equal",
+                    "value": [
+                      11968
+                    ],
+                    "valueSrc": [
+                      "value"
+                    ],
+                    "valueType": [
+                      "number"
+                    ]
+                  },
+                  "type": "rule"
+                }
+              ],
+              "id": "9a99ba98-89ab-4cde-b012-318679840626",
+              "type": "group"
+            },
+            "whereString": "profile_id = 11968"
+          },
+          "table": "app_fill"
+        }
+      ],
+      "title": "Fills",
+      "type": "table"
+    },
+    {
+      "datasource": {
+        "type": "postgres",
+        "uid": "8PO0bcxVz"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "custom": {
+            "align": "auto",
+            "cellOptions": {
+              "type": "auto"
+            },
+            "filterable": true,
+            "inspect": false
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green"
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "string"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 9,
+        "w": 24,
+        "x": 0,
+        "y": 43
+      },
+      "id": 22,
+      "options": {
+        "cellHeight": "sm",
+        "footer": {
+          "countRows": false,
+          "fields": "",
+          "reducer": [
+            "sum"
+          ],
+          "show": false
+        },
+        "showHeader": true
+      },
+      "pluginVersion": "10.0.0-preview",
+      "targets": [
+        {
+          "datasource": {
+            "type": "postgres",
+            "uid": "8PO0bcxVz"
+          },
+          "editorMode": "code",
+          "expr": "",
+          "format": "table",
+          "legendFormat": "__auto",
+          "range": true,
+          "rawQuery": true,
+          "rawSql": "SELECT to_timestamp(timestamp/1e6), market_id, price, size, price*size notional, side, is_maker, fee, liquidation, order_id, trade_id\r\n FROM app_fill WHERE profile_id IN ($profile_id) AND liquidation = TRUE\r\n order by timestamp DESC",
+          "refId": "A",
+          "sql": {
+            "columns": [
+              {
+                "parameters": [
+                  {
+                    "name": "*",
+                    "type": "functionParameter"
+                  }
+                ],
+                "type": "function"
+              }
+            ],
+            "groupBy": [
+              {
+                "property": {
+                  "type": "string"
+                },
+                "type": "groupBy"
+              }
+            ],
+            "limit": 50,
+            "whereJsonTree": {
+              "children1": [
+                {
+                  "id": "ba9a899b-89ab-4cde-b012-318679cfc8f3",
+                  "properties": {
+                    "field": "profile_id",
+                    "operator": "equal",
+                    "value": [
+                      11968
+                    ],
+                    "valueSrc": [
+                      "value"
+                    ],
+                    "valueType": [
+                      "number"
+                    ]
+                  },
+                  "type": "rule"
+                }
+              ],
+              "id": "9a99ba98-89ab-4cde-b012-318679840626",
+              "type": "group"
+            },
+            "whereString": "profile_id = 11968"
+          },
+          "table": "app_fill"
+        }
+      ],
+      "title": "Liquidation Trades",
+      "type": "table"
+    },
+    {
+      "datasource": {
+        "type": "postgres",
+        "uid": "8PO0bcxVz"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "custom": {
+            "align": "auto",
+            "cellOptions": {
+              "type": "auto"
+            },
+            "filterable": true,
+            "inspect": false
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green"
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 9,
+        "w": 24,
+        "x": 0,
+        "y": 52
+      },
+      "id": 8,
+      "options": {
+        "cellHeight": "sm",
+        "footer": {
+          "countRows": false,
+          "fields": "",
+          "reducer": [
+            "sum"
+          ],
+          "show": false
+        },
+        "showHeader": true
+      },
+      "pluginVersion": "10.0.0-preview",
+      "targets": [
+        {
+          "datasource": {
+            "type": "postgres",
+            "uid": "8PO0bcxVz"
+          },
+          "editorMode": "code",
+          "format": "table",
+          "rawQuery": true,
+          "rawSql": "SELECT to_timestamp(timestamp/1e6), market_id, profile_id, order_type, status, price, initial_size,side,total_filled_size,size, reason\r\n FROM app_order WHERE profile_id in ($profile_id)\r\n ORDER BY timestamp DESC",
+          "refId": "A",
+          "sql": {
+            "columns": [
+              {
+                "parameters": [
+                  {
+                    "name": "*",
+                    "type": "functionParameter"
+                  }
+                ],
+                "type": "function"
+              }
+            ],
+            "groupBy": [
+              {
+                "property": {
+                  "type": "string"
+                },
+                "type": "groupBy"
+              }
+            ],
+            "limit": 50,
+            "whereJsonTree": {
+              "children1": [
+                {
+                  "id": "ba9a899b-89ab-4cde-b012-318679cfc8f3",
+                  "properties": {
+                    "field": "profile_id",
+                    "operator": "equal",
+                    "value": [
+                      11968
+                    ],
+                    "valueSrc": [
+                      "value"
+                    ],
+                    "valueType": [
+                      "number"
+                    ]
+                  },
+                  "type": "rule"
+                }
+              ],
+              "id": "9a99ba98-89ab-4cde-b012-318679840626",
+              "type": "group"
+            },
+            "whereString": "profile_id = 11968"
+          },
+          "table": "app_fill"
+        }
+      ],
+      "title": "Orders History",
+      "type": "table"
+    },
+    {
+      "datasource": {
+        "type": "postgres",
+        "uid": "8PO0bcxVz"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "custom": {
+            "align": "auto",
+            "cellOptions": {
+              "type": "auto"
+            },
+            "filterable": true,
+            "inspect": false
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green"
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "string"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 10,
+        "w": 15,
+        "x": 0,
+        "y": 61
+      },
+      "id": 5,
+      "options": {
+        "cellHeight": "sm",
+        "footer": {
+          "countRows": false,
+          "fields": "",
+          "reducer": [
+            "sum"
+          ],
+          "show": false
+        },
+        "showHeader": true
+      },
+      "pluginVersion": "10.0.0-preview",
+      "targets": [
+        {
+          "datasource": {
+            "type": "postgres",
+            "uid": "8PO0bcxVz"
+          },
+          "editorMode": "code",
+          "format": "table",
+          "rawQuery": true,
+          "rawSql": "SELECT to_timestamp(timestamp/1e6), profile_id, wallet, ops_type,  amount,status, ops_id2, reason, txhash\r\n FROM app_balance_operation \r\n WHERE profile_id = $profile_id AND timestamp BETWEEN $__unixEpochFrom()::bigint*1000000 AND $__unixEpochTo()::bigint*1000000 AND ops_type IN ('deposit', 'withdrawal')\r\n order by timestamp DESC\r\n LIMIT 100",
+          "refId": "A",
+          "sql": {
+            "columns": [
+              {
+                "parameters": [
+                  {
+                    "name": "*",
+                    "type": "functionParameter"
+                  }
+                ],
+                "type": "function"
+              }
+            ],
+            "groupBy": [
+              {
+                "property": {
+                  "type": "string"
+                },
+                "type": "groupBy"
+              }
+            ],
+            "limit": 50,
+            "whereJsonTree": {
+              "children1": [
+                {
+                  "id": "ba9a899b-89ab-4cde-b012-318679cfc8f3",
+                  "properties": {
+                    "field": "profile_id",
+                    "operator": "equal",
+                    "value": [
+                      11968
+                    ],
+                    "valueSrc": [
+                      "value"
+                    ],
+                    "valueType": [
+                      "number"
+                    ]
+                  },
+                  "type": "rule"
+                }
+              ],
+              "id": "9a99ba98-89ab-4cde-b012-318679840626",
+              "type": "group"
+            },
+            "whereString": "profile_id = 11968"
+          },
+          "table": "app_fill"
+        }
+      ],
+      "title": "Deposits / Withdrawals",
+      "type": "table"
+    },
+    {
+      "datasource": {
+        "type": "postgres",
+        "uid": "8PO0bcxVz"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "custom": {
+            "align": "auto",
+            "cellOptions": {
+              "type": "auto"
+            },
+            "inspect": false
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green"
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "string"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 20,
+        "w": 9,
+        "x": 15,
+        "y": 61
+      },
+      "id": 9,
+      "options": {
+        "cellHeight": "sm",
+        "footer": {
+          "countRows": false,
+          "fields": "",
+          "reducer": [
+            "sum"
+          ],
+          "show": false
+        },
+        "showHeader": true
+      },
+      "pluginVersion": "10.0.0-preview",
+      "targets": [
+        {
+          "datasource": {
+            "type": "postgres",
+            "uid": "8PO0bcxVz"
+          },
+          "editorMode": "code",
+          "format": "table",
+          "rawQuery": true,
+          "rawSql": "SELECT shard_id,ops_type, SUM(amount) \r\nFROM app_balance_operation \r\nWHERE profile_id in ($profile_id) \r\n\r\nGROUP BY ROLLUP(ops_type),rollup(shard_id) ORDER BY shard_id, ops_type\r\nLIMIT 100\r\n",
+          "refId": "A",
+          "sql": {
+            "columns": [
+              {
+                "parameters": [
+                  {
+                    "name": "*",
+                    "type": "functionParameter"
+                  }
+                ],
+                "type": "function"
+              }
+            ],
+            "groupBy": [
+              {
+                "property": {
+                  "type": "string"
+                },
+                "type": "groupBy"
+              }
+            ],
+            "limit": 50,
+            "whereJsonTree": {
+              "children1": [
+                {
+                  "id": "ba9a899b-89ab-4cde-b012-318679cfc8f3",
+                  "properties": {
+                    "field": "profile_id",
+                    "operator": "equal",
+                    "value": [
+                      11968
+                    ],
+                    "valueSrc": [
+                      "value"
+                    ],
+                    "valueType": [
+                      "number"
+                    ]
+                  },
+                  "type": "rule"
+                }
+              ],
+              "id": "9a99ba98-89ab-4cde-b012-318679840626",
+              "type": "group"
+            },
+            "whereString": "profile_id = 11968"
+          },
+          "table": "app_fill"
+        }
+      ],
+      "title": "Net Balance Ops",
+      "type": "table"
+    },
+    {
+      "datasource": {
+        "type": "postgres",
+        "uid": "8PO0bcxVz"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "custom": {
+            "align": "auto",
+            "cellOptions": {
+              "type": "auto"
+            },
+            "filterable": true,
+            "inspect": false
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green"
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "string"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 10,
+        "w": 15,
+        "x": 0,
+        "y": 71
+      },
+      "id": 23,
+      "options": {
+        "cellHeight": "sm",
+        "footer": {
+          "countRows": false,
+          "fields": "",
+          "reducer": [
+            "sum"
+          ],
+          "show": false
+        },
+        "showHeader": true
+      },
+      "pluginVersion": "10.0.0-preview",
+      "targets": [
+        {
+          "datasource": {
+            "type": "postgres",
+            "uid": "8PO0bcxVz"
+          },
+          "editorMode": "code",
+          "format": "table",
+          "rawQuery": true,
+          "rawSql": "SELECT time_bucket('1d'::interval, to_timestamp(timestamp/1e6)) as time, sum(amount), shard_id\r\n FROM app_balance_operation \r\n WHERE profile_id = $profile_id AND timestamp BETWEEN $__unixEpochFrom()::bigint*1000000 AND $__unixEpochTo()::bigint*1000000 AND ops_type NOT IN ('funding', 'fee', 'deposit', 'withdrawal')\r\n GROUP BY time, ROLLUP(shard_id)\r\n order by time DESC",
+          "refId": "A",
+          "sql": {
+            "columns": [
+              {
+                "parameters": [
+                  {
+                    "name": "*",
+                    "type": "functionParameter"
+                  }
+                ],
+                "type": "function"
+              }
+            ],
+            "groupBy": [
+              {
+                "property": {
+                  "type": "string"
+                },
+                "type": "groupBy"
+              }
+            ],
+            "limit": 50,
+            "whereJsonTree": {
+              "children1": [
+                {
+                  "id": "ba9a899b-89ab-4cde-b012-318679cfc8f3",
+                  "properties": {
+                    "field": "profile_id",
+                    "operator": "equal",
+                    "value": [
+                      11968
+                    ],
+                    "valueSrc": [
+                      "value"
+                    ],
+                    "valueType": [
+                      "number"
+                    ]
+                  },
+                  "type": "rule"
+                }
+              ],
+              "id": "9a99ba98-89ab-4cde-b012-318679840626",
+              "type": "group"
+            },
+            "whereString": "profile_id = 11968"
+          },
+          "table": "app_fill"
+        }
+      ],
+      "title": "Realised PnL",
+      "type": "table"
+    },
+    {
+      "datasource": {
+        "type": "postgres",
+        "uid": "8PO0bcxVz"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "custom": {
+            "align": "auto",
+            "cellOptions": {
+              "type": "auto"
+            },
+            "inspect": false
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green"
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "string"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 0,
+        "y": 81
+      },
+      "id": 13,
+      "options": {
+        "cellHeight": "sm",
+        "footer": {
+          "countRows": false,
+          "fields": "",
+          "reducer": [
+            "sum"
+          ],
+          "show": false
+        },
+        "showHeader": true,
+        "sortBy": [
+          {
+            "desc": false,
+            "displayName": "archive_timestamp"
+          }
+        ]
+      },
+      "pluginVersion": "10.0.0-preview",
+      "targets": [
+        {
+          "datasource": {
+            "type": "postgres",
+            "uid": "8PO0bcxVz"
+          },
+          "editorMode": "code",
+          "format": "table",
+          "rawQuery": true,
+          "rawSql": "SELECT\n    to_timestamp(t1.archive_timestamp/1e6) AS archive_timestamp, t1.id AS profile_id, t1.balance, t1.account_equity, t1.cum_unrealized_pnl AS unrealized_pnl, t1.account_margin\nFROM\n  app_profile_cache t1\n  WHERE t1.id=$profile_id \n  and t1.archive_timestamp between $__unixEpochFrom()::bigint*1000000 and $__unixEpochTo()::bigint*1000000\nLIMIT 100",
+          "refId": "A",
+          "sql": {
+            "columns": [
+              {
+                "parameters": [],
+                "type": "function"
+              }
+            ],
+            "groupBy": [
+              {
+                "property": {
+                  "type": "string"
+                },
+                "type": "groupBy"
+              }
+            ],
+            "limit": 50
+          }
+        }
+      ],
+      "title": "profile",
+      "type": "table"
+    },
+    {
+      "datasource": {
+        "type": "postgres",
+        "uid": "8PO0bcxVz"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "custom": {
+            "align": "auto",
+            "cellOptions": {
+              "type": "auto"
+            },
+            "inspect": false
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green"
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "string"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 12,
+        "y": 81
+      },
+      "id": 15,
+      "options": {
+        "cellHeight": "sm",
+        "footer": {
+          "countRows": false,
+          "fields": "",
+          "reducer": [
+            "sum"
+          ],
+          "show": false
+        },
+        "showHeader": true,
+        "sortBy": [
+          {
+            "desc": false,
+            "displayName": "archive_timestamp"
+          }
+        ]
+      },
+      "pluginVersion": "10.0.0-preview",
+      "targets": [
+        {
+          "datasource": {
+            "type": "postgres",
+            "uid": "8PO0bcxVz"
+          },
+          "editorMode": "code",
+          "format": "table",
+          "rawQuery": true,
+          "rawSql": "SELECT time_bucket('1 day'::interval, to_timestamp(timestamp/1e6)) AS day_bucket, sum(amount) AS Amount, shard_id \nFROM app_balance_operation \nWHERE profile_id in ($profile_id) \nand ops_type in ('fee') \nand timestamp > $__from::bigint*1000\nGROUP BY day_bucket, shard_id\nORDER BY day_bucket DESC",
+          "refId": "A",
+          "sql": {
+            "columns": [
+              {
+                "parameters": [],
+                "type": "function"
+              }
+            ],
+            "groupBy": [
+              {
+                "property": {
+                  "type": "string"
+                },
+                "type": "groupBy"
+              }
+            ],
+            "limit": 50
+          }
+        }
+      ],
+      "title": "historical fees paid",
+      "type": "table"
+    }
+  ],
+  "refresh": "30s",
+  "schemaVersion": 38,
+  "style": "dark",
+  "tags": [],
+  "templating": {
+    "list": [
+      {
+        "current": {
+          "selected": false,
+          "text": "19467",
+          "value": "19467"
+        },
+        "hide": 0,
+        "label": "profile_id",
+        "name": "profile_id",
+        "options": [
+          {
+            "selected": true,
+            "text": "17319",
+            "value": "17319"
+          }
+        ],
+        "query": "17319",
+        "skipUrlSync": false,
+        "type": "textbox"
+      }
+    ]
+  },
+  "time": {
+    "from": "now-2d",
+    "to": "now"
+  },
+  "timepicker": {},
+  "timezone": "",
+  "title": "Profile stats",
+  "uid": "2mbdL61Vk",
+  "version": 84,
+  "weekStart": ""
+}

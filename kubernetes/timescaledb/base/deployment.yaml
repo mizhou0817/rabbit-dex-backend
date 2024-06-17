@@ -1,0 +1,55 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: timescaledb
+  name: timescaledb
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: timescaledb
+  template:
+    metadata:
+      labels:
+        app: timescaledb
+    spec:
+      securityContext:
+        # Postgres group id
+        fsGroup: 1000
+        supplementalGroups:
+          - 0
+      containers:
+        - image: 618528691313.dkr.ecr.ap-northeast-1.amazonaws.com/rabbitx/timescaledb:latest
+          imagePullPolicy: Always
+          env:
+            - name: POSTGRES_PASSWORD
+              value: "rabbitx"
+            - name: POSTGRES_DB
+              value: "rabbitx"
+            - name: POSTGRES_USER
+              value: "rabbitx"
+            # PGDATA This optional variable can be used to define another location - like a subdirectory - for the database files.
+            # The default is /var/lib/postgresql/data, but if the data volume you're using is a filesystem mountpoint
+            # (like with GCE persistent disks), Postgres initdb recommends a subdirectory (for example /var/lib/postgresql/data/pgdata)
+            # be created to contain the data.
+            - name: PGDATA
+              value: /var/lib/postgresql/data/pgdata
+          name: timescaledb
+          ports:
+            - containerPort: 5432
+              protocol: TCP
+          resources: {}
+          volumeMounts:
+            - mountPath: /var/lib/postgresql/data
+              name: timescaledb-pv
+            - mountPath: /dev/shm
+              name: dshm
+      volumes:
+        - name: timescaledb-pv
+          persistentVolumeClaim:
+            claimName: timescaledb-pvc
+        - name: dshm
+          emptyDir:
+            sizeLimit: 4Gi
+            medium: Memory

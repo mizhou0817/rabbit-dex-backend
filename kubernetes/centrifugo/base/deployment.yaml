@@ -1,0 +1,29 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: centrifugo
+  name: centrifugo
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: centrifugo
+  template:
+    metadata:
+      labels:
+        app: centrifugo
+    spec:
+      containers:
+        - image: 618528691313.dkr.ecr.ap-northeast-1.amazonaws.com/rabbitx/centrifugo
+          env:
+            - name: CENTRIFUGO_PORT
+              value: ""
+          imagePullPolicy: Always
+          command: ["/usr/bin/centrifugo"]
+          args: ["-c", "/root/.rabbit/config.json"]
+          name: centrifugo
+          ports:
+            - containerPort: 8000
+              protocol: TCP
+          resources: {}

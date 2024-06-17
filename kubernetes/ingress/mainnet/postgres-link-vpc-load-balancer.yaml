@@ -1,0 +1,23 @@
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: timescaledb
+  name: timescaledb-mainnet-internal-lb
+  annotations:
+    service.beta.kubernetes.io/aws-load-balancer-name: timescaledb-mainnet-internal-lb
+    service.beta.kubernetes.io/aws-load-balancer-type: internal
+    service.beta.kubernetes.io/aws-load-balancer-nlb-target-type: instance
+    service.beta.kubernetes.io/aws-load-balancer-subnets: subnet-01c2e324b91d035e0, subnet-0ba5dd9af17be91f0
+    service.beta.kubernetes.io/aws-load-balancer-ip-address-type: ipv4
+    service.beta.kubernetes.io/aws-load-balancer-scheme: internal
+  namespace: default
+spec:
+  selector:
+    app: timescaledb
+  ports:
+    - port: 5432
+      targetPort: 5432
+      protocol: TCP
+  type: LoadBalancer
+  loadBalancerClass: service.k8s.aws/nlb

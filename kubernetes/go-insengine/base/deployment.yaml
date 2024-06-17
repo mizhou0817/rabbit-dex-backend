@@ -1,0 +1,22 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: go-insengine
+  name: go-insengine
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: go-insengine
+  template:
+    metadata:
+      labels:
+        app: go-insengine
+    spec:
+      containers:
+        - image: 618528691313.dkr.ecr.ap-northeast-1.amazonaws.com/rabbitx/go-insengine
+          imagePullPolicy: Always
+          command: ["/usr/bin/go-insengine"]
+          name: go-insengine
+          resources: {}

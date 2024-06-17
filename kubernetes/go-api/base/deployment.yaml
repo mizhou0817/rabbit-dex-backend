@@ -1,0 +1,48 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: go-api
+  name: go-api
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: go-api
+  template:
+    metadata:
+      labels:
+        app: go-api
+    spec:
+      serviceAccountName: go-api-service
+      volumes:
+        - name: secrets-store-inline
+          csi:
+            driver: secrets-store.csi.k8s.io
+            readOnly: true
+            volumeAttributes:
+              secretProviderClass: "aws-secrets-go-api"
+      containers:
+        - image: 618528691313.dkr.ecr.ap-northeast-1.amazonaws.com/rabbitx/go-api
+          imagePullPolicy: Always
+          command: ["/usr/bin/go-api"]
+          name: go-api
+          ports:
+            - containerPort: 8888
+              protocol: TCP
+          resources: {}
+          volumeMounts:
+            - name: secrets-store-inline
+              mountPath: "/mnt/secrets-store"
+              readOnly: true
+          env:
+            - name: ALCHEMY_URL
+              valueFrom:
+                secretKeyRef:
+                  name: go-api-secrets
+                  key: ALCHEMY_URL
+            - name: BLAST_OPERATOR_PRIV_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: go-api-secrets
+                  key: BLAST_OPERATOR_PRIV_KEY

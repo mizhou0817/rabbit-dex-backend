@@ -1,0 +1,87 @@
+    <head>
+        <title>Centrifugo quick start</title>
+    </head>
+    <body>
+        <h2>OrderBook</h2>
+        <div id="orderbook">-</div>
+        <br><br><hr><br><br>
+        <h2>Markets</h2>
+        <div id="markets">-</div>
+        <br><br><hr><br><br>
+        <h2>Trades</h2>
+        <div id="trades">-</div>
+        <br><br><hr><br><br>
+        <h2>Account</h2>
+        <div id="account">-</div>
+        
+        <script src="https://unpkg.com/centrifuge@3.0.0/dist/centrifuge.js"></script>
+        <script type="text/javascript">
+            const orderbookContainer = document.getElementById('orderbook')
+            const marketsContainer = document.getElementById('markets')
+            const tradesContainer = document.getElementById('trades')
+            const accountContainer = document.getElementById('account')
+            const centrifuge = new Centrifuge("ws://localhost:8000/connection/websocket", { token: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIwIiwiZXhwIjo1MjYyNjUyMDEwfQ.x_245iYDEvTTbraw1gt4jmFRFfgMJb-GJ-hsU9HuDik" });
+
+            centrifuge.on('connect', function(ctx) {
+                console.log("connected", ctx);
+            });
+
+            centrifuge.on('disconnect', function(ctx) {
+                console.log("disconnected", ctx);
+            });
+
+            
+            const orderbookSub = centrifuge.newSubscription("orderbook:BTC-USD");
+            orderbookSub.on('publication', function(ctx) {
+                orderbookContainer.innerHTML = JSON.stringify(ctx.data);
+                console.warn(ctx.data);
+            });
+            orderbookSub.on('subscribed', function(ctx) {
+                console.error('orderbook initial state');
+                console.error(ctx.data);
+                orderbookContainer.innerHTML = JSON.stringify(ctx.data);
+            });
+            orderbookSub.subscribe();
+
+            const marketsSub = centrifuge.newSubscription("market:BTC-USD");
+            marketsSub.on('publication', function(ctx) {
+                marketsContainer.innerHTML = JSON.stringify(ctx.data);
+                console.warn(ctx.data);
+            });
+            marketsSub.on('subscribed', function(ctx) {
+                console.error('markets initial state');
+                console.error(ctx.data);
+                marketsContainer.innerHTML = JSON.stringify(ctx.data);
+            });
+            marketsSub.subscribe();
+
+            const tradesSub = centrifuge.newSubscription("trade:BTC-USD");
+            tradesSub.on('publication', function(ctx) {
+                tradesContainer.innerHTML = JSON.stringify(ctx.data);
+                console.warn(ctx.data);
+            });
+            tradesSub.on('subscribed', function(ctx) {
+                console.error('trades initial state');
+                tradesContainer.innerHTML = JSON.stringify(ctx.data);
+                console.error(ctx.data);
+            });
+            tradesSub.subscribe();
+
+            const profileSub = centrifuge.newSubscription("account@0");
+            profileSub.on('publication', function(ctx) {
+                accountContainer.innerHTML = JSON.stringify(ctx.data);
+                console.warn(ctx);
+            });
+
+            // fetching initial state
+            profileSub.on('subscribed', function(ctx) {
+                console.error('profile initial state');
+                console.error(ctx.data);
+                accountContainer.innerText = JSON.stringify(ctx.data);
+            });
+            profileSub.subscribe();
+
+            centrifuge.connect();
+        </script>
+    </body>
+</html>

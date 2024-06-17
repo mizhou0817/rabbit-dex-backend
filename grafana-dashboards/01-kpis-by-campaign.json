@@ -1,0 +1,654 @@
+{
+  "annotations": {
+    "list": [
+      {
+        "builtIn": 1,
+        "datasource": {
+          "type": "grafana",
+          "uid": "-- Grafana --"
+        },
+        "enable": true,
+        "hide": true,
+        "iconColor": "rgba(0, 211, 255, 1)",
+        "name": "Annotations & Alerts",
+        "type": "dashboard"
+      }
+    ]
+  },
+  "editable": true,
+  "fiscalYearStartMonth": 0,
+  "graphTooltip": 0,
+  "id": 40,
+  "links": [],
+  "liveNow": false,
+  "panels": [
+    {
+      "datasource": {
+        "type": "postgres",
+        "uid": "8PO0bcxVz"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "custom": {
+            "align": "auto",
+            "cellOptions": {
+              "type": "auto"
+            },
+            "inspect": false
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 18,
+        "x": 0,
+        "y": 0
+      },
+      "id": 2,
+      "options": {
+        "cellHeight": "sm",
+        "footer": {
+          "countRows": false,
+          "fields": "",
+          "reducer": [
+            "sum"
+          ],
+          "show": false
+        },
+        "showHeader": true,
+        "sortBy": []
+      },
+      "pluginVersion": "10.0.0-preview",
+      "targets": [
+        {
+          "datasource": {
+            "type": "postgres",
+            "uid": "8PO0bcxVz"
+          },
+          "editorMode": "code",
+          "format": "table",
+          "rawQuery": true,
+          "rawSql": "SELECT\n  utm_source AS \"SOURCE\",\n  utm_medium AS \"MEDIUM\",\n  utm_campaign AS \"CAMPAIGN\",\n  --COUNT(wallet) AS \"WALLETS ONBOARDED\"\n  COUNT(DISTINCT wallet) AS \"WALLETS ONBOARDED (UNIQUE)\"\nFROM\n  onboarding_profile_view\nWHERE\n  --profile = $profile_id AND\n  --utm_source is not null AND\n  profile_id NOT IN (select profile_id from ignored_profile_ids) AND --Remove testing profiles\n  wallet is not null\nGROUP BY\n  1,2,3\nORDER BY\n  1,2,3 DESC;\n--LIMIT 2;\n\n\n\n\n\n/*\n-- Old way (fails):\nSELECT\n  --(event->>'request_body')::jsonb->'campaign'->-1->'ts' as \"TIME (ATTRIBUTION)\", --Use 0 for 1st element, 1 for 2nd element, -1 for latest element\n  --(event->>'response_body')::jsonb->'result'->0->'profile'->>'wallet' as \"WALLET\",\n  --(event->>'response_body')::jsonb->'result'->0->'profile'->>'id' as \"PROFILE ID\",\n  --event->>'url_path' as \"URL path\",\n  --event->>'client_ip_address' as \"IP\",\n  (event->>'request_body')::jsonb->'campaign'->-1->'utm_source' as \"SOURCE\",\n  (event->>'request_body')::jsonb->'campaign'->-1->'utm_medium' as \"MEDIUM\",\n  (event->>'request_body')::jsonb->'campaign'->-1->'utm_campaign' as \"CAMPAIGN\",\n  --(event->>'response_body')::jsonb->'result'->0->'profile'->>'balance' as \"BALANCE\",\n  --(event->>'response_body')::jsonb->'result'->0->'profile'->>'total_notional' as \"NOTIONAL\",\n  --(event->>'response_body')::jsonb->'result'->0->'profile'->>'cum_trading_volume' as \"TRADING VOLUME\",\n  --(event->>'request_body')::jsonb->>'campaign' as \"UTM HISTORY\",\n  --(event->>'response_body')::jsonb->'result'->0->'profile'->>'orders' as \"ORDERS HISTORY\",\n  --(event->>'response_body')::jsonb->'result'->0->'profile'->>'positions' as \"POSITIONS HISTORY\"\n  COUNT (DISTINCT (1,2,3,(event->>'response_body')::jsonb->'result'->0->'profile'->>'id')) AS \"WALLETS (UNIQUE)?\",\n  COUNT((event->>'response_body')::jsonb->'result'->0->'profile'->>'id') AS \"WALLET CONNECTIONS (TOTAL)\",\n  SUM(CAST((event->>'response_body')::jsonb->'result'->0->'profile'->>'balance' AS DECIMAL)) AS \"BALANCE (SUM)\",\n  SUM(CAST((event->>'response_body')::jsonb->'result'->0->'profile'->>'cum_trading_volume' AS DECIMAL)) AS \"TRADING VOLUME (SUM)\"\nFROM\n  analytic_event\nWHERE\n  --profile_id = $profile_id AND\n  --(event->>'response_body')::jsonb->'result'->0->'profile'->>'wallet' is not null AND\n  (event->>'request_body')::jsonb->'campaign'->-1->'utm_source' is not null\nGROUP BY\n  1,2,3\nORDER BY\n  1,2,3 DESC\nLIMIT 10;\n*/",
+          "refId": "A",
+          "sql": {
+            "columns": [
+              {
+                "parameters": [],
+                "type": "function"
+              }
+            ],
+            "groupBy": [
+              {
+                "property": {
+                  "type": "string"
+                },
+                "type": "groupBy"
+              }
+            ],
+            "limit": 50
+          }
+        }
+      ],
+      "title": "1. WALLETS ONBOARDED by campaign",
+      "type": "table"
+    },
+    {
+      "datasource": {
+        "type": "postgres",
+        "uid": "8PO0bcxVz"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "custom": {
+            "align": "auto",
+            "cellOptions": {
+              "type": "auto"
+            },
+            "inspect": false
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 18,
+        "x": 0,
+        "y": 8
+      },
+      "id": 4,
+      "options": {
+        "cellHeight": "sm",
+        "footer": {
+          "countRows": false,
+          "fields": "",
+          "reducer": [
+            "sum"
+          ],
+          "show": false
+        },
+        "showHeader": true
+      },
+      "pluginVersion": "10.0.0-preview",
+      "targets": [
+        {
+          "datasource": {
+            "type": "postgres",
+            "uid": "8PO0bcxVz"
+          },
+          "editorMode": "code",
+          "format": "table",
+          "rawQuery": true,
+          "rawSql": "SELECT\n  p.utm_source AS \"SOURCE\",\n  p.utm_medium AS \"MEDIUM\",\n  p.utm_campaign AS \"CAMPAIGN\",\n  COALESCE(SUM(deposit_data.DEPOSITS), 0) AS \"DEPOSITS\",\n  COALESCE(COUNT(DISTINCT deposit_data.profile_id), 0) AS \"DEPOSITORS\",\n  COALESCE(SUM(deposit_data.DEPOSIT_AMOUNT), 0) AS \"DEPOSIT AMOUNT\",\n  COALESCE(SUM(withdrawal_data.WITHDRAWALS), 0) AS \"WITHDRAWALS\",\n  COALESCE(COUNT(DISTINCT withdrawal_data.profile_id), 0) AS \"WITHDRAWERS\",\n  COALESCE(SUM(withdrawal_data.WITHDRAWAL_AMOUNT), 0) AS \"WITHDRAWAL AMOUNT\"\nFROM\n  onboarding_profile_view p\nLEFT JOIN LATERAL (\n  SELECT\n    COUNT(ops_type) AS DEPOSITS,\n    profile_id,\n    SUM(amount) AS DEPOSIT_AMOUNT\n  FROM \n    app_balance_operation\n  WHERE \n    profile_id = p.profile_id AND ops_type = 'deposit'\n  GROUP BY profile_id\n) deposit_data ON true\nLEFT JOIN LATERAL (\n  SELECT\n    COUNT(ops_type) AS WITHDRAWALS,\n    profile_id,\n    SUM(amount) AS WITHDRAWAL_AMOUNT\n  FROM \n    app_balance_operation\n  WHERE \n    profile_id = p.profile_id AND ops_type = 'withdrawal'\n  GROUP BY profile_id\n) withdrawal_data ON true\nWHERE\n  p.profile_id NOT IN (select profile_id from ignored_profile_ids) AND\n  p.wallet IS NOT NULL\nGROUP BY\n 1,2,3\nHAVING\n  COALESCE(SUM(deposit_data.DEPOSITS), 0) != 0 and\n  COALESCE(COUNT(DISTINCT deposit_data.profile_id), 0) != 0 and\n  COALESCE(SUM(deposit_data.DEPOSIT_AMOUNT), 0) != 0 and\n  COALESCE(SUM(withdrawal_data.WITHDRAWALS), 0) != 0 and\n  COALESCE(COUNT(DISTINCT withdrawal_data.profile_id), 0) != 0 and \n  COALESCE(SUM(withdrawal_data.WITHDRAWAL_AMOUNT), 0) != 0;",
+          "refId": "A",
+          "sql": {
+            "columns": [
+              {
+                "parameters": [],
+                "type": "function"
+              }
+            ],
+            "groupBy": [
+              {
+                "property": {
+                  "type": "string"
+                },
+                "type": "groupBy"
+              }
+            ],
+            "limit": 50
+          }
+        }
+      ],
+      "title": "2. DEPOSITS & WITHDRAWALS by campaign",
+      "type": "table"
+    },
+    {
+      "datasource": {
+        "type": "postgres",
+        "uid": "8PO0bcxVz"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "custom": {
+            "align": "auto",
+            "cellOptions": {
+              "type": "auto"
+            },
+            "inspect": false
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green"
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 18,
+        "x": 0,
+        "y": 16
+      },
+      "id": 3,
+      "options": {
+        "cellHeight": "sm",
+        "footer": {
+          "countRows": false,
+          "fields": "",
+          "reducer": [
+            "sum"
+          ],
+          "show": false
+        },
+        "showHeader": true
+      },
+      "pluginVersion": "10.0.0-preview",
+      "targets": [
+        {
+          "datasource": {
+            "type": "postgres",
+            "uid": "8PO0bcxVz"
+          },
+          "editorMode": "code",
+          "format": "table",
+          "hide": false,
+          "rawQuery": true,
+          "rawSql": "SELECT\n  p.utm_source AS \"SOURCE\",\n  p.utm_medium AS \"MEDIUM\",\n  p.utm_campaign AS \"CAMPAIGN\",\n  COALESCE(SUM(a.price_size_sum), 0) AS \"VOLUME\",\n  COALESCE(SUM(a.fee_sum), 0) AS \"FEES\"\nFROM\n  onboarding_profile_view p\nLEFT JOIN (\n  SELECT \n    profile_id,\n    SUM(volume) AS price_size_sum,\n    SUM(fee) AS fee_sum\n  FROM \n    app_fill_1d\n  WHERE \n    bucket > 1640995200000000 AND bucket <= 1699315200000000 --Filter the fills table by date (timestamp from epochconverter.com in microseconds). First check: From 01-01-2022 (00:00 GMT) to 07-11-2023 (00:00 GMT)\n    --bucket > 1699315200000000 AND bucket <= 1705392000000000 --Second check: From 07-11-2023 (00:00 GMT) (previous last check) to 16-01-2024 (08:00 GMT, 09:00 CET)\n  GROUP BY\n    profile_id\n) a ON a.profile_id = p.profile_id\nWHERE\n  p.profile_id NOT IN (select profile_id from ignored_profile_ids) AND\n  p.wallet IS NOT NULL\nGROUP BY\n  p.utm_source, p.utm_medium, p.utm_campaign;",
+          "refId": "B",
+          "sql": {
+            "columns": [
+              {
+                "parameters": [],
+                "type": "function"
+              }
+            ],
+            "groupBy": [
+              {
+                "property": {
+                  "type": "string"
+                },
+                "type": "groupBy"
+              }
+            ],
+            "limit": 50
+          }
+        },
+        {
+          "datasource": {
+            "type": "postgres",
+            "uid": "8PO0bcxVz"
+          },
+          "editorMode": "code",
+          "format": "table",
+          "hide": true,
+          "rawQuery": true,
+          "rawSql": "SELECT\n  --to_timestamp(\"timestamp\"/1e6) AS \"TIME\",\n  p.utm_source AS \"SOURCE\",\n  p.utm_medium AS \"MEDIUM\",\n  p.utm_campaign AS \"CAMPAIGN\",\n  COUNT (DISTINCT a.trades) AS \"TRADES\" --This is too heavy, it might work if I use smaller time frames?\n  --SUM(a.price*a.size) AS \"VOLUME\",\n  --SUM(a.fee) AS \"FEES\"\nFROM\n  onboarding_profile_view p\nLEFT JOIN\n--app_fill a ON a.profile_id = p.profile_id --This fails (too much data), so let's split by time frame, by filtering the fills table by date (timestamp from epochconverter.com, then add 3 zeroes to turn it into microseconds)\napp_fill_1d a ON a.profile_id = p.profile_id AND a.bucket > 1640995200000000 and a.bucket <= 1699315200000000 --Filter the fills table by date (timestamp from epochconverter.com in microseconds). First check: From 01-01-2022 (00:00 GMT) to 07-11-2023 (00:00 GMT)\n  --app_fill a ON a.profile_id = p.profile_id AND a.timestamp > 1699315200000000 and a.timestamp <= 1701417600000000 --Check on 21st Nov: From 07-11-2023 (00:00 GMT) (previous last check) to 01-12-2023 (08:00 GMT, 09:00 CET)\n--app_fill a ON a.profile_id = p.profile_id AND a.timestamp > 1700121600000000 and a.timestamp <= timestamp_new_check --Check: From 16-11-2023 (08:00 GMT) (previous last check) to Y-11-2023 (08:00 GMT, 09:00 CET)\n--app_fill a ON a.profile_id = p.profile_id AND a.timestamp > timestamp_last_check and a.timestamp <= timestamp_new_check --Check: From X-11-2023 (08:00 GMT) (previous last check) to Y-11-2023 (08:00 GMT, 09:00 CET)\n--app_fill a ON a.profile_id = p.profile_id AND a.timestamp > timestamp_last_check and a.timestamp <= timestamp_new_check --Check: From X-11-2023 (08:00 GMT) (previous last check) to Y-11-2023 (08:00 GMT, 09:00 CET)\nWHERE\n  p.profile_id NOT IN (select profile_id from ignored_profile_ids) AND --Remove testing profiles\n  p.wallet is not null\nGROUP BY\n  1,2,3;\n--ORDER BY\n  --1,2,3 ASC;\n--LIMIT 100;\n\n\n--For the time frame increases, keep in mind that 24h are 86400000000 microseconds (so we can add 86400000000 to the epoch from the previous day)\n\n\n/* --Previous querie (it was too heavy):\nSELECT\n  --to_timestamp(\"timestamp\"/1e6) AS \"TIME\",\n  p.utm_source AS \"SOURCE\",\n  p.utm_medium AS \"MEDIUM\",\n  p.utm_campaign AS \"CAMPAIGN\",\n  COUNT (DISTINCT a.order_id) AS \"TRADES\",\n  SUM(a.price*a.size) AS \"VOLUME\",\n  SUM(a.fee) AS \"FEES\"\nFROM\n  onboarding_profile_view p\nLEFT JOIN\n  app_fill a ON a.profile_id = p.profile_id\nWHERE\n  p.wallet is not null\nGROUP BY\n  1,2,3;\n  */",
+          "refId": "A",
+          "sql": {
+            "columns": [
+              {
+                "parameters": [],
+                "type": "function"
+              }
+            ],
+            "groupBy": [
+              {
+                "property": {
+                  "type": "string"
+                },
+                "type": "groupBy"
+              }
+            ],
+            "limit": 50
+          }
+        }
+      ],
+      "title": "3. VOLUME & FEES by campaign (during a time frame)",
+      "type": "table"
+    },
+    {
+      "datasource": {
+        "type": "postgres",
+        "uid": "8PO0bcxVz"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "custom": {
+            "align": "auto",
+            "cellOptions": {
+              "type": "auto"
+            },
+            "inspect": false
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green"
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 18,
+        "x": 0,
+        "y": 24
+      },
+      "id": 5,
+      "options": {
+        "cellHeight": "sm",
+        "footer": {
+          "countRows": false,
+          "fields": "",
+          "reducer": [
+            "sum"
+          ],
+          "show": false
+        },
+        "showHeader": true
+      },
+      "pluginVersion": "10.0.0-preview",
+      "targets": [
+        {
+          "datasource": {
+            "type": "postgres",
+            "uid": "8PO0bcxVz"
+          },
+          "editorMode": "code",
+          "format": "table",
+          "rawQuery": true,
+          "rawSql": "SELECT\n  --to_timestamp(\"timestamp\"/1e6) AS \"TIME\",\n  p.utm_source AS \"SOURCE\",\n  p.utm_medium AS \"MEDIUM\",\n  p.utm_campaign AS \"CAMPAIGN\",\n  COUNT (DISTINCT a.profile_id) AS \"TRADERS\" -- -> TRADERS\nFROM\n  onboarding_profile_view p\nINNER JOIN\n  app_fill_profile_1d a ON a.profile_id = p.profile_id\nWHERE\n  p.profile_id NOT IN (select profile_id from ignored_profile_ids) AND --Remove testing profiles\n  p.wallet is not null\nGROUP BY\n  1,2,3;\n--ORDER BY\n  --1,2,3 ASC;\n--LIMIT 100;",
+          "refId": "A",
+          "sql": {
+            "columns": [
+              {
+                "parameters": [],
+                "type": "function"
+              }
+            ],
+            "groupBy": [
+              {
+                "property": {
+                  "type": "string"
+                },
+                "type": "groupBy"
+              }
+            ],
+            "limit": 50
+          }
+        }
+      ],
+      "title": "4. TRADERS by campaign",
+      "type": "table"
+    },
+    {
+      "datasource": {
+        "type": "postgres",
+        "uid": "8PO0bcxVz"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "custom": {
+            "align": "auto",
+            "cellOptions": {
+              "type": "auto"
+            },
+            "inspect": false
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green"
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 18,
+        "x": 0,
+        "y": 32
+      },
+      "id": 7,
+      "options": {
+        "cellHeight": "sm",
+        "footer": {
+          "countRows": false,
+          "fields": "",
+          "reducer": [
+            "sum"
+          ],
+          "show": false
+        },
+        "showHeader": true
+      },
+      "pluginVersion": "10.0.0-preview",
+      "targets": [
+        {
+          "datasource": {
+            "type": "postgres",
+            "uid": "8PO0bcxVz"
+          },
+          "editorMode": "code",
+          "format": "table",
+          "rawQuery": true,
+          "rawSql": "SELECT\n  --to_timestamp(\"timestamp\"/1e6) AS \"TIME\",\n  p.utm_source AS \"SOURCE\",\n  p.utm_medium AS \"MEDIUM\",\n  p.utm_campaign AS \"CAMPAIGN\",\n  COUNT (DISTINCT a.trades) AS \"TRADES\" --This is too heavy, it might work if I use smaller time frames?\n  --SUM(a.price*a.size) AS \"VOLUME\",\n  --SUM(a.fee) AS \"FEES\"\nFROM\n  onboarding_profile_view p\nLEFT JOIN\n--app_fill a ON a.profile_id = p.profile_id --This fails (too much data), so let's split by time frame, by filtering the fills table by date (timestamp from epochconverter.com, then add 3 zeroes to turn it into microseconds)\napp_fill_1d a ON a.profile_id = p.profile_id AND a.bucket > 1640995200000000 and a.bucket <= 1699315200000000 --Filter the fills table by date (timestamp from epochconverter.com in microseconds). First check: From 01-01-2022 (00:00 GMT) to 07-11-2023 (00:00 GMT)\n  --app_fill a ON a.profile_id = p.profile_id AND a.timestamp > 1699315200000000 and a.timestamp <= 1701417600000000 --Check on 21st Nov: From 07-11-2023 (00:00 GMT) (previous last check) to 01-12-2023 (08:00 GMT, 09:00 CET)\n--app_fill a ON a.profile_id = p.profile_id AND a.timestamp > 1700121600000000 and a.timestamp <= timestamp_new_check --Check: From 16-11-2023 (08:00 GMT) (previous last check) to Y-11-2023 (08:00 GMT, 09:00 CET)\n--app_fill a ON a.profile_id = p.profile_id AND a.timestamp > timestamp_last_check and a.timestamp <= timestamp_new_check --Check: From X-11-2023 (08:00 GMT) (previous last check) to Y-11-2023 (08:00 GMT, 09:00 CET)\n--app_fill a ON a.profile_id = p.profile_id AND a.timestamp > timestamp_last_check and a.timestamp <= timestamp_new_check --Check: From X-11-2023 (08:00 GMT) (previous last check) to Y-11-2023 (08:00 GMT, 09:00 CET)\nWHERE\n  p.profile_id NOT IN (select profile_id from ignored_profile_ids) AND --Remove testing profiles\n  p.wallet is not null\nGROUP BY\n  1,2,3;\n--ORDER BY\n  --1,2,3 ASC;\n--LIMIT 100;\n\n\n--For the time frame increases, keep in mind that 24h are 86400000000 microseconds (so we can add 86400000000 to the epoch from the previous day)\n\n\n/* --Previous querie (it was too heavy):\nSELECT\n  --to_timestamp(\"timestamp\"/1e6) AS \"TIME\",\n  p.utm_source AS \"SOURCE\",\n  p.utm_medium AS \"MEDIUM\",\n  p.utm_campaign AS \"CAMPAIGN\",\n  COUNT (DISTINCT a.order_id) AS \"TRADES\",\n  SUM(a.price*a.size) AS \"VOLUME\",\n  SUM(a.fee) AS \"FEES\"\nFROM\n  onboarding_profile_view p\nLEFT JOIN\n  app_fill a ON a.profile_id = p.profile_id\nWHERE\n  p.wallet is not null\nGROUP BY\n  1,2,3;\n  */",
+          "refId": "A",
+          "sql": {
+            "columns": [
+              {
+                "parameters": [],
+                "type": "function"
+              }
+            ],
+            "groupBy": [
+              {
+                "property": {
+                  "type": "string"
+                },
+                "type": "groupBy"
+              }
+            ],
+            "limit": 50
+          }
+        }
+      ],
+      "title": "5. TRADES by campaign (during a time frame) -> Fails!",
+      "type": "table"
+    },
+    {
+      "datasource": {
+        "type": "postgres",
+        "uid": "8PO0bcxVz"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "custom": {
+            "align": "auto",
+            "cellOptions": {
+              "type": "auto"
+            },
+            "inspect": false
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green"
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "profile_id"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 115
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "wallet"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 378
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "utm_source"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 153
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "PROFILE_ID"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 126
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "WALLET"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 383
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 18,
+        "x": 0,
+        "y": 40
+      },
+      "id": 6,
+      "options": {
+        "cellHeight": "sm",
+        "footer": {
+          "countRows": false,
+          "fields": "",
+          "reducer": [
+            "sum"
+          ],
+          "show": false
+        },
+        "showHeader": true,
+        "sortBy": []
+      },
+      "pluginVersion": "10.0.0-preview",
+      "targets": [
+        {
+          "datasource": {
+            "type": "postgres",
+            "uid": "8PO0bcxVz"
+          },
+          "editorMode": "code",
+          "format": "table",
+          "rawQuery": true,
+          "rawSql": "SELECT\n  timestamp AS \"TIME\",\n  profile_id AS \"PROFILE_ID\",\n  wallet AS \"WALLET\",\n  utm_source AS \"UTM_SOURCE\",\n  utm_medium AS \"UTM_MEDIUM\",\n  utm_campaign AS \"UTM_CAMPAIGN\"\nFROM\n  onboarding_profile_view\nWHERE\n wallet is not null --to avoid onboarding events that failed (those that show an empty wallet and profile_id)\n  --utm_source is not null\nORDER BY\n  timestamp DESC;\n--LIMIT 100;",
+          "refId": "A",
+          "sql": {
+            "columns": [
+              {
+                "parameters": [],
+                "type": "function"
+              }
+            ],
+            "groupBy": [
+              {
+                "property": {
+                  "type": "string"
+                },
+                "type": "groupBy"
+              }
+            ],
+            "limit": 50
+          }
+        }
+      ],
+      "title": "ALL ONBOARDED USERS WITH UTM TAGS BY DATE (worked during Sep 14-28, and then working since Oct 6)",
+      "type": "table"
+    }
+  ],
+  "refresh": "",
+  "schemaVersion": 38,
+  "style": "dark",
+  "tags": [],
+  "templating": {
+    "list": []
+  },
+  "time": {
+    "from": "now-6h",
+    "to": "now"
+  },
+  "timepicker": {},
+  "timezone": "",
+  "title": "01. KPIs by campaign",
+  "uid": "e890dbe5-7c6d-433a-b20c-31233fe2e2f6",
+  "version": 114,
+  "weekStart": "monday"
+}

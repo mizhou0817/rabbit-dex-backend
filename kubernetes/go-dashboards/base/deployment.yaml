@@ -1,0 +1,21 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: go-dashboards
+  name: go-dashboards
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: go-dashboards
+  template:
+    metadata:
+      labels:
+        app: go-dashboards
+    spec:
+      containers:
+        - image: 618528691313.dkr.ecr.ap-northeast-1.amazonaws.com/rabbitx/go-dashboards
+          imagePullPolicy: Always
+          name: go-dashboards
+          resources: { }

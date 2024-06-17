@@ -1,0 +1,55 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: go-trading-bot
+  name: go-trading-bot
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: go-trading-bot
+  template:
+    metadata:
+      labels:
+        app: go-trading-bot
+    spec:
+      serviceAccountName: go-trading-bot-service
+      volumes:
+        - name: secrets-store-inline
+          csi:
+            driver: secrets-store.csi.k8s.io
+            readOnly: true
+            volumeAttributes:
+              secretProviderClass: aws-secrets-go-trading-bot
+      containers:
+        - image: xxxxxxxxxxxx.dkr.ecr.ap-northeast-1.amazonaws.com/app
+          imagePullPolicy: Always
+          command: ["/usr/bin/go-trading-bot"]
+          name: go-trading-bot
+          resources: {}
+          volumeMounts:
+            - name: secrets-store-inline
+              mountPath: /mnt/secrets-store
+              readOnly: true
+          env:
+            - name: BTC_PRIVATE_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: trading-bot-secrets
+                  key: BTC_PRIVATE_KEY
+            - name: SOL_PRIVATE_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: trading-bot-secrets
+                  key: SOL_PRIVATE_KEY
+            - name: ETH_PRIVATE_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: trading-bot-secrets
+                  key: ETH_PRIVATE_KEY
+            - name: ARB_PRIVATE_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: trading-bot-secrets
+                  key: ARB_PRIVATE_KEY

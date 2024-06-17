@@ -1,0 +1,22 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: go-referralservice
+  name: go-referralservice
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: go-referralservice
+  template:
+    metadata:
+      labels:
+        app: go-referralservice
+    spec:
+      containers:
+        - image: 618528691313.dkr.ecr.ap-northeast-1.amazonaws.com/rabbitx/go-referralservice
+          imagePullPolicy: Always
+          command: ["/usr/bin/go-referralservice"]
+          name: go-referralservice
+          resources: {}

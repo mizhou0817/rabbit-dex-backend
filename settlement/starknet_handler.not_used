@@ -1,0 +1,302 @@
+package settlement
+
+import (
+	"context"
+	"fmt"
+
+	//	"math"
+	"math/big"
+	"strconv"
+	"strings"
+
+	"github.com/dontpanicdao/caigo"
+	"github.com/dontpanicdao/caigo/gateway"
+	"github.com/dontpanicdao/caigo/types"
+	"github.com/shopspring/decimal"
+	"github.com/sirupsen/logrus"
+	"github.com/strips-finance/rabbit-dex-backend/model"
+	"github.com/strips-finance/rabbit-dex-backend/tdecimal"
+)
+
+// Handles interactions with Starknet rabbit.cairo contract via Starknet Gateway using Caigo
+
+type StarknetHandler struct {
+	gateway                 *gateway.GatewayProvider
+	account                 *caigo.Account
+	rabbitL2ContractAddress string
+	apiModel                *model.ApiModel
+}
+
+const (
+	MAX_TX_POLL      int    = 500
+	TX_POLL_INTERVAL int    = 5
+	FEE_MARGIN       uint64 = 125
+	MAX_TX_ATTEMPTS  int    = 10
+	DEPOSIT_KEY      string = "0x6465706f736974"
+	WITHDRAW_KEY     string = "0x7769746864726177"
+	TOKEN_DECIMALS   int32  = 6
+	DUPLICATE_ID     string = "DUPLICATE ID"
+)
+
+var (
+	Decimals_Multiplier decimal.Decimal = decimal.NewFromInt32(10).Pow(
+		decimal.NewFromInt32(TOKEN_DECIMALS))
+	ZeroBigInt = big.NewInt(0)
+)
+
+func TokenDecimalsToTDecimal(amount *big.Int) *tdecimal.Decimal {
+	return tdecimal.NewDecimal(decimal.NewFromBigInt(amount, -TOKEN_DECIMALS))
+}
+
+func TDecimalToTokenDecimals(amount *tdecimal.Decimal) *big.Int {
+	return amount.Mul(Decimals_Multiplier).Round(0).BigInt()
+}
+
+func NewStarknetHandler(starknetChainId string, accountAddress string, accountPrivateKey string,
+	rabbitL2ContractAddress string, apiModel *model.ApiModel) (*StarknetHandler, error) {
+	gw := gateway.NewProvider(gateway.WithChain(starknetChainId))
+	account, err := caigo.NewGatewayAccount(accountPrivateKey, accountAddress, gw, caigo.AccountVersion1)
+	if err != nil {
+		return nil, fmt.Errorf("Error creating Caigo Account %s\n", err.Error())
+	}
+	ch := &StarknetHandler{
+		gateway:                 gw,
+		account:                 account,
+		rabbitL2ContractAddress: rabbitL2ContractAddress,
+		apiModel:                apiModel,
+	}
+	return ch, nil
+}
+
+func (ch *StarknetHandler) processPendingDeposits(ctx context.Context) error {
+	txInfo := []types.FunctionCall{
+		{
+			ContractAddress:    types.HexToHash(ch.rabbitL2ContractAddress),
+			EntryPointSelector: "process_pending_deposits",
+		},
+	}
+	logrus.Infof("calling process_pending_deposits")
+	receipt, err := ch.executeTx(ctx, txInfo)
+	if err != nil {
+		return err
+	}
+	return ch.processDepositEvents(ctx, receipt.Events)
+}
+
+func (ch *StarknetHandler) executeTx(ctx context.Context, txInfo []types.FunctionCall) (*gateway.TransactionReceipt, error) {
+	feeEstimate, err := ch.account.EstimateFee(ctx, txInfo, types.ExecuteDetails{})
+	if err != nil {
+		return nil, fmt.Errorf("Error estimating fee for transaction: %s txInfo is %v", err.Error(), txInfo[0])
+	}
+	fee, _ := big.NewInt(0).SetString(string(feeEstimate.OverallFee), 0)
+	initialFee := fee
+	var txHash string
+	var receipt *gateway.TransactionReceipt
+	numAttempts := 0
+	success := false
+	for !success {
+		if numAttempts < MAX_TX_ATTEMPTS {
+			expandedFee := big.NewInt(0).Mul(fee, big.NewInt(int64(FEE_MARGIN)))
+			fee = big.NewInt(0).Div(expandedFee, big.NewInt(100))
+			numAttempts++
+			txHash, receipt, err = ch.attemptTxWithFee(ctx, txInfo, fee)
+			if err != nil {
+				return nil,
+					fmt.Errorf("Error polling tx for processing pending deposits %s\ntxInfo is %v",
+						err.Error(), txInfo)
+			}
+			success = receipt.Status != types.TransactionRejected
+		} else {
+			return nil, fmt.Errorf("Transaction %s rejected after %v attempts, iniital fee offer %v, final fee offer %v", txHash, numAttempts, initialFee, fee)
+		}
+	}
+	return receipt, nil
+}
+
+func (ch *StarknetHandler) attemptTxWithFee(ctx context.Context, txInfo []types.FunctionCall, maxFee *big.Int) (txHash string, receipt *gateway.TransactionReceipt, err error) {
+
+	execResp, err := ch.account.Execute(context.Background(), txInfo, types.ExecuteDetails{MaxFee: maxFee})
+
+	if err != nil {
+		return "", nil, fmt.Errorf("Error processing transaction %s", err.Error())
+	}
+
+	_, receipt, err = ch.gateway.WaitForTransaction(ctx, execResp.TransactionHash, TX_POLL_INTERVAL, MAX_TX_POLL)
+
+	return execResp.TransactionHash, receipt, err
+}
+
+func (ch *StarknetHandler) processDepositEvents(ctx context.Context, events []interface{}) error {
+	ackData := make([]string, 1, len(events)+1)
+	acknowledged := ackData[1:]
+	count := 0
+	logrus.Infof("processing %v events from process_pending_deposits call", len(events))
+	for i, evintf := range events {
+		event := evintf.(map[string]interface{})
+		keys := event["keys"].([]interface{})
+		data := event["data"].([]interface{})
+		if (len(keys) == 3) &&
+			(keys[0].(string) == DEPOSIT_KEY) &&
+			(len(data) == 1) {
+			logrus.Debugf("processing deposit event %v", i)
+			logrus.Debugf("event deposit id %s", keys[1].(string))
+			logrus.Debugf("event wallet %s", keys[2].(string))
+			idHexStr := StripPrefix(keys[1].(string), 2)
+			wallet := GetWalletStringInRabbitTntStandardFormat(keys[2].(string))
+			id, success := new(big.Int).SetString(idHexStr, 16)
+			if !success {
+				logrus.Errorf(
+					"Invalid deposit id %v for wallet 0x%s",
+					keys[1],
+					wallet)
+				continue
+			}
+			amtHexStr := StripPrefix(data[0].(string), 2)
+			amount, success := new(big.Int).SetString(amtHexStr, 16)
+			if success {
+				logrus.Debugf("deposit amount %s", amount)
+			} else {
+				logrus.Errorf(
+					"Invalid amount %v in deposit %d for wallet 0x%s",
+					data[0],
+					id,
+					wallet)
+				continue
+			}
+			var err error = nil
+			var profile *model.Profile = nil
+
+			if amount.Cmp(ZeroBigInt) < 1 {
+				logrus.Errorf(
+					"Invalid amount %d in deposit 0x%x for wallet 0x%s",
+					amount,
+					id,
+					wallet)
+			} else {
+				profile, err = ch.apiModel.GetProfileByWallet(ctx, wallet)
+				deposit := model.Deposit{
+					Id:     fmt.Sprintf("d_%d", id),
+					Wallet: wallet,
+					Amount: TokenDecimalsToTDecimal(amount),
+				}
+				if err == nil && profile != nil {
+					logrus.Debugf("processing deposit for %s: %v", profile.Wallet, deposit.Amount)
+					err = ch.apiModel.ProcessDeposit(ctx, profile.ProfileId, deposit)
+				} else if err.Error() == model.PROFILE_NOT_FOUND {
+					logrus.Debugf("processing deposit for unknown (%s): %v", wallet, deposit.Amount)
+					err = ch.apiModel.ProcessDepositUnknown(ctx, deposit)
+				}
+
+				if err != nil {
+					logrus.Errorf(
+						"Error whilst processing deposit %s for wallet: %s, amount: %d, error: %s",
+						fmt.Sprintf("d_%d", id),
+						wallet,
+						amount,
+						err.Error(),
+					)
+				}
+			}
+			if err == nil || strings.Contains(err.Error(), DUPLICATE_ID) {
+				acknowledged = append(acknowledged, fmt.Sprintf("0x%x", id))
+				count++
+			}
+		}
+	}
+	ackData = ackData[:count+1]
+	ackData[0] = "0x" + strconv.FormatInt(int64(count), 16)
+	txInfo := []types.FunctionCall{
+		{
+			ContractAddress:    types.HexToHash(ch.rabbitL2ContractAddress),
+			EntryPointSelector: "acknowledge_deposits",
+			Calldata:           ackData,
+		},
+	}
+	logrus.Infof("Acknowledging %v deposits", count)
+	_, err := ch.executeTx(ctx, txInfo)
+	if err != nil {
+		err = fmt.Errorf(
+			"Error whilst acknowledging deposits: %s",
+			err.Error())
+	}
+	return err
+}
+
+func (ch *StarknetHandler) processWithdrawals(ctx context.Context, withdrawals []*model.Withdrawal) (acknowledged []string, err error) {
+	numWithdrawals := len(withdrawals)
+	logrus.Infof("processing %v withdrawals", numWithdrawals)
+	if numWithdrawals == 0 {
+		return nil, nil
+	}
+	withdrawCalldata := make([]string, 1, (3*numWithdrawals)+1)
+	count := 0
+	for _, withdrawal := range withdrawals {
+		idNum, success := new(big.Int).SetString((StripPrefix(withdrawal.Id, 2)), 10)
+		if !success {
+			return nil, fmt.Errorf(
+				"Error parsing withdrawal ID %s, %s is not a base 10 number",
+				withdrawal.Id,
+				StripPrefix(withdrawal.Id, 2))
+		}
+
+		//Inside tarantool we don't cut amount. BUT USDT has just 6 decimals
+		//We should never send 0 amount to L2
+		token_amount := TDecimalToTokenDecimals(withdrawal.Amount)
+		if token_amount.Cmp(big.NewInt(0)) <= 0 {
+			logrus.Infof("SKIP ZERO withdraw call data: id 0x%x, wallet 0x%s, amount %v", idNum, withdrawal.Wallet, withdrawal.Amount)
+			continue
+		}
+
+		logrus.Debugf("adding to withdraw call data: id 0x%x, wallet 0x%s, amount %v", idNum, withdrawal.Wallet, withdrawal.Amount)
+		withdrawCalldata = append(withdrawCalldata, fmt.Sprintf("0x%x", idNum))
+		withdrawCalldata = append(withdrawCalldata, fmt.Sprintf("0x%s", withdrawal.Wallet))
+		withdrawCalldata = append(withdrawCalldata, fmt.Sprintf("0x%x", token_amount))
+		count = count + 3
+	}
+	withdrawCalldata[0] = strconv.Itoa(numWithdrawals)
+	txInfo := []types.FunctionCall{
+		{
+			ContractAddress:    types.HexToHash(ch.rabbitL2ContractAddress),
+			EntryPointSelector: "withdraw",
+			Calldata:           withdrawCalldata,
+		},
+	}
+	receipt, err := ch.executeTx(ctx, txInfo)
+	if err != nil {
+		return nil, err
+	}
+	acknowledged = make([]string, 0, len(receipt.Events))
+	for _, evIntf := range receipt.Events {
+		event := evIntf.(map[string]interface{})
+		var keys []interface{}
+		if event["keys"] != nil {
+			keys = event["keys"].([]interface{})
+		} else {
+			keys = nil
+		}
+		var data []interface{}
+		if event["data"] != nil {
+			data = event["data"].([]interface{})
+		} else {
+			data = nil
+		}
+		if (len(keys) == 3) &&
+			(keys[0] == WITHDRAW_KEY) &&
+			(len(data) == 2) {
+			idHexStr := StripPrefix(keys[1].(string), 2)
+			id, _ := new(big.Int).SetString(idHexStr, 16)
+			acknowledged = append(acknowledged, fmt.Sprintf("w_%v", id))
+		}
+	}
+	logrus.Infof("acknowledged %v withdrawals", len(acknowledged))
+	return acknowledged, nil
+}
+
+// Returns the input with its first charsToRemove characters removed.
+// Deposit and withdrawal ids are strings "d_123", "w_1112" etc. in
+// Tarantool, but are integers 123, 1112 on StarkNet and Ethereum.
+// Also used to remove the leading '0x' from a hex number string.
+func StripPrefix(input string, charsToRemove int) string {
+	asRunes := []rune(input)
+	return string(asRunes[charsToRemove:])
+}

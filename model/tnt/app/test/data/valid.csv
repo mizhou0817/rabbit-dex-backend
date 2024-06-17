@@ -1,0 +1,7 @@
+id,profile_id,market_id,price,size,side,taker_profile_id
+"fill-1",1,"BTC-USD",100.12,0.23,"long",2
+"fill-2",20,"BTC-USD",100.22,1,"short",3
+"fill-3",30,"BTC-USD",200.12,0.25,"long",4
+"fill-4",40,"BTC-USD",300.2,0.26,"long",5
+"fill-4",40,"BTC-USD",300.2,0.26,"long",5
+"fill-4",40,"BTC-USD",300.2,0.26,"long",5

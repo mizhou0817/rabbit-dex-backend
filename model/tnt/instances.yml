@@ -1,0 +1,404 @@
+---
+tnt-stateboard:
+  listen: localhost:5001
+  password: passwd
+
+tnt.btc-market:
+  advertise_uri: localhost:2001
+  http_port: 7001
+
+tnt.btc-market-2:
+  advertise_uri: localhost:2101
+  http_port: 7101
+
+tnt.eth-market:
+  advertise_uri: localhost:2002
+  http_port: 7002
+
+tnt.eth-market-2:
+  advertise_uri: localhost:2102
+  http_port: 7102
+
+tnt.sol-market:
+  advertise_uri: localhost:2003
+  http_port: 7003
+
+tnt.sol-market-2:
+  advertise_uri: localhost:2103
+  http_port: 7103
+
+tnt.arb-market:
+  advertise_uri: localhost:2004
+  http_port: 7004
+
+tnt.arb-market-2:
+  advertise_uri: localhost:2104
+  http_port: 7104
+
+tnt.doge-market:
+  advertise_uri: localhost:2005
+  http_port: 7005
+
+tnt.doge-market-2:
+  advertise_uri: localhost:2105
+  http_port: 7105
+
+tnt.ldo-market:
+  advertise_uri: localhost:2006
+  http_port: 7006
+
+tnt.ldo-market-2:
+  advertise_uri: localhost:2106
+  http_port: 7106
+
+tnt.sui-market:
+  advertise_uri: localhost:2007
+  http_port: 7007
+
+tnt.sui-market-2:
+  advertise_uri: localhost:2107
+  http_port: 7107
+
+tnt.pepe1000-market:
+  advertise_uri: localhost:2008
+  http_port: 7008
+
+tnt.pepe1000-market-2:
+  advertise_uri: localhost:2108
+  http_port: 7108
+
+tnt.bch-market:
+  advertise_uri: localhost:2009
+  http_port: 7009
+
+tnt.bch-market-2:
+  advertise_uri: localhost:2109
+  http_port: 7109
+
+tnt.xrp-market:
+  advertise_uri: localhost:2010
+  http_port: 7010
+
+tnt.xrp-market-2:
+  advertise_uri: localhost:2110
+  http_port: 7110
+
+tnt.wld-market:
+  advertise_uri: localhost:2011
+  http_port: 7011
+
+tnt.wld-market-2:
+  advertise_uri: localhost:2111
+  http_port: 7111
+
+tnt.ton-market:
+  advertise_uri: localhost:2012
+  http_port: 7012
+
+tnt.ton-market-2:
+  advertise_uri: localhost:2112
+  http_port: 7112
+
+tnt.stx-market:
+  advertise_uri: localhost:2013
+  http_port: 7013
+
+tnt.stx-market-2:
+  advertise_uri: localhost:2113
+  http_port: 7113
+
+tnt.matic-market:
+  advertise_uri: localhost:2014
+  http_port: 7014
+
+tnt.matic-market-2:
+  advertise_uri: localhost:2114
+  http_port: 7114
+
+tnt.trb-market:
+  advertise_uri: localhost:2015
+  http_port: 7015
+
+tnt.trb-market-2:
+  advertise_uri: localhost:2115
+  http_port: 7115
+
+tnt.apt-market:
+  advertise_uri: localhost:2016
+  http_port: 7016
+
+tnt.apt-market-2:
+  advertise_uri: localhost:2116
+  http_port: 7116
+
+tnt.inj-market:
+  advertise_uri: localhost:2017
+  http_port: 7017
+
+tnt.inj-market-2:
+  advertise_uri: localhost:2117
+  http_port: 7117
+
+tnt.aave-market:
+  advertise_uri: localhost:2018
+  http_port: 7018
+
+tnt.aave-market-2:
+  advertise_uri: localhost:2118
+  http_port: 7118
+
+tnt.link-market:
+  advertise_uri: localhost:2019
+  http_port: 7019
+
+tnt.link-market-2:
+  advertise_uri: localhost:2119
+  http_port: 7119
+
+tnt.bnb-market:
+  advertise_uri: localhost:2020
+  http_port: 7020
+
+tnt.bnb-market-2:
+  advertise_uri: localhost:2120
+  http_port: 7120
+
+tnt.rndr-market:
+  advertise_uri: localhost:2021
+  http_port: 7021
+
+tnt.rndr-market-2:
+  advertise_uri: localhost:2121
+  http_port: 7121
+
+tnt.mkr-market:
+  advertise_uri: localhost:2022
+  http_port: 7022
+
+tnt.mkr-market-2:
+  advertise_uri: localhost:2122
+  http_port: 7122
+
+tnt.rlb-market:
+  advertise_uri: localhost:2023
+  http_port: 7023
+
+tnt.rlb-market-2:
+  advertise_uri: localhost:2123
+  http_port: 7123
+
+tnt.ordi-market:
+  advertise_uri: localhost:2024
+  http_port: 7024
+
+tnt.ordi-market-2:
+  advertise_uri: localhost:2124
+  http_port: 7124
+
+tnt.stg-market:
+  advertise_uri: localhost:2025
+  http_port: 7025
+
+tnt.stg-market-2:
+  advertise_uri: localhost:2125
+  http_port: 7125
+
+tnt.sats1000000-market:
+  advertise_uri: localhost:2026
+  http_port: 7026
+
+tnt.sats1000000-market-2:
+  advertise_uri: localhost:2126
+  http_port: 7126
+
+tnt.tia-market:
+  advertise_uri: localhost:2027
+  http_port: 7027
+
+tnt.tia-market-2:
+  advertise_uri: localhost:2127
+  http_port: 7127
+
+tnt.blur-market:
+  advertise_uri: localhost:2028
+  http_port: 7028
+
+tnt.blur-market-2:
+  advertise_uri: localhost:2128
+  http_port: 7128
+
+tnt.jto-market:
+  advertise_uri: localhost:2029
+  http_port: 7029
+
+tnt.jto-market-2:
+  advertise_uri: localhost:2129
+  http_port: 7129
+
+tnt.meme-market:
+  advertise_uri: localhost:2030
+  http_port: 7030
+
+tnt.meme-market-2:
+  advertise_uri: localhost:2130
+  http_port: 7130
+
+tnt.sei-market:
+  advertise_uri: localhost:2031
+  http_port: 7031
+
+tnt.sei-market-2:
+  advertise_uri: localhost:2131
+  http_port: 7131
+
+tnt.yes-market:
+  advertise_uri: localhost:2032
+  http_port: 7032
+
+tnt.yes-market-2:
+  advertise_uri: localhost:2132
+  http_port: 7132
+
+tnt.wif-market:
+  advertise_uri: localhost:2033
+  http_port: 7033
+
+tnt.wif-market-2:
+  advertise_uri: localhost:2133
+  http_port: 7133
+
+tnt.strk-market:
+  advertise_uri: localhost:2034
+  http_port: 7034
+
+tnt.strk-market-2:
+  advertise_uri: localhost:2134
+  http_port: 7134
+
+tnt.shib1000-market:
+  advertise_uri: localhost:2035
+  http_port: 7035
+
+tnt.shib1000-market-2:
+  advertise_uri: localhost:2135
+  http_port: 7135
+
+tnt.bome-market:
+  advertise_uri: localhost:2036
+  http_port: 7036
+
+tnt.bome-market-2:
+  advertise_uri: localhost:2136
+  http_port: 7136
+
+tnt.slerf-market:
+  advertise_uri: localhost:2037
+  http_port: 7037
+
+tnt.slerf-market-2:
+  advertise_uri: localhost:2137
+  http_port: 7137
+
+tnt.w-market:
+  advertise_uri: localhost:2038
+  http_port: 7038
+
+tnt.w-market-2:
+  advertise_uri: localhost:2138
+  http_port: 7138
+
+tnt.ena-market:
+  advertise_uri: localhost:2039
+  http_port: 7039
+
+tnt.ena-market-2:
+  advertise_uri: localhost:2139
+  http_port: 7139
+
+tnt.pac-market:
+  advertise_uri: localhost:2040
+  http_port: 7040
+
+tnt.pac-market-2:
+  advertise_uri: localhost:2140
+  http_port: 7140
+
+tnt.maga-market:
+  advertise_uri: localhost:2041
+  http_port: 7041
+
+tnt.maga-market-2:
+  advertise_uri: localhost:2141
+  http_port: 7141
+
+tnt.trump-market:
+  advertise_uri: localhost:2042
+  http_port: 7042
+
+tnt.trump-market-2:
+  advertise_uri: localhost:2142
+  http_port: 7142
+
+tnt.mog1000-market:
+  advertise_uri: localhost:2043
+  http_port: 7043
+
+tnt.mog1000-market-2:
+  advertise_uri: localhost:2143
+  http_port: 7143
+
+tnt.not-market:
+  advertise_uri: localhost:2044
+  http_port: 7044
+
+tnt.not-market-2:
+  advertise_uri: localhost:2144
+  http_port: 7144
+
+tnt.mother-market:
+  advertise_uri: localhost:2045
+  http_port: 7045
+
+tnt.mother-market-2:
+  advertise_uri: localhost:2145
+  http_port: 7145
+
+tnt.bonk1000-market:
+  advertise_uri: localhost:2046
+  http_port: 7046
+
+tnt.bonk1000-market-2:
+  advertise_uri: localhost:2146
+  http_port: 7146
+
+tnt.taiko-market:
+  advertise_uri: localhost:2047
+  http_port: 7047
+
+tnt.taiko-market-2:
+  advertise_uri: localhost:2147
+  http_port: 7147
+
+tnt.floki1000-market:
+  advertise_uri: localhost:2048
+  http_port: 7048
+
+tnt.floki1000-market-2:
+  advertise_uri: localhost:2148
+  http_port: 7148
+
+tnt.api-gateway:
+  advertise_uri: localhost:3003
+  http_port: 8003
+
+tnt.profile:
+  advertise_uri: localhost:3004
+  http_port: 8004
+
+tnt.auth:
+  advertise_uri: localhost:3005
+  http_port: 8005
+
+tnt.pubsub:
+  advertise_uri: localhost:9001
+  http_port: 8006

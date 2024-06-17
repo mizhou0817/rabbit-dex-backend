@@ -1,0 +1,161 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: tarantool
+  name: tarantool
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: tarantool
+  template:
+    metadata:
+      labels:
+        app: tarantool
+    spec:
+      containers:
+        - image: 618528691313.dkr.ecr.ap-northeast-1.amazonaws.com/rabbitx/tarantool:XXX
+          imagePullPolicy: Always
+          command: ["/usr/src/app/start.sh"]
+          name: tarantool
+          env:
+            - name: RECOVERY
+              value: "false"
+          ports:
+            # markets
+            - containerPort: 2001
+            - containerPort: 2101
+            - containerPort: 2002
+            - containerPort: 2102
+            - containerPort: 2003
+            - containerPort: 2103
+            - containerPort: 2004
+            - containerPort: 2104
+            - containerPort: 2005
+            - containerPort: 2105
+            - containerPort: 2006
+            - containerPort: 2106
+            - containerPort: 2007
+            - containerPort: 2107
+            - containerPort: 2008
+            - containerPort: 2108
+            - containerPort: 2109
+            - containerPort: 2110
+            - containerPort: 2111
+            - containerPort: 2112
+            - containerPort: 2113
+            - containerPort: 2114
+            - containerPort: 2115
+            - containerPort: 2116
+            - containerPort: 2117
+            - containerPort: 2118
+            - containerPort: 2119
+            - containerPort: 2120
+            - containerPort: 2121
+            - containerPort: 2122
+            - containerPort: 2123
+            - containerPort: 2124
+            - containerPort: 2125
+            - containerPort: 2126
+            - containerPort: 2127
+            - containerPort: 2128
+            - containerPort: 2129
+            - containerPort: 2130
+            - containerPort: 2131
+            - containerPort: 2132
+            - containerPort: 2133
+            - containerPort: 2134
+            - containerPort: 2135
+            - containerPort: 2136
+            - containerPort: 2137
+            - containerPort: 2138
+            - containerPort: 2139
+            - containerPort: 2140
+            - containerPort: 2141
+            - containerPort: 2142
+            - containerPort: 2143
+            - containerPort: 2144
+            - containerPort: 2145
+            - containerPort: 2146
+            - containerPort: 2147
+            - containerPort: 2148
+            # markets http expose (metrics)
+            - containerPort: 7001
+            - containerPort: 7101
+            - containerPort: 7002
+            - containerPort: 7102
+            - containerPort: 7003
+            - containerPort: 7103
+            - containerPort: 7004
+            - containerPort: 7104
+            - containerPort: 7005
+            - containerPort: 7105
+            - containerPort: 7006
+            - containerPort: 7106
+            - containerPort: 7007
+            - containerPort: 7107
+            - containerPort: 7008
+            - containerPort: 7108
+            - containerPort: 7009
+            - containerPort: 7109
+            - containerPort: 7010
+            - containerPort: 7110
+            - containerPort: 7111
+            - containerPort: 7112
+            - containerPort: 7113
+            - containerPort: 7114
+            - containerPort: 7115
+            - containerPort: 7116
+            - containerPort: 7117
+            - containerPort: 7118
+            - containerPort: 7119
+            - containerPort: 7120
+            - containerPort: 7121
+            - containerPort: 7122
+            - containerPort: 7123
+            - containerPort: 7124
+            - containerPort: 7125
+            - containerPort: 7126
+            - containerPort: 7127
+            - containerPort: 7128
+            - containerPort: 7129
+            - containerPort: 7130
+            - containerPort: 7131
+            - containerPort: 7132
+            - containerPort: 7133
+            - containerPort: 7134
+            - containerPort: 7135
+            - containerPort: 7136
+            - containerPort: 7137
+            - containerPort: 7138
+            - containerPort: 7139
+            - containerPort: 7140
+            - containerPort: 7141
+            - containerPort: 7142
+            - containerPort: 7143
+            - containerPort: 7144
+            - containerPort: 7145
+            - containerPort: 7146
+            - containerPort: 7147
+            - containerPort: 7148
+            # profile/auth etc..
+            - containerPort: 3003
+            - containerPort: 3004
+            - containerPort: 3005
+            # profile/auth http expose (metrics)
+            - containerPort: 8003
+            - containerPort: 8004
+            - containerPort: 8005
+            - containerPort: 8006
+            # centrifugo
+            - containerPort: 9001
+              protocol: TCP
+          resources: {}
+          volumeMounts:
+            - mountPath: /usr/src/app/tmp
+              name: tarantool-pv
+      volumes:
+        - name: tarantool-pv
+          persistentVolumeClaim:
+            claimName: tarantool-pvc

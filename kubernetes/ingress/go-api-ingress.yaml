@@ -1,0 +1,62 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  annotations:
+    cert-manager.io/cluster-issuer: letsencrypt
+    nginx.ingress.kubernetes.io/proxy-read-timeout: "3600"
+    nginx.ingress.kubernetes.io/proxy-send-timeout: "3600"
+    nginx.ingress.kubernetes.io/server-snippets: |
+     location / {
+      proxysetheader Upgrade $httpupgrade;
+      proxyhttpversion 1.1;
+      proxysetheader X-Forwarded-Host $httphost;
+      proxysetheader X-Forwarded-Proto $scheme;
+      proxysetheader X-Forwarded-For $remoteaddr;
+      proxysetheader Host $host;
+      proxysetheader Connection "upgrade";
+      proxycachebypass $httpupgrade;
+      }
+  name: go-api-ingress
+  namespace: rabbitx
+spec:
+  ingressClassName: nginx
+  rules:
+  - host: api.testnet.bfx.trade
+    http:
+      paths:
+      - backend:
+          service:
+            name: go-api
+            port:
+              number: 8888
+        path: /
+        pathType: ImplementationSpecific
+      - backend:
+          service:
+            name: centrifugo
+            port:
+              number: 8000
+        path: /ws
+        pathType: Exact
+  - host: api.testnet.rabbitx.io
+    http:
+      paths:
+      - backend:
+          service:
+            name: go-api
+            port:
+              number: 8888
+        path: /
+        pathType: ImplementationSpecific
+      - backend:
+          service:
+            name: centrifugo
+            port:
+              number: 8000
+        path: /ws
+        pathType: Exact
+  tls:
+  - hosts:
+    - api.testnet.bfx.trade
+    - api.testnet.rabbitx.io
+    secretName: api-testnet-ingress

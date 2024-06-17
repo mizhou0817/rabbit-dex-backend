@@ -1,0 +1,611 @@
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: tarantool
+  name: tarantool
+spec:
+  ports:
+    - name: btc-market
+      port: 2001
+      targetPort: 2001
+    - name: btc-market-2
+      port: 2101
+      targetPort: 2101
+    - name: btc-market-http
+      port: 7001
+      targetPort: 7001
+    - name: btc-market-2-http
+      port: 7101
+      targetPort: 7101
+    - name: eth-market
+      port: 2002
+      targetPort: 2002
+    - name: eth-market-2
+      port: 2102
+      targetPort: 2102
+    - name: eth-market-http
+      port: 7002
+      targetPort: 7002
+    - name: eth-market-2-http
+      port: 7102
+      targetPort: 7102
+    - name: sol-market
+      port: 2003
+      targetPort: 2003
+    - name: sol-market-2
+      port: 2103
+      targetPort: 2103
+    - name: sol-market-http
+      port: 7003
+      targetPort: 7003
+    - name: sol-market-2-http
+      port: 7103
+      targetPort: 7103
+    - name: arb-market
+      port: 2004
+      targetPort: 2004
+    - name: arb-market-2
+      port: 2104
+      targetPort: 2104
+    - name: arb-market-http
+      port: 7004
+      targetPort: 7004
+    - name: arb-market-2-http
+      port: 7104
+      targetPort: 7104
+    - name: doge-market
+      port: 2005
+      targetPort: 2005
+    - name: doge-market-2
+      port: 2105
+      targetPort: 2105
+    - name: doge-market-http
+      port: 7005
+      targetPort: 7005
+    - name: doge-market-2-http
+      port: 7105
+      targetPort: 7105
+    - name: ldo-market
+      port: 2006
+      targetPort: 2006
+    - name: ldo-market-2
+      port: 2106
+      targetPort: 2106
+    - name: ldo-market-http
+      port: 7006
+      targetPort: 7006
+    - name: ldo-market-2-http
+      port: 7106
+      targetPort: 7106
+    - name: sui-market
+      port: 2007
+      targetPort: 2007
+    - name: sui-market-2
+      port: 2107
+      targetPort: 2107
+    - name: sui-market-http
+      port: 7007
+      targetPort: 7007
+    - name: sui-market-2-http
+      port: 7107
+      targetPort: 7107
+    - name: pepe-market
+      port: 2008
+      targetPort: 2008
+    - name: pepe-market-2
+      port: 2108
+      targetPort: 2108
+    - name: pepe-market-http
+      port: 7008
+      targetPort: 7008
+    - name: pepe-market-2-http
+      port: 7108
+      targetPort: 7108
+    - name: bch-market
+      port: 2009
+      targetPort: 2009
+    - name: bch-market-2
+      port: 2109
+      targetPort: 2109
+    - name: bch-market-http
+      port: 7009
+      targetPort: 7009
+    - name: bch-market-2-http
+      port: 7109
+      targetPort: 7109
+    - name: xrp-market
+      port: 2010
+      targetPort: 2010
+    - name: xrp-market-2
+      port: 2110
+      targetPort: 2110
+    - name: xrp-market-http
+      port: 7010
+      targetPort: 7010
+    - name: xrp-market-2-http
+      port: 7110
+      targetPort: 7110
+    - name: wld-market
+      port: 2011
+      targetPort: 2011
+    - name: wld-market-2
+      port: 2111
+      targetPort: 2111
+    - name: wld-market-http
+      port: 7011
+      targetPort: 7011
+    - name: wld-market-2-http
+      port: 7111
+      targetPort: 7111
+    - name: ton-market
+      port: 2012
+      targetPort: 2012
+    - name: ton-market-2
+      port: 2112
+      targetPort: 2112
+    - name: ton-market-http
+      port: 7012
+      targetPort: 7012
+    - name: ton-market-2-http
+      port: 7112
+      targetPort: 7112
+    - name: stx-market
+      port: 2013
+      targetPort: 2013
+    - name: stx-market-2
+      port: 2113
+      targetPort: 2113
+    - name: stx-market-http
+      port: 7013
+      targetPort: 7013
+    - name: stx-market-2-http
+      port: 7113
+      targetPort: 7113
+    - name: matic-market
+      port: 2014
+      targetPort: 2014
+    - name: matic-market-2
+      port: 2114
+      targetPort: 2114
+    - name: matic-market-http
+      port: 7014
+      targetPort: 7014
+    - name: matic-market-2-http
+      port: 7114
+      targetPort: 7114
+    - name: trb-market
+      port: 2015
+      targetPort: 2015
+    - name: trb-market-2
+      port: 2115
+      targetPort: 2115
+    - name: trb-market-http
+      port: 7015
+      targetPort: 7015
+    - name: trb-market-2-http
+      port: 7115
+      targetPort: 7115
+    - name: apt-market
+      port: 2016
+      targetPort: 2016
+    - name: apt-market-2
+      port: 2116
+      targetPort: 2116
+    - name: apt-market-http
+      port: 7016
+      targetPort: 7016
+    - name: apt-market-2-http
+      port: 7116
+      targetPort: 7116
+    - name: inj-market
+      port: 2017
+      targetPort: 2017
+    - name: inj-market-2
+      port: 2117
+      targetPort: 2117
+    - name: inj-market-http
+      port: 7017
+      targetPort: 7017
+    - name: inj-market-2-http
+      port: 7117
+      targetPort: 7117
+    - name: aave-market
+      port: 2018
+      targetPort: 2018
+    - name: aave-market-2
+      port: 2118
+      targetPort: 2118
+    - name: aave-market-http
+      port: 7018
+      targetPort: 7018
+    - name: aave-market-2-http
+      port: 7118
+      targetPort: 7118
+    - name: link-market
+      port: 2019
+      targetPort: 2019
+    - name: link-market-2
+      port: 2119
+      targetPort: 2119
+    - name: link-market-http
+      port: 7019
+      targetPort: 7019
+    - name: link-market-2-http
+      port: 7119
+      targetPort: 7119
+    - name: bnb-market
+      port: 2020
+      targetPort: 2020
+    - name: bnb-market-2
+      port: 2120
+      targetPort: 2120
+    - name: bnb-market-http
+      port: 7020
+      targetPort: 7020
+    - name: bnb-market-2-http
+      port: 7120
+      targetPort: 7120
+    - name: rndr-market
+      port: 2021
+      targetPort: 2021
+    - name: rndr-market-2
+      port: 2121
+      targetPort: 2121
+    - name: rndr-market-http
+      port: 7021
+      targetPort: 7021
+    - name: rndr-market-2-http
+      port: 7121
+      targetPort: 7121
+    - name: mkr-market
+      port: 2022
+      targetPort: 2022
+    - name: mkr-market-2
+      port: 2122
+      targetPort: 2122
+    - name: mkr-market-http
+      port: 7022
+      targetPort: 7022
+    - name: mkr-market-2-http
+      port: 7122
+      targetPort: 7122
+    - name: rlb-market
+      port: 2023
+      targetPort: 2023
+    - name: rlb-market-2
+      port: 2123
+      targetPort: 2123
+    - name: rlb-market-http
+      port: 7023
+      targetPort: 7023
+    - name: rlb-market-2-http
+      port: 7123
+      targetPort: 7123
+    - name: ordi-market
+      port: 2024
+      targetPort: 2024
+    - name: ordi-market-2
+      port: 2124
+      targetPort: 2124
+    - name: ordi-market-http
+      port: 7024
+      targetPort: 7024
+    - name: ordi-market-2-http
+      port: 7124
+      targetPort: 7124
+    - name: stg-market
+      port: 2025
+      targetPort: 2025
+    - name: stg-market-2
+      port: 2125
+      targetPort: 2125
+    - name: stg-market-http
+      port: 7025
+      targetPort: 7025
+    - name: stg-market-2-http
+      port: 7125
+      targetPort: 7125
+    - name: sats-market
+      port: 2026
+      targetPort: 2026
+    - name: sats-market-2
+      port: 2126
+      targetPort: 2126
+    - name: sats-market-http
+      port: 7026
+      targetPort: 7026
+    - name: sats-market-2-http
+      port: 7126
+      targetPort: 7126
+    - name: tia-market
+      port: 2027
+      targetPort: 2027
+    - name: tia-market-2
+      port: 2127
+      targetPort: 2127
+    - name: tia-market-http
+      port: 7027
+      targetPort: 7027
+    - name: tia-market-2-http
+      port: 7127
+      targetPort: 7127
+    - name: blur-market
+      port: 2028
+      targetPort: 2028
+    - name: blur-market-2
+      port: 2128
+      targetPort: 2128
+    - name: blur-market-http
+      port: 7028
+      targetPort: 7028
+    - name: blur-market-2-http
+      port: 7128
+      targetPort: 7128
+    - name: jto-market
+      port: 2029
+      targetPort: 2029
+    - name: jto-market-2
+      port: 2129
+      targetPort: 2129
+    - name: jto-market-http
+      port: 7029
+      targetPort: 7029
+    - name: jto-market-2-http
+      port: 7129
+      targetPort: 7129
+    - name: meme-market
+      port: 2030
+      targetPort: 2030
+    - name: meme-market-2
+      port: 2130
+      targetPort: 2130
+    - name: meme-market-http
+      port: 7030
+      targetPort: 7030
+    - name: meme-market-2-http
+      port: 7130
+      targetPort: 7130
+    - name: sei-market
+      port: 2031
+      targetPort: 2031
+    - name: sei-market-2
+      port: 2131
+      targetPort: 2131
+    - name: sei-market-http
+      port: 7031
+      targetPort: 7031
+    - name: sei-market-2-http
+      port: 7131
+      targetPort: 7131
+    - name: yes-market
+      port: 2032
+      targetPort: 2032
+    - name: yes-market-2
+      port: 2132
+      targetPort: 2132
+    - name: yes-market-http
+      port: 7032
+      targetPort: 7032
+    - name: yes-market-2-http
+      port: 7132
+      targetPort: 7132
+    - name: wif-market
+      port: 2033
+      targetPort: 2033
+    - name: wif-market-2
+      port: 2133
+      targetPort: 2133
+    - name: wif-market-http
+      port: 7033
+      targetPort: 7033
+    - name: wif-market-2-http
+      port: 7133
+      targetPort: 7133
+    - name: strk-market
+      port: 2034
+      targetPort: 2034
+    - name: strk-market-2
+      port: 2134
+      targetPort: 2134
+    - name: strk-market-http
+      port: 7034
+      targetPort: 7034
+    - name: strk-market-2-http
+      port: 7134
+      targetPort: 7134
+    - name: shib-market
+      port: 2035
+      targetPort: 2035
+    - name: shib-market-2
+      port: 2135
+      targetPort: 2135
+    - name: shib-market-http
+      port: 7035
+      targetPort: 7035
+    - name: shib-market-2-http
+      port: 7135
+      targetPort: 7135
+    - name: bome-market
+      port: 2036
+      targetPort: 2036
+    - name: bome-market-2
+      port: 2136
+      targetPort: 2136
+    - name: bome-market-http
+      port: 7036
+      targetPort: 7036
+    - name: bome-market-2-http
+      port: 7136
+      targetPort: 7136
+    - name: slerf-market
+      port: 2037
+      targetPort: 2037
+    - name: slerf-market-2
+      port: 2137
+      targetPort: 2137
+    - name: slerf-market-http
+      port: 7037
+      targetPort: 7037
+    - name: slerf-market-2-http
+      port: 7137
+      targetPort: 7137
+    - name: w-market
+      port: 2038
+      targetPort: 2038
+    - name: w-market-2
+      port: 2138
+      targetPort: 2138
+    - name: w-market-http
+      port: 7038
+      targetPort: 7038
+    - name: w-market-2-http
+      port: 7138
+      targetPort: 7138
+    - name: ena-market
+      port: 2039
+      targetPort: 2039
+    - name: ena-market-2
+      port: 2139
+      targetPort: 2139
+    - name: ena-market-http
+      port: 7039
+      targetPort: 7039
+    - name: ena-market-2-http
+      port: 7139
+      targetPort: 7139
+    - name: pac-market
+      port: 2040
+      targetPort: 2040
+    - name: pac-market-2
+      port: 2140
+      targetPort: 2140
+    - name: pac-market-http
+      port: 7040
+      targetPort: 7040
+    - name: pac-market-2-http
+      port: 7140
+      targetPort: 7140
+    - name: maga-market
+      port: 2041
+      targetPort: 2041
+    - name: maga-market-2
+      port: 2141
+      targetPort: 2141
+    - name: maga-market-http
+      port: 7041
+      targetPort: 7041
+    - name: maga-market-2-http
+      port: 7141
+      targetPort: 7141
+    - name: trump-market
+      port: 2042
+      targetPort: 2042
+    - name: trump-market-2
+      port: 2142
+      targetPort: 2142
+    - name: trump-market-http
+      port: 7042
+      targetPort: 7042
+    - name: trump-market-2-http
+      port: 7142
+      targetPort: 7142
+    - name: mog-market
+      port: 2043
+      targetPort: 2043
+    - name: mog-market-2
+      port: 2143
+      targetPort: 2143
+    - name: mog-market-http
+      port: 7043
+      targetPort: 7043
+    - name: mog-market-2-http
+      port: 7143
+      targetPort: 7143
+    - name: not-market
+      port: 2044
+      targetPort: 2044
+    - name: not-market-2
+      port: 2144
+      targetPort: 2144
+    - name: not-market-http
+      port: 7044
+      targetPort: 7044
+    - name: not-market-2-http
+      port: 7144
+      targetPort: 7144
+    - name: mother-market
+      port: 2045
+      targetPort: 2045
+    - name: mother-market-2
+      port: 2145
+      targetPort: 2145
+    - name: mother-market-http
+      port: 7045
+      targetPort: 7045
+    - name: mother-market-2-http
+      port: 7145
+      targetPort: 7145
+    - name: bonk-market
+      port: 2046
+      targetPort: 2046
+    - name: bonk-market-2
+      port: 2146
+      targetPort: 2146
+    - name: bonk-market-http
+      port: 7046
+      targetPort: 7046
+    - name: bonk-market-2-http
+      port: 7146
+      targetPort: 7146
+    - name: taiko-market
+      port: 2047
+      targetPort: 2047
+    - name: taiko-market-2
+      port: 2147
+      targetPort: 2147
+    - name: taiko-market-http
+      port: 7047
+      targetPort: 7047
+    - name: taiko-market-2-http
+      port: 7147
+      targetPort: 7147
+    - name: floki-market
+      port: 2048
+      targetPort: 2048
+    - name: floki-market-2
+      port: 2148
+      targetPort: 2148
+    - name: floki-market-http
+      port: 7048
+      targetPort: 7048
+    - name: floki-market-2-http
+      port: 7148
+      targetPort: 7148
+    - name: api-gateway
+      port: 3003
+      targetPort: 3003
+    - name: api-gateway-http
+      port: 8003
+      targetPort: 8003
+    - name: profile
+      port: 3004
+      targetPort: 3004
+    - name: profile-http
+      port: 8004
+      targetPort: 8004
+    - name: auth
+      port: 3005
+      targetPort: 3005
+    - name: auth-http
+      port: 8005
+      targetPort: 8005
+    - name: pubsub
+      port: 9001
+      targetPort: 9001
+    - name: pubsub-http
+      port: 8006
+      targetPort: 8006
+  selector:
+    app: tarantool
+  type: ClusterIP

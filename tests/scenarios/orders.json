@@ -1,0 +1,227 @@
+{
+    "market": [
+        {
+            "marketID": "btc",
+            "minOrder": 0.0001,
+            "minTick": 1,
+            "initialMargin": 0.05,
+            "forcedMargin": 0.03,
+            "liquidatedMargin": 0.02,
+            "fairPrice": 19435
+        }
+    ],
+    "sequence": [
+        {
+            "traderID": 0,
+            "amount": 500000,
+            "action": "deposit"
+        },
+        {
+            "traderID": 1,
+            "amount": 10000,
+            "action": "deposit"
+        },
+        {
+            "traderID": 2,
+            "amount": 10000,
+            "action": "deposit"
+        },
+        {
+            "marketID": "btc",
+            "amount": 1000.0,
+            "action": "setFairPrice"
+        },
+        {
+            "traderID": 2,
+            "orderType": "limit",
+            "price": 1010,
+            "size": 0.1,
+            "side": 0,
+            "marketID": "btc",
+            "action": "add",
+            "rejected": false,
+            "orderID": 100,
+            "timeInForce": "good_till_cancel"
+        },
+        {
+            "traderID": 1,
+            "orderType": "limit",
+            "price": 990,
+            "size": 0.1,
+            "side": 1,
+            "marketID": "btc",
+            "action": "add",
+            "rejected": false,
+            "orderID": 101,
+            "timeInForce": "good_till_cancel"
+        },
+
+        {
+            "traderID": 1,
+            "orderType": "stop_loss_limit",
+            "triggerPrice": 1010,
+            "price": 1020,
+            "marketID": "btc",
+            "percentPosition": 0.5,
+            "action": "add",
+            "rejected": false,
+            "orderID": 1000,
+            "timeInForce": "good_till_cancel"
+        },
+        {
+            "traderID": 1,
+            "triggerPrice": 1020,
+            "price": 1120,
+            "marketID": "btc",
+            "percentPosition": 0.5,
+            "action": "amend",
+            "rejected": true,
+            "orderID": 1000
+        },
+
+        {
+            "traderID": 2,
+            "orderType": "stop_loss_limit",
+            "triggerPrice": 980,
+            "price": 970,
+            "marketID": "btc",
+            "percentPosition": 0.5,
+            "action": "add",
+            "rejected": false,
+            "orderID": 1001,
+            "timeInForce": "good_till_cancel"
+        },
+        {
+            "traderID": 2,
+            "triggerPrice": 970,
+            "price": 900,
+            "marketID": "btc",
+            "percentPosition": 0.5,
+            "action": "amend",
+            "rejected": true,
+            "orderID": 1001
+        },
+
+        {
+            "traderID": 1,
+            "orderType": "take_profit_limit",
+            "triggerPrice": 980,
+            "price": 970,
+            "marketID": "btc",
+            "percentPosition": 0.5,
+            "action": "add",
+            "rejected": false,
+            "orderID": 1002,
+            "timeInForce": "good_till_cancel"
+        },
+        {
+            "traderID": 1,
+            "triggerPrice": 970,
+            "price": 1100,
+            "marketID": "btc",
+            "percentPosition": 0.5,
+            "action": "amend",
+            "rejected": true,
+            "orderID": 1002
+        },
+
+        {
+            "traderID": 2,
+            "orderType": "take_profit_limit",
+            "triggerPrice": 1040,
+            "price": 1020,
+            "marketID": "btc",
+            "percentPosition": 0.5,
+            "action": "add",
+            "rejected": false,
+            "orderID": 1003,
+            "timeInForce": "good_till_cancel"
+        },
+        {
+            "traderID": 2,
+            "triggerPrice": 1040,
+            "price": 920,
+            "marketID": "btc",
+            "percentPosition": 0.5,
+            "action": "amend",
+            "rejected": true,
+            "orderID": 1003
+        }
+    ],
+    "expected": {
+        "fills": [
+            {
+                "price": 1010,
+                "size": 0.1,
+                "takerID": 1,
+                "makerID": 2,
+                "bidOrderID": 100,
+                "askOrderID": 101,
+                "marketID": "btc"
+            }
+        ],
+        "orderbook": [],
+        "traderAccount": [],
+        "exchange": [
+            {
+                "tradingFee": 0.0707,
+                "exchangeBalanceExInsurance": 0,
+                "cumulativeVolume": 101,
+                "cumulativeVolume_Q": 0.1
+            }
+        ],
+        "INV3": [
+            {
+                "status": true,
+                "sumAE": 0,
+                "exchangeBal_insuranceDeposit": 500000
+            }
+        ],
+        "orderQueue": [
+            {
+                "sequence": 0,
+                "traderID": 1,
+                "market": "btc",
+                "triggerPrice": 1010,
+                "percentPosition": 0.5,
+                "orderType": "stop_loss_limit",
+                "status": "active",
+                "orderID": 1000,
+                "price": 1020
+            },
+            {
+                "sequence": 1,
+                "traderID": 2,
+                "market": "btc",
+                "triggerPrice": 980,
+                "percentPosition": 0.5,
+                "orderType": "stop_loss_limit",
+                "status": "active",
+                "orderID": 1001,
+                "price": 970
+            },
+            {
+                "sequence": 2,
+                "traderID": 1,
+                "market": "btc",
+                "triggerPrice": 980,
+                "percentPosition": 0.5,
+                "orderType": "take_profit_limit",
+                "status": "active",
+                "orderID": 1002,
+                "price": 970
+            },
+            {
+                "sequence": 3,
+                "traderID": 2,
+                "market": "btc",
+                "triggerPrice": 1040,
+                "percentPosition": 0.5,
+                "orderType": "take_profit_limit",
+                "status": "active",
+                "orderID": 1003,
+                "price": 1020
+            }
+        ]
+    }
+}

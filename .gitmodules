@@ -1,0 +1,3 @@
+[submodule "deps/caigo"]
+	path = deps/caigo
+	url = https://github.com/alex-sumner/caigo

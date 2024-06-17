@@ -1,0 +1,45 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: go-pricingservice
+  name: go-pricingservice
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: go-pricingservice
+  template:
+    metadata:
+      labels:
+        app: go-pricingservice
+    spec:
+      serviceAccountName: pricing-service
+      volumes:
+        - name: secrets-store-inline
+          csi:
+            driver: secrets-store.csi.k8s.io
+            readOnly: true
+            volumeAttributes:
+              secretProviderClass: "aws-secrets-go-pricing"
+      containers:
+        - image: 618528691313.dkr.ecr.ap-northeast-1.amazonaws.com/rabbitx/go-pricingservice
+          imagePullPolicy: Always
+          command: ["/usr/bin/go-pricingservice"]
+          name: go-pricingservice
+          resources: {}
+          volumeMounts:
+            - name: secrets-store-inline
+              mountPath: "/mnt/secrets-store"
+              readOnly: true
+          env:
+            - name: COINGECKO_API_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: pricing-secrets
+                  key: COINGECKO_API_KEY
+            - name: COINMARKETCAP_API_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: pricing-secrets
+                  key: COINMARKETCAP_API_KEY

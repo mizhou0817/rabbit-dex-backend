@@ -1,0 +1,1675 @@
+{
+    "market": [
+        {
+            "marketID": "btc",
+            "minOrder": 0.0001,
+            "minTick": 1.0,
+            "initialMargin": 0.05,
+            "forcedMargin": 0.03,
+            "liquidatedMargin": 0.02,
+            "fairPrice": 20398.0
+        },
+        {
+            "marketID": "eth",
+            "minOrder": 0.001,
+            "minTick": 0.1,
+            "initialMargin": 0.05,
+            "forcedMargin": 0.03,
+            "liquidatedMargin": 0.02,
+            "fairPrice": 1240.7
+        },
+        {
+            "marketID": "sol",
+            "minOrder": 0.01,
+            "minTick": 0.0001,
+            "initialMargin": 0.05,
+            "forcedMargin": 0.03,
+            "liquidatedMargin": 0.02,
+            "fairPrice": 37.8
+        },
+        {
+            "marketID": "luna",
+            "minOrder": 1.0,
+            "minTick": 1e-06,
+            "initialMargin": 0.05,
+            "forcedMargin": 0.03,
+            "liquidatedMargin": 0.02,
+            "fairPrice": 120.0
+        }
+    ],
+    "sequence": [
+        {
+            "traderID": 0,
+            "amount": 500000,
+            "action": "deposit"
+        },
+        {
+            "traderID": 1,
+            "amount": 10000,
+            "action": "deposit"
+        },
+        {
+            "traderID": 2,
+            "amount": 50000,
+            "action": "deposit"
+        },
+        {
+            "traderID": 3,
+            "amount": 5000,
+            "action": "deposit"
+        },
+        {
+            "traderID": 4,
+            "amount": 2900,
+            "action": "deposit"
+        },
+        {
+            "traderID": 5,
+            "amount": 1100,
+            "action": "deposit"
+        },
+        {
+            "traderID": 6,
+            "amount": 6000,
+            "action": "deposit"
+        },
+        {
+            "traderID": 7,
+            "amount": 10000,
+            "action": "deposit"
+        },
+        {
+            "traderID": 8,
+            "amount": 3700,
+            "action": "deposit"
+        },
+        {
+            "traderID": 9,
+            "amount": 4100,
+            "action": "deposit"
+        },
+        {
+            "traderID": 10,
+            "amount": 10000,
+            "action": "deposit"
+        },
+        {
+            "traderID": 11,
+            "amount": 10000,
+            "action": "deposit"
+        },
+        {
+            "traderID": 12,
+            "amount": 10000,
+            "action": "deposit"
+        },
+        {
+            "traderID": 13,
+            "amount": 10000,
+            "action": "deposit"
+        },
+        {
+            "traderID": 14,
+            "amount": 4355,
+            "action": "deposit"
+        },
+        {
+            "traderID": 15,
+            "amount": 10000,
+            "action": "deposit"
+        },
+        {
+            "traderID": 16,
+            "amount": 10000,
+            "action": "deposit"
+        },
+        {
+            "traderID": 17,
+            "amount": 10000,
+            "action": "deposit"
+        },
+        {
+            "traderID": 18,
+            "amount": 10000,
+            "action": "deposit"
+        },
+        {
+            "traderID": 19,
+            "amount": 20000,
+            "action": "deposit"
+        },
+        {
+            "traderID": 20,
+            "amount": 2300,
+            "action": "deposit"
+        },
+        {
+            "traderID": 21,
+            "amount": 800,
+            "action": "deposit"
+        },
+        {
+            "traderID": 22,
+            "amount": 4000,
+            "action": "deposit"
+        },
+        {
+            "marketID": "btc",
+            "amount": 20666.0,
+            "action": "setFairPrice"
+        },
+        {
+            "marketID": "btc",
+            "traderID": 1,
+            "orderType": "limit",
+            "price": 20156,
+            "side": 1,
+            "size": 0.5935,
+            "leverage": 20,
+            "action": "add",
+            "orderID": 1,
+            "fairPrice": 20666.0
+        },
+        {
+            "marketID": "btc",
+            "amount": 20411.0,
+            "action": "setFairPrice"
+        },
+        {
+            "marketID": "btc",
+            "traderID": 2,
+            "orderType": "limit",
+            "price": 20156,
+            "side": 1,
+            "size": 7.9212,
+            "leverage": 20,
+            "action": "add",
+            "orderID": 2,
+            "fairPrice": 20411.0
+        },
+        {
+            "marketID": "btc",
+            "amount": 20411.0,
+            "action": "setFairPrice"
+        },
+        {
+            "marketID": "btc",
+            "traderID": 3,
+            "orderType": "limit",
+            "price": 20156,
+            "side": 1,
+            "size": 2.5976,
+            "leverage": 20,
+            "action": "add",
+            "orderID": 3,
+            "fairPrice": 20411.0
+        },
+        {
+            "marketID": "btc",
+            "amount": 20411.0,
+            "action": "setFairPrice"
+        },
+        {
+            "marketID": "btc",
+            "traderID": 4,
+            "orderType": "limit",
+            "price": 20167,
+            "side": 1,
+            "size": 1.9762,
+            "leverage": 20,
+            "action": "add",
+            "orderID": 4,
+            "fairPrice": 20411.0
+        },
+        {
+            "marketID": "btc",
+            "amount": 20411.0,
+            "action": "setFairPrice"
+        },
+        {
+            "marketID": "btc",
+            "traderID": 4,
+            "orderType": "limit",
+            "price": 20168,
+            "side": 1,
+            "size": 0.047,
+            "leverage": 20,
+            "action": "add",
+            "orderID": 5,
+            "fairPrice": 20411.0
+        },
+        {
+            "marketID": "btc",
+            "amount": 20411.0,
+            "action": "setFairPrice"
+        },
+        {
+            "marketID": "btc",
+            "traderID": 22,
+            "orderType": "limit",
+            "price": 20169,
+            "side": 1,
+            "size": 1.1934,
+            "leverage": 20,
+            "action": "add",
+            "orderID": 6,
+            "fairPrice": 20411.0
+        },
+        {
+            "marketID": "btc",
+            "amount": 20411.0,
+            "action": "setFairPrice"
+        },
+        {
+            "marketID": "btc",
+            "traderID": 22,
+            "orderType": "limit",
+            "price": 20170,
+            "side": 1,
+            "size": 1.6784,
+            "leverage": 20,
+            "action": "add",
+            "orderID": 7,
+            "fairPrice": 20411.0
+        },
+        {
+            "marketID": "btc",
+            "amount": 20411.0,
+            "action": "setFairPrice"
+        },
+        {
+            "marketID": "btc",
+            "traderID": 6,
+            "orderType": "limit",
+            "price": 20103,
+            "side": 0,
+            "size": 0.5654,
+            "leverage": 20,
+            "action": "add",
+            "orderID": 8,
+            "fairPrice": 20411.0
+        },
+        {
+            "marketID": "btc",
+            "amount": 20398.0,
+            "action": "setFairPrice"
+        },
+        {
+            "marketID": "btc",
+            "traderID": 7,
+            "orderType": "limit",
+            "price": 20102,
+            "side": 0,
+            "size": 0.5829,
+            "leverage": 20,
+            "action": "add",
+            "orderID": 9,
+            "fairPrice": 20398.0
+        },
+        {
+            "marketID": "btc",
+            "amount": 20398.0,
+            "action": "setFairPrice"
+        },
+        {
+            "marketID": "btc",
+            "traderID": 8,
+            "orderType": "limit",
+            "price": 20101,
+            "side": 0,
+            "size": 0.1576,
+            "leverage": 20,
+            "action": "add",
+            "orderID": 10,
+            "fairPrice": 20398.0
+        },
+        {
+            "marketID": "btc",
+            "amount": 20398.0,
+            "action": "setFairPrice"
+        },
+        {
+            "marketID": "btc",
+            "traderID": 9,
+            "orderType": "limit",
+            "price": 20100,
+            "side": 0,
+            "size": 0.6358,
+            "leverage": 20,
+            "action": "add",
+            "orderID": 11,
+            "fairPrice": 20398.0
+        },
+        {
+            "marketID": "btc",
+            "amount": 20398.0,
+            "action": "setFairPrice"
+        },
+        {
+            "marketID": "btc",
+            "traderID": 10,
+            "orderType": "limit",
+            "price": 19537,
+            "side": 0,
+            "size": 0.5227,
+            "leverage": 20,
+            "action": "add",
+            "orderID": 12,
+            "fairPrice": 20398.0
+        },
+        {
+            "marketID": "btc",
+            "amount": 20398.0,
+            "action": "setFairPrice"
+        },
+        {
+            "marketID": "btc",
+            "traderID": 10,
+            "orderType": "limit",
+            "price": 19533,
+            "side": 0,
+            "size": 0.1846,
+            "leverage": 20,
+            "action": "add",
+            "orderID": 13,
+            "fairPrice": 20398.0
+        },
+        {
+            "marketID": "eth",
+            "amount": 1074.8,
+            "action": "setFairPrice"
+        },
+        {
+            "marketID": "eth",
+            "traderID": 6,
+            "orderType": "limit",
+            "price": 1269.9,
+            "side": 1,
+            "size": 45.708,
+            "leverage": 20,
+            "action": "add",
+            "orderID": 14,
+            "fairPrice": 1074.8
+        },
+        {
+            "marketID": "eth",
+            "amount": 1240.8,
+            "action": "setFairPrice"
+        },
+        {
+            "marketID": "eth",
+            "traderID": 7,
+            "orderType": "limit",
+            "price": 1270.2,
+            "side": 1,
+            "size": 29.191,
+            "leverage": 15,
+            "action": "add",
+            "orderID": 15,
+            "fairPrice": 1240.8
+        },
+        {
+            "marketID": "eth",
+            "amount": 1240.8,
+            "action": "setFairPrice"
+        },
+        {
+            "marketID": "eth",
+            "traderID": 8,
+            "orderType": "limit",
+            "price": 1270.3,
+            "side": 1,
+            "size": 29.11,
+            "leverage": 20,
+            "action": "add",
+            "orderID": 16,
+            "fairPrice": 1240.8
+        },
+        {
+            "marketID": "eth",
+            "amount": 1240.8,
+            "action": "setFairPrice"
+        },
+        {
+            "marketID": "eth",
+            "traderID": 9,
+            "orderType": "limit",
+            "price": 1270.4,
+            "side": 1,
+            "size": 14.318,
+            "leverage": 10,
+            "action": "add",
+            "orderID": 17,
+            "fairPrice": 1240.8
+        },
+        {
+            "marketID": "eth",
+            "amount": 1240.8,
+            "action": "setFairPrice"
+        },
+        {
+            "marketID": "eth",
+            "traderID": 10,
+            "orderType": "limit",
+            "price": 1270.5,
+            "side": 1,
+            "size": 20.209,
+            "leverage": 20,
+            "action": "add",
+            "orderID": 18,
+            "fairPrice": 1240.8
+        },
+        {
+            "marketID": "eth",
+            "amount": 1240.8,
+            "action": "setFairPrice"
+        },
+        {
+            "marketID": "eth",
+            "traderID": 5,
+            "orderType": "limit",
+            "price": 1269.4,
+            "side": 0,
+            "size": 8.652,
+            "leverage": 20,
+            "action": "add",
+            "orderID": 19,
+            "fairPrice": 1240.8
+        },
+        {
+            "marketID": "eth",
+            "amount": 1240.7,
+            "action": "setFairPrice"
+        },
+        {
+            "marketID": "eth",
+            "traderID": 11,
+            "orderType": "limit",
+            "price": 1269.3,
+            "side": 0,
+            "size": 10.263,
+            "leverage": 10,
+            "action": "add",
+            "orderID": 20,
+            "fairPrice": 1240.7
+        },
+        {
+            "marketID": "eth",
+            "amount": 1240.7,
+            "action": "setFairPrice"
+        },
+        {
+            "marketID": "eth",
+            "traderID": 3,
+            "orderType": "limit",
+            "price": 1269,
+            "side": 0,
+            "size": 12.298,
+            "leverage": 10,
+            "action": "add",
+            "orderID": 21,
+            "fairPrice": 1240.7
+        },
+        {
+            "marketID": "eth",
+            "amount": 1240.7,
+            "action": "setFairPrice"
+        },
+        {
+            "marketID": "eth",
+            "traderID": 2,
+            "orderType": "limit",
+            "price": 1268.9,
+            "side": 0,
+            "size": 2.238,
+            "leverage": 10,
+            "action": "add",
+            "orderID": 22,
+            "fairPrice": 1240.7
+        },
+        {
+            "marketID": "eth",
+            "amount": 1240.7,
+            "action": "setFairPrice"
+        },
+        {
+            "marketID": "eth",
+            "traderID": 1,
+            "orderType": "limit",
+            "price": 1268.5,
+            "side": 0,
+            "size": 25.888,
+            "leverage": 15,
+            "action": "add",
+            "orderID": 23,
+            "fairPrice": 1240.7
+        },
+        {
+            "marketID": "sol",
+            "amount": 28.8821,
+            "action": "setFairPrice"
+        },
+        {
+            "marketID": "sol",
+            "traderID": 1,
+            "orderType": "limit",
+            "price": 33.425,
+            "side": 1,
+            "size": 18.3,
+            "leverage": 20,
+            "action": "add",
+            "orderID": 25,
+            "fairPrice": 28.8821
+        },
+        {
+            "marketID": "sol",
+            "amount": 33.4145,
+            "action": "setFairPrice"
+        },
+        {
+            "marketID": "sol",
+            "traderID": 6,
+            "orderType": "limit",
+            "price": 33.4275,
+            "side": 1,
+            "size": 0.01,
+            "leverage": 20,
+            "action": "add",
+            "orderID": 26,
+            "fairPrice": 33.4145
+        },
+        {
+            "marketID": "sol",
+            "amount": 33.4145,
+            "action": "setFairPrice"
+        },
+        {
+            "marketID": "sol",
+            "traderID": 13,
+            "orderType": "limit",
+            "price": 33.43,
+            "side": 1,
+            "size": 254.58,
+            "leverage": 20,
+            "action": "add",
+            "orderID": 27,
+            "fairPrice": 33.4145
+        },
+        {
+            "marketID": "sol",
+            "amount": 33.4145,
+            "action": "setFairPrice"
+        },
+        {
+            "marketID": "sol",
+            "traderID": 9,
+            "orderType": "limit",
+            "price": 33.4325,
+            "side": 1,
+            "size": 957.23,
+            "leverage": 20,
+            "action": "add",
+            "orderID": 28,
+            "fairPrice": 33.4145
+        },
+        {
+            "marketID": "sol",
+            "amount": 33.4145,
+            "action": "setFairPrice"
+        },
+        {
+            "marketID": "sol",
+            "traderID": 15,
+            "orderType": "limit",
+            "price": 33.435,
+            "side": 1,
+            "size": 1121.71,
+            "leverage": 20,
+            "action": "add",
+            "orderID": 29,
+            "fairPrice": 33.4145
+        },
+        {
+            "marketID": "sol",
+            "amount": 33.4145,
+            "action": "setFairPrice"
+        },
+        {
+            "marketID": "sol",
+            "traderID": 8,
+            "orderType": "limit",
+            "price": 32.4225,
+            "side": 0,
+            "size": 111.41,
+            "leverage": 15,
+            "action": "add",
+            "orderID": 30,
+            "fairPrice": 33.4145
+        },
+        {
+            "marketID": "sol",
+            "amount": 32.9258,
+            "action": "setFairPrice"
+        },
+        {
+            "marketID": "sol",
+            "traderID": 7,
+            "orderType": "limit",
+            "price": 32.42,
+            "side": 0,
+            "size": 2.53,
+            "leverage": 10,
+            "action": "add",
+            "orderID": 31,
+            "fairPrice": 32.9258
+        },
+        {
+            "marketID": "sol",
+            "amount": 32.9258,
+            "action": "setFairPrice"
+        },
+        {
+            "marketID": "sol",
+            "traderID": 17,
+            "orderType": "limit",
+            "price": 31.41,
+            "side": 0,
+            "size": 167.89,
+            "leverage": 10,
+            "action": "add",
+            "orderID": 32,
+            "fairPrice": 32.9258
+        },
+        {
+            "marketID": "sol",
+            "amount": 32.9258,
+            "action": "setFairPrice"
+        },
+        {
+            "marketID": "sol",
+            "traderID": 18,
+            "orderType": "limit",
+            "price": 30.4025,
+            "side": 0,
+            "size": 401.44,
+            "leverage": 15,
+            "action": "add",
+            "orderID": 33,
+            "fairPrice": 32.9258
+        },
+        {
+            "marketID": "sol",
+            "amount": 32.9258,
+            "action": "setFairPrice"
+        },
+        {
+            "marketID": "sol",
+            "traderID": 19,
+            "orderType": "limit",
+            "price": 30.4,
+            "side": 0,
+            "size": 171.9,
+            "leverage": 15,
+            "action": "add",
+            "orderID": 34,
+            "fairPrice": 32.9258
+        },
+        {
+            "marketID": "sol",
+            "amount": 32.9258,
+            "action": "setFairPrice"
+        },
+        {
+            "marketID": "sol",
+            "traderID": 14,
+            "orderType": "limit",
+            "price": 30.25,
+            "side": 0,
+            "size": 0.1,
+            "leverage": 20,
+            "action": "add",
+            "orderID": 35,
+            "fairPrice": 32.9258
+        },
+        {
+            "marketID": "sol",
+            "amount": 33.9,
+            "action": "setFairPrice"
+        },
+        {
+            "marketID": "sol",
+            "traderID": 2,
+            "orderType": "limit",
+            "price": 33.43,
+            "side": 0,
+            "size": 300,
+            "leverage": 20,
+            "action": "match",
+            "orderID": 36,
+            "fairPrice": 33.9
+        },
+        {
+            "marketID": "sol",
+            "amount": 33.9,
+            "action": "setFairPrice"
+        },
+        {
+            "marketID": "sol",
+            "traderID": 4,
+            "orderType": "limit",
+            "price": 33.45,
+            "side": 0,
+            "size": 500,
+            "leverage": 20,
+            "action": "match",
+            "orderID": 37,
+            "fairPrice": 33.9
+        },
+        {
+            "marketID": "sol",
+            "amount": 28.5,
+            "action": "setFairPrice"
+        },
+        {
+            "marketID": "sol",
+            "traderID": 20,
+            "orderType": "limit",
+            "price": 30,
+            "side": 1,
+            "size": 283,
+            "leverage": 20,
+            "action": "match",
+            "orderID": 38,
+            "fairPrice": 28.5
+        },
+        {
+            "marketID": "sol",
+            "amount": 27.3,
+            "action": "setFairPrice"
+        },
+        {
+            "marketID": "sol",
+            "traderID": 3,
+            "orderType": "limit",
+            "price": 28.875,
+            "side": 1,
+            "size": 159,
+            "leverage": 20,
+            "action": "match",
+            "orderID": 39,
+            "fairPrice": 27.3
+        },
+        {
+            "action": "liquidate"
+        },
+        {
+            "marketID": "sol",
+            "amount": 35,
+            "action": "setFairPrice"
+        },
+        {
+            "marketID": "sol",
+            "traderID": 6,
+            "orderType": "limit",
+            "price": 33.45,
+            "side": 0,
+            "size": 666,
+            "leverage": 20,
+            "action": "match",
+            "orderID": 40,
+            "fairPrice": 35
+        },
+        {
+            "marketID": "sol",
+            "amount": 37.8,
+            "action": "setFairPrice"
+        },
+        {
+            "marketID": "sol",
+            "traderID": 11,
+            "orderType": "limit",
+            "price": 36.2,
+            "side": 0,
+            "size": 135,
+            "leverage": 20,
+            "action": "match",
+            "orderID": 41,
+            "fairPrice": 37.8
+        },
+        {
+            "marketID": "btc",
+            "amount": 20398.0,
+            "action": "setFairPrice"
+        },
+        {
+            "marketID": "btc",
+            "traderID": 14,
+            "orderType": "limit",
+            "price": 20100,
+            "side": 1,
+            "size": 1.64,
+            "leverage": 20,
+            "action": "match",
+            "orderID": 42,
+            "fairPrice": 20398.0
+        },
+        {
+            "action": "liquidate"
+        },
+        {
+            "marketID": "luna",
+            "amount": 85,
+            "action": "setFairPrice"
+        },
+        {
+            "marketID": "luna",
+            "traderID": 15,
+            "orderType": "limit",
+            "price": 85,
+            "side": 0,
+            "size": 101,
+            "leverage": 20,
+            "action": "add",
+            "orderID": 43,
+            "fairPrice": 85
+        },
+        {
+            "marketID": "luna",
+            "amount": 115,
+            "action": "setFairPrice"
+        },
+        {
+            "marketID": "luna",
+            "traderID": 16,
+            "orderType": "limit",
+            "price": 115,
+            "side": 1,
+            "size": 200,
+            "leverage": 20,
+            "action": "add",
+            "orderID": 44,
+            "fairPrice": 115
+        },
+        {
+            "marketID": "luna",
+            "amount": 115,
+            "action": "setFairPrice"
+        },
+        {
+            "marketID": "luna",
+            "traderID": 21,
+            "orderType": "limit",
+            "price": 115,
+            "side": 0,
+            "size": 100,
+            "leverage": 20,
+            "action": "match",
+            "orderID": 45,
+            "fairPrice": 115
+        },
+        {
+            "marketID": "luna",
+            "amount": 85,
+            "action": "setFairPrice"
+        },
+        {
+            "marketID": "luna",
+            "traderID": 5,
+            "orderType": "limit",
+            "price": 85,
+            "side": 1,
+            "size": 100,
+            "leverage": 20,
+            "action": "match",
+            "orderID": 46,
+            "fairPrice": 85
+        },
+        {
+            "action": "liquidate"
+        },
+        {
+            "marketID": "luna",
+            "amount": 120,
+            "action": "setFairPrice"
+        },
+        {
+            "marketID": "luna",
+            "traderID": 20,
+            "orderType": "limit",
+            "price": 120,
+            "side": 1,
+            "size": 1,
+            "leverage": 20,
+            "action": "add",
+            "orderID": 47,
+            "fairPrice": 120
+        },
+        {
+            "action": "liquidate"
+        }
+    ],
+    "expected": {
+        "fills": [
+            {
+                "price": 20103,
+                "size": 0.5654,
+                "takerID": 14,
+                "makerID": 6,
+                "bidOrderID": 8,
+                "askOrderID": 42,
+                "marketID": "btc"
+            },
+            {
+                "price": 20102,
+                "size": 0.5829,
+                "takerID": 14,
+                "makerID": 7,
+                "bidOrderID": 9,
+                "askOrderID": 42,
+                "marketID": "btc"
+            },
+            {
+                "price": 20101,
+                "size": 0.1576,
+                "takerID": 14,
+                "makerID": 8,
+                "bidOrderID": 10,
+                "askOrderID": 42,
+                "marketID": "btc"
+            },
+            {
+                "price": 20100,
+                "size": 0.33410000000000006,
+                "takerID": 14,
+                "makerID": 9,
+                "bidOrderID": 11,
+                "askOrderID": 42,
+                "marketID": "btc"
+            },
+            {
+                "price": 33.425,
+                "size": 18.3,
+                "takerID": 2,
+                "makerID": 1,
+                "bidOrderID": 36,
+                "askOrderID": 25,
+                "marketID": "sol"
+            },
+            {
+                "price": 33.4275,
+                "size": 0.01,
+                "takerID": 2,
+                "makerID": 6,
+                "bidOrderID": 36,
+                "askOrderID": 26,
+                "marketID": "sol"
+            },
+            {
+                "price": 33.43,
+                "size": 254.58,
+                "takerID": 2,
+                "makerID": 13,
+                "bidOrderID": 36,
+                "askOrderID": 27,
+                "marketID": "sol"
+            },
+            {
+                "price": 33.4325,
+                "size": 500,
+                "takerID": 4,
+                "makerID": 9,
+                "bidOrderID": 37,
+                "askOrderID": 28,
+                "marketID": "sol"
+            },
+            {
+                "price": 33.43,
+                "size": 27.110000000000014,
+                "takerID": 20,
+                "makerID": 2,
+                "bidOrderID": 36,
+                "askOrderID": 38,
+                "marketID": "sol"
+            },
+            {
+                "price": 32.4225,
+                "size": 111.41,
+                "takerID": 20,
+                "makerID": 8,
+                "bidOrderID": 30,
+                "askOrderID": 38,
+                "marketID": "sol"
+            },
+            {
+                "price": 32.42,
+                "size": 2.53,
+                "takerID": 20,
+                "makerID": 7,
+                "bidOrderID": 31,
+                "askOrderID": 38,
+                "marketID": "sol"
+            },
+            {
+                "price": 31.41,
+                "size": 141.95,
+                "takerID": 20,
+                "makerID": 17,
+                "bidOrderID": 32,
+                "askOrderID": 38,
+                "marketID": "sol"
+            },
+            {
+                "price": 31.41,
+                "size": 25.939999999999998,
+                "takerID": 3,
+                "makerID": 17,
+                "bidOrderID": 32,
+                "askOrderID": 39,
+                "marketID": "sol"
+            },
+            {
+                "price": 30.4025,
+                "size": 133.06,
+                "takerID": 3,
+                "makerID": 18,
+                "bidOrderID": 33,
+                "askOrderID": 39,
+                "marketID": "sol"
+            },
+            {
+                "price": 33.4325,
+                "size": 457.23,
+                "takerID": 6,
+                "makerID": 9,
+                "bidOrderID": 40,
+                "askOrderID": 28,
+                "marketID": "sol"
+            },
+            {
+                "price": 33.435,
+                "size": 208.76999999999998,
+                "takerID": 6,
+                "makerID": 15,
+                "bidOrderID": 40,
+                "askOrderID": 29,
+                "marketID": "sol"
+            },
+            {
+                "price": 33.435,
+                "size": 135,
+                "takerID": 11,
+                "makerID": 15,
+                "bidOrderID": 41,
+                "askOrderID": 29,
+                "marketID": "sol"
+            },
+            {
+                "price": 115,
+                "size": 100,
+                "takerID": 21,
+                "makerID": 16,
+                "bidOrderID": 45,
+                "askOrderID": 44,
+                "marketID": "luna"
+            },
+            {
+                "price": 85,
+                "size": 100,
+                "takerID": 5,
+                "makerID": 15,
+                "bidOrderID": 43,
+                "askOrderID": 46,
+                "marketID": "luna"
+            },
+            {
+                "price": 20389.05308822827,
+                "size": 0.33410000000000006,
+                "buyerID": 0,
+                "sellerID": 9,
+                "marketID": "btc"
+            },
+            {
+                "price": 27.65590275,
+                "size": 500.0,
+                "buyerID": 0,
+                "sellerID": 4,
+                "marketID": "sol"
+            },
+            {
+                "price": 37.81657972692038,
+                "size": 957.23,
+                "buyerID": 9,
+                "sellerID": 0,
+                "marketID": "sol"
+            },
+            {
+                "price": 107.0805,
+                "size": 100.0,
+                "buyerID": 0,
+                "sellerID": 21,
+                "marketID": "luna"
+            },
+            {
+                "price": 95.9405,
+                "size": 100.0,
+                "buyerID": 5,
+                "sellerID": 0,
+                "marketID": "luna"
+            }
+        ],
+        "orderbook": [
+            {
+                "marketID": "btc",
+                "totalBids": 0.7073,
+                "bidMin": 19533,
+                "bidMax": 19537,
+                "totalOffers": 13.9841,
+                "offerMin": 20156,
+                "offerMax": 20170
+            },
+            {
+                "marketID": "eth",
+                "totalBids": 50.687,
+                "bidMin": 1268.5,
+                "bidMax": 1269.3,
+                "totalOffers": 124.218,
+                "offerMin": 1269.9,
+                "offerMax": 1270.5
+            },
+            {
+                "marketID": "sol",
+                "totalBids": 440.38,
+                "bidMin": 30.25,
+                "bidMax": 30.4025,
+                "totalOffers": 777.94,
+                "offerMin": 33.435,
+                "offerMax": 33.435
+            },
+            {
+                "marketID": "luna",
+                "totalBids": 1,
+                "bidMin": 85,
+                "bidMax": 85,
+                "totalOffers": 101,
+                "offerMin": 115,
+                "offerMax": 120
+            }
+        ],
+        "traderAccount": [
+            {
+                "traderID": 0,
+                "cumVolume": 0.0,
+                "walletBalance": 503966.338488,
+                "unrealizedPnL": 10.569911762742242,
+                "AE": 503976.9083997627,
+                "margin": 20.913409810583243,
+                "withdrawable": 479868.072688
+            },
+            {
+                "traderID": 1,
+                "cumVolume": 611.6775,
+                "walletBalance": 10000.0,
+                "unrealizedPnL": -80.0625,
+                "AE": 9919.9375,
+                "margin": 14.340557868563334,
+                "withdrawable": 7097.959333333333
+            },
+            {
+                "traderID": 2,
+                "cumVolume": 10028.908475000002,
+                "walletBalance": 49993.614165,
+                "unrealizedPnL": 1311.0915249999962,
+                "AE": 51304.705689999995,
+                "margin": 4.524224487654321,
+                "withdrawable": 41159.648985
+            },
+            {
+                "traderID": 3,
+                "cumVolume": 4860.13205,
+                "walletBalance": 4996.597908,
+                "unrealizedPnL": -1150.0679499999992,
+                "AE": 3846.5299580000005,
+                "margin": 0.6400003257795083,
+                "withdrawable": -632.457521999999
+            },
+            {
+                "traderID": 4,
+                "cumVolume": 16716.25,
+                "walletBalance": 0.0,
+                "unrealizedPnL": 0.0,
+                "AE": 0.0,
+                "margin": 0.0,
+                "withdrawable": 0.0
+            },
+            {
+                "traderID": 5,
+                "cumVolume": 8500.0,
+                "walletBalance": 0.0,
+                "unrealizedPnL": 0.0,
+                "AE": 0.0,
+                "margin": 0.0,
+                "withdrawable": 0.0
+            },
+            {
+                "traderID": 6,
+                "cumVolume": 33633.1374,
+                "walletBalance": 5984.413353,
+                "unrealizedPnL": 3074.9823999999985,
+                "AE": 9059.395752999999,
+                "margin": 0.24679991273815274,
+                "withdrawable": 1246.8113329999999
+            },
+            {
+                "traderID": 7,
+                "cumVolume": 11799.4784,
+                "walletBalance": 10000.0,
+                "unrealizedPnL": 186.14979999999997,
+                "AE": 10186.1498,
+                "margin": 0.8498636558741243,
+                "withdrawable": 6924.04301
+            },
+            {
+                "traderID": 8,
+                "cumVolume": 6780.108324999999,
+                "walletBalance": 3700.0,
+                "unrealizedPnL": 645.9144749999997,
+                "AE": 4345.914475,
+                "margin": 0.5852277311887596,
+                "withdrawable": 1409.5889100000002
+            },
+            {
+                "traderID": 9,
+                "cumVolume": 38718.001975,
+                "walletBalance": -0.0,
+                "unrealizedPnL": 0.0,
+                "AE": 0.0,
+                "margin": 0.0,
+                "withdrawable": -0.0
+            },
+            {
+                "traderID": 10,
+                "cumVolume": 0.0,
+                "walletBalance": 10000.0,
+                "unrealizedPnL": 0.0,
+                "AE": 10000.0,
+                "margin": 1.0,
+                "withdrawable": 8025.33419
+            },
+            {
+                "traderID": 11,
+                "cumVolume": 4513.725,
+                "walletBalance": 9996.840392,
+                "unrealizedPnL": 589.2749999999993,
+                "AE": 10586.115392,
+                "margin": 2.074488612972761,
+                "withdrawable": 8439.007802
+            },
+            {
+                "traderID": 12,
+                "cumVolume": 0.0,
+                "walletBalance": 10000.0,
+                "unrealizedPnL": 0.0,
+                "AE": 10000.0,
+                "margin": 1.0,
+                "withdrawable": 10000.0
+            },
+            {
+                "traderID": 13,
+                "cumVolume": 8510.609400000001,
+                "walletBalance": 10000.0,
+                "unrealizedPnL": -1112.5145999999993,
+                "AE": 8887.485400000001,
+                "margin": 0.923555115781528,
+                "withdrawable": 8406.329200000002
+            },
+            {
+                "traderID": 14,
+                "cumVolume": 32967.0196,
+                "walletBalance": 4331.923086,
+                "unrealizedPnL": -485.70039999999784,
+                "AE": 3846.222686000002,
+                "margin": 0.11497488652641703,
+                "withdrawable": 2173.435436000002
+            },
+            {
+                "traderID": 15,
+                "cumVolume": 19993.949950000002,
+                "walletBalance": 10000.0,
+                "unrealizedPnL": 1999.443950000002,
+                "AE": 11999.443950000003,
+                "margin": 0.4800832610974589,
+                "withdrawable": 7445.503504999999
+            },
+            {
+                "traderID": 16,
+                "cumVolume": 11500.0,
+                "walletBalance": 10000.0,
+                "unrealizedPnL": -500.0,
+                "AE": 9500.0,
+                "margin": 0.7916666666666666,
+                "withdrawable": 8325.0
+            },
+            {
+                "traderID": 17,
+                "cumVolume": 5273.424899999999,
+                "walletBalance": 10000.0,
+                "unrealizedPnL": 1072.8171,
+                "AE": 11072.8171,
+                "margin": 1.7447833064040106,
+                "withdrawable": 9365.3758
+            },
+            {
+                "traderID": 18,
+                "cumVolume": 4045.35665,
+                "walletBalance": 10000.0,
+                "unrealizedPnL": 984.3113499999996,
+                "AE": 10984.31135,
+                "margin": 2.183903858067769,
+                "withdrawable": 9120.72727
+            },
+            {
+                "traderID": 19,
+                "cumVolume": 0.0,
+                "walletBalance": 20000.0,
+                "unrealizedPnL": 0.0,
+                "AE": 20000.0,
+                "margin": 1.0,
+                "withdrawable": 19651.616
+            },
+            {
+                "traderID": 20,
+                "cumVolume": 9059.150125,
+                "walletBalance": 2293.658595,
+                "unrealizedPnL": -1638.2498749999993,
+                "AE": 655.4087200000006,
+                "margin": 0.06126803896273866,
+                "withdrawable": 114.53872000000058
+            },
+            {
+                "traderID": 21,
+                "cumVolume": 11500.0,
+                "walletBalance": 0.0,
+                "unrealizedPnL": 0.0,
+                "AE": 0.0,
+                "margin": 0.0,
+                "withdrawable": 0.0
+            },
+            {
+                "traderID": 22,
+                "cumVolume": 0.0,
+                "walletBalance": 4000.0,
+                "unrealizedPnL": 0.0,
+                "AE": 4000.0,
+                "margin": 1.0,
+                "withdrawable": 1103.84937
+            },
+            {
+                "traderID": 23,
+                "cumVolume": 0.0,
+                "walletBalance": 0.0,
+                "unrealizedPnL": 0.0,
+                "AE": 0.0,
+                "margin": 0.0,
+                "withdrawable": 0.0
+            },
+            {
+                "traderID": 24,
+                "cumVolume": 0.0,
+                "walletBalance": 0.0,
+                "unrealizedPnL": 0.0,
+                "AE": 0.0,
+                "margin": 0.0,
+                "withdrawable": 0.0
+            },
+            {
+                "traderID": 25,
+                "cumVolume": 0.0,
+                "walletBalance": 0.0,
+                "unrealizedPnL": 0.0,
+                "AE": 0.0,
+                "margin": 0.0,
+                "withdrawable": 0.0
+            },
+            {
+                "traderID": 26,
+                "cumVolume": 0.0,
+                "walletBalance": 0.0,
+                "unrealizedPnL": 0.0,
+                "AE": 0.0,
+                "margin": 0.0,
+                "withdrawable": 0.0
+            },
+            {
+                "traderID": 27,
+                "cumVolume": 0.0,
+                "walletBalance": 0.0,
+                "unrealizedPnL": 0.0,
+                "AE": 0.0,
+                "margin": 0.0,
+                "withdrawable": 0.0
+            },
+            {
+                "traderID": 28,
+                "cumVolume": 0.0,
+                "walletBalance": 0.0,
+                "unrealizedPnL": 0.0,
+                "AE": 0.0,
+                "margin": 0.0,
+                "withdrawable": 0.0
+            },
+            {
+                "traderID": 29,
+                "cumVolume": 0.0,
+                "walletBalance": 0.0,
+                "unrealizedPnL": 0.0,
+                "AE": 0.0,
+                "margin": 0.0,
+                "withdrawable": 0.0
+            },
+            {
+                "traderID": 30,
+                "cumVolume": 0.0,
+                "walletBalance": 0.0,
+                "unrealizedPnL": 0.0,
+                "AE": 0.0,
+                "margin": 0.0,
+                "withdrawable": 0.0
+            },
+            {
+                "traderID": 31,
+                "cumVolume": 0.0,
+                "walletBalance": 0.0,
+                "unrealizedPnL": 0.0,
+                "AE": 0.0,
+                "margin": 0.0,
+                "withdrawable": 0.0
+            },
+            {
+                "traderID": 32,
+                "cumVolume": 0.0,
+                "walletBalance": 0.0,
+                "unrealizedPnL": 0.0,
+                "AE": 0.0,
+                "margin": 0.0,
+                "withdrawable": 0.0
+            },
+            {
+                "traderID": 33,
+                "cumVolume": 0.0,
+                "walletBalance": 0.0,
+                "unrealizedPnL": 0.0,
+                "AE": 0.0,
+                "margin": 0.0,
+                "withdrawable": 0.0
+            },
+            {
+                "traderID": 34,
+                "cumVolume": 0.0,
+                "walletBalance": 0.0,
+                "unrealizedPnL": 0.0,
+                "AE": 0.0,
+                "margin": 0.0,
+                "withdrawable": 0.0
+            },
+            {
+                "traderID": 35,
+                "cumVolume": 0.0,
+                "walletBalance": 0.0,
+                "unrealizedPnL": 0.0,
+                "AE": 0.0,
+                "margin": 0.0,
+                "withdrawable": 0.0
+            },
+            {
+                "traderID": 36,
+                "cumVolume": 0.0,
+                "walletBalance": 0.0,
+                "unrealizedPnL": 0.0,
+                "AE": 0.0,
+                "margin": 0.0,
+                "withdrawable": 0.0
+            },
+            {
+                "traderID": 37,
+                "cumVolume": 0.0,
+                "walletBalance": 0.0,
+                "unrealizedPnL": 0.0,
+                "AE": 0.0,
+                "margin": 0.0,
+                "withdrawable": 0.0
+            },
+            {
+                "traderID": 38,
+                "cumVolume": 0.0,
+                "walletBalance": 0.0,
+                "unrealizedPnL": 0.0,
+                "AE": 0.0,
+                "margin": 0.0,
+                "withdrawable": 0.0
+            },
+            {
+                "traderID": 39,
+                "cumVolume": 0.0,
+                "walletBalance": 0.0,
+                "unrealizedPnL": 0.0,
+                "AE": 0.0,
+                "margin": 0.0,
+                "withdrawable": 0.0
+            },
+            {
+                "traderID": 40,
+                "cumVolume": 0.0,
+                "walletBalance": 0.0,
+                "unrealizedPnL": 0.0,
+                "AE": 0.0,
+                "margin": 0.0,
+                "withdrawable": 0.0
+            },
+            {
+                "traderID": 41,
+                "cumVolume": 0.0,
+                "walletBalance": 0.0,
+                "unrealizedPnL": 0.0,
+                "AE": 0.0,
+                "margin": 0.0,
+                "withdrawable": 0.0
+            },
+            {
+                "traderID": 42,
+                "cumVolume": 0.0,
+                "walletBalance": 0.0,
+                "unrealizedPnL": 0.0,
+                "AE": 0.0,
+                "margin": 0.0,
+                "withdrawable": 0.0
+            },
+            {
+                "traderID": 43,
+                "cumVolume": 0.0,
+                "walletBalance": 0.0,
+                "unrealizedPnL": 0.0,
+                "AE": 0.0,
+                "margin": 0.0,
+                "withdrawable": 0.0
+            },
+            {
+                "traderID": 44,
+                "cumVolume": 0.0,
+                "walletBalance": 0.0,
+                "unrealizedPnL": 0.0,
+                "AE": 0.0,
+                "margin": 0.0,
+                "withdrawable": 0.0
+            },
+            {
+                "traderID": 45,
+                "cumVolume": 0.0,
+                "walletBalance": 0.0,
+                "unrealizedPnL": 0.0,
+                "AE": 0.0,
+                "margin": 0.0,
+                "withdrawable": 0.0
+            },
+            {
+                "traderID": 46,
+                "cumVolume": 0.0,
+                "walletBalance": 0.0,
+                "unrealizedPnL": 0.0,
+                "AE": 0.0,
+                "margin": 0.0,
+                "withdrawable": 0.0
+            },
+            {
+                "traderID": 47,
+                "cumVolume": 0.0,
+                "walletBalance": 0.0,
+                "unrealizedPnL": 0.0,
+                "AE": 0.0,
+                "margin": 0.0,
+                "withdrawable": 0.0
+            },
+            {
+                "traderID": 48,
+                "cumVolume": 0.0,
+                "walletBalance": 0.0,
+                "unrealizedPnL": 0.0,
+                "AE": 0.0,
+                "margin": 0.0,
+                "withdrawable": 0.0
+            },
+            {
+                "traderID": 49,
+                "cumVolume": 0.0,
+                "walletBalance": 0.0,
+                "unrealizedPnL": 0.0,
+                "AE": 0.0,
+                "margin": 0.0,
+                "withdrawable": 0.0
+            },
+            {
+                "traderID": 50,
+                "cumVolume": 0.0,
+                "walletBalance": 0.0,
+                "unrealizedPnL": 0.0,
+                "AE": 0.0,
+                "margin": 0.0,
+                "withdrawable": 0.0
+            }
+        ],
+        "exchange": [
+            {
+                "tradingFee": 83.6538254125,
+                "exchangeBalanceExInsurance": 204171.3461745876,
+                "cumulativeVolume": 119505.464875,
+                "cumulativeVolume_Q": 2217.5299999999997
+            }
+        ],
+        "INV3": [
+            {
+                "status": true,
+                "sumAE": 200194.437774,
+                "exchangeBal_insuranceDeposit": 704171.3461745876
+            }
+        ]
+    }
+}

@@ -1,0 +1,22 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: go-fundingservice
+  name: go-fundingservice
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: go-fundingservice
+  template:
+    metadata:
+      labels:
+        app: go-fundingservice
+    spec:
+      containers:
+        - image: 618528691313.dkr.ecr.ap-northeast-1.amazonaws.com/rabbitx/go-fundingservice
+          imagePullPolicy: Always
+          command: ["/usr/bin/go-fundingservice"]
+          name: go-fundingservice
+          resources: {}

@@ -1,0 +1,22 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: go-profile-periodics
+  name: go-profile-periodics
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: go-profile-periodics
+  template:
+    metadata:
+      labels:
+        app: go-profile-periodics
+    spec:
+      containers:
+        - image: 618528691313.dkr.ecr.ap-northeast-1.amazonaws.com/rabbitx/go-profile-periodics
+          imagePullPolicy: Always
+          command: ["/usr/bin/go-profile-periodics"]
+          name: go-profile-periodics
+          resources: {}

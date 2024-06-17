@@ -1,0 +1,333 @@
+{
+  "annotations": {
+    "list": [
+      {
+        "builtIn": 1,
+        "datasource": {
+          "type": "grafana",
+          "uid": "-- Grafana --"
+        },
+        "enable": true,
+        "hide": true,
+        "iconColor": "rgba(0, 211, 255, 1)",
+        "name": "Annotations & Alerts",
+        "type": "dashboard"
+      }
+    ]
+  },
+  "editable": true,
+  "fiscalYearStartMonth": 0,
+  "graphTooltip": 0,
+  "id": 38,
+  "links": [],
+  "liveNow": false,
+  "panels": [
+    {
+      "datasource": {
+        "type": "postgres",
+        "uid": "8PO0bcxVz"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "custom": {
+            "align": "auto",
+            "cellOptions": {
+              "type": "auto"
+            },
+            "inspect": false
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "CUMULATIVE TRADING VOLUME"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 253
+              },
+              {
+                "id": "unit",
+                "value": "none"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "BALANCE"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 113
+              },
+              {
+                "id": "unit",
+                "value": "none"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "PROFILE_ID"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 100
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "WALLET ADDRESS"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 378
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 21,
+        "w": 11,
+        "x": 0,
+        "y": 0
+      },
+      "id": 3,
+      "options": {
+        "cellHeight": "sm",
+        "footer": {
+          "countRows": false,
+          "fields": "",
+          "reducer": [
+            "sum"
+          ],
+          "show": false
+        },
+        "showHeader": true,
+        "sortBy": []
+      },
+      "pluginVersion": "10.0.0-preview",
+      "targets": [
+        {
+          "datasource": {
+            "type": "postgres",
+            "uid": "8PO0bcxVz"
+          },
+          "editorMode": "code",
+          "format": "table",
+          "rawQuery": true,
+          "rawSql": "SELECT \n  DISTINCT id as \"PROFILE_ID\",\n  wallet as \"WALLET ADDRESS\",\n  cum_trading_volume AS \"CUMULATIVE TRADING VOLUME\",\n  balance AS \"BALANCE\"\n  --total_notional,\n  --cum_unrealized_pnl,\n  --profile_type,\n  --status,\n  --last_update\n  --account_equity,\n  --total_order_margin,\n  --total_position_margin,\n  --account_margin,\n  --withdrawable_balance,\n  --cum_unrealized_pnl,\n  --health,\n  --account_leverage,\n  --leverage,\n  --last_liq_check,\n  --shard_id,\n  --archive_id,\n  --archive_timestamp,\nFROM\n  app_profile_cache_last\nWHERE\n  id NOT IN (select profile_id from ignored_profile_ids)\nORDER BY\n  id ASC\n  --cum_trading_volume DESC",
+          "refId": "A",
+          "sql": {
+            "columns": [
+              {
+                "parameters": [],
+                "type": "function"
+              }
+            ],
+            "groupBy": [
+              {
+                "property": {
+                  "type": "string"
+                },
+                "type": "groupBy"
+              }
+            ],
+            "limit": 50
+          }
+        }
+      ],
+      "title": "Full info about all wallets",
+      "type": "table"
+    },
+    {
+      "datasource": {
+        "type": "postgres",
+        "uid": "8PO0bcxVz"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "custom": {
+            "align": "auto",
+            "cellOptions": {
+              "type": "auto"
+            },
+            "inspect": false
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "VOLUME"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "currencyUSD"
+              },
+              {
+                "id": "custom.width",
+                "value": 105
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "FEE"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "currencyUSD"
+              },
+              {
+                "id": "custom.width",
+                "value": 87
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "PROFILE_ID"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 94
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "WALLET ADDRESS"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 387
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 21,
+        "w": 11,
+        "x": 11,
+        "y": 0
+      },
+      "id": 2,
+      "options": {
+        "cellHeight": "sm",
+        "footer": {
+          "countRows": false,
+          "fields": "",
+          "reducer": [
+            "sum"
+          ],
+          "show": false
+        },
+        "showHeader": true,
+        "sortBy": []
+      },
+      "pluginVersion": "10.0.0-preview",
+      "targets": [
+        {
+          "datasource": {
+            "type": "postgres",
+            "uid": "8PO0bcxVz"
+          },
+          "editorMode": "code",
+          "format": "table",
+          "rawQuery": true,
+          "rawSql": "/*\nSELECT *\nFROM app_balance_operation\nLIMIT 10;\n*/\n\n/*\nSELECT *\nFROM \napp_fill\nLIMIT 10;\n*/\n\n\nWITH  --Let's prepare and merge the 2 needed tables (app_fill and app_balance_operation)\n  trade AS (  --1st table to prepare: app_fill -> We'll get the number of trades for each profile_id\n    SELECT\n      profile_id,\n      --size as size, --Aded by Eu\n      --price as price, --Aded by Eu\n      SUM(cnt) as trade_count,\n      SUM(volume) as volume, --Aded by Eu\n      SUM(fee) as fee --Aded by Eu\n    FROM\n      app_fill_1h\n    WHERE\n      \"timestamp\" >= $__from::bigint*1000 AND --Time filter used at top-right corner\n      \"timestamp\" <= $__to::bigint*1000 AND --Time filter used at top-right corner\n      profile_id NOT IN (select profile_id from ignored_profile_ids)\n    GROUP BY\n      profile_id\n      --1,2,3\n    ORDER BY\n      trade_count DESC\n    --LIMIT\n      --50\n  ),\n  ops AS (  --2nd table to prepare: app_balance_operation -> We'll retrieve the wallet address of each unique profile_id who performed a deposit\n    SELECT\n      id as profile_id,\n      wallet\n    FROM\n      app_profile\n  )\n\n\nSELECT  --We can now merge the 2 tables by using the profile_id (common field on both tables) to match them\n  trade.profile_id AS \"PROFILE_ID\",\n  ops.wallet AS \"WALLET ADDRESS\",\n  trade.trade_count AS \"TRADE COUNT\",\n  --trade.size AS \"SIZE\", --Aded by Eu\n  --trade.price AS \"PRICE\", --Aded by Eu\n  trade.volume AS \"VOLUME\", --Aded by Eu\n  trade.fee AS \"FEE\" --Aded by Eu\nFROM\n  trade,\n  ops\nWHERE\n  trade.profile_id = ops.profile_id --AND\n  --trade.profile_id = 5749 --This is a profile_id with 1 trade (volume 12.8)\n  --trade.profile_id = 3502 --This is a profile_id with 2 trades (volume is 374)\nORDER BY\n  trade.trade_count DESC;\n  --trade.volume DESC;\n  --trade.profile_id ASC;\n",
+          "refId": "A",
+          "sql": {
+            "columns": [
+              {
+                "parameters": [],
+                "type": "function"
+              }
+            ],
+            "groupBy": [
+              {
+                "property": {
+                  "type": "string"
+                },
+                "type": "groupBy"
+              }
+            ],
+            "limit": 50
+          }
+        }
+      ],
+      "title": "Wallets by # of trades, volume and fees",
+      "type": "table"
+    }
+  ],
+  "refresh": "",
+  "schemaVersion": 38,
+  "style": "dark",
+  "tags": [],
+  "templating": {
+    "list": []
+  },
+  "time": {
+    "from": "now-6h",
+    "to": "now"
+  },
+  "timepicker": {},
+  "timezone": "",
+  "title": "02. All Trader Wallets with KPIs",
+  "uid": "d443213a-4b31-4adc-880c-c60d55a2f638",
+  "version": 38,
+  "weekStart": "monday"
+}

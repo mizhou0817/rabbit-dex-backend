@@ -1,0 +1,35 @@
+resources:
+  - ../../base/
+
+patchesJson6902:
+  - target:
+      kind: Deployment
+      name: go-api
+    patch: |-
+      - op: replace
+        path: /spec/template/spec/containers/0/image
+        value: 763292132769.dkr.ecr.ap-northeast-1.amazonaws.com/rabbitx-dev-apn1-testnet-go-api
+
+  - target:
+      kind: SecretProviderClass
+      name: aws-secrets-go-api
+    patch: |-
+      - op: replace
+        path: /spec/parameters/objects
+        value: |
+          - objectName: "arn:aws:secretsmanager:ap-northeast-1:763292132769:secret:rabbitx-dev-apn1-testnet-go-api-NUixtt"
+            objectType: "secretsmanager"
+            jmesPath:
+                - path: "ALCHEMY_URL"
+                  objectAlias: "ALCHEMY_URL"
+                - path: "BLAST_OPERATOR_PRIV_KEY"
+                  objectAlias: "BLAST_OPERATOR_PRIV_KEY"
+
+
+  - target:
+      kind: ServiceAccount
+      name: go-api-service
+    patch: |-
+      - op: replace
+        path: /metadata/annotations/eks.amazonaws.com~1role-arn
+        value: arn:aws:iam::763292132769:role/rabbitx-dev-apn1-testnet-eks-service-go-api

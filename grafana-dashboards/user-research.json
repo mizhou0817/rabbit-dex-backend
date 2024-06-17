@@ -1,0 +1,267 @@
+{
+  "annotations": {
+    "list": [
+      {
+        "builtIn": 1,
+        "datasource": {
+          "type": "grafana",
+          "uid": "-- Grafana --"
+        },
+        "enable": true,
+        "hide": true,
+        "iconColor": "rgba(0, 211, 255, 1)",
+        "name": "Annotations & Alerts",
+        "type": "dashboard"
+      }
+    ]
+  },
+  "editable": true,
+  "fiscalYearStartMonth": 0,
+  "graphTooltip": 0,
+  "id": 33,
+  "links": [],
+  "liveNow": false,
+  "panels": [
+    {
+      "datasource": {
+        "type": "postgres",
+        "uid": "8PO0bcxVz"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "custom": {
+            "align": "auto",
+            "cellOptions": {
+              "type": "auto"
+            },
+            "inspect": false
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "trade_notional"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "currencyUSD"
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 17,
+        "w": 12,
+        "x": 0,
+        "y": 0
+      },
+      "id": 1,
+      "options": {
+        "cellHeight": "sm",
+        "footer": {
+          "countRows": false,
+          "fields": "",
+          "reducer": [
+            "sum"
+          ],
+          "show": false
+        },
+        "showHeader": true,
+        "sortBy": [
+          {
+            "desc": true,
+            "displayName": "trade_notional"
+          }
+        ]
+      },
+      "pluginVersion": "10.0.0-preview",
+      "targets": [
+        {
+          "datasource": {
+            "type": "postgres",
+            "uid": "8PO0bcxVz"
+          },
+          "editorMode": "code",
+          "format": "table",
+          "key": "Q-c82b1272-b061-4efb-aa07-ba165e162fdb-0",
+          "rawQuery": true,
+          "rawSql": "WITH trade AS (\r\n  SELECT\r\n    profile_id,\r\n    sum(cnt) as trade_count,\r\n    sum(volume) as trade_notional,\r\n    sum(fee) as fee_paid\r\n  FROM\r\n    app_fill_1h\r\n  WHERE\r\n    \"timestamp\" >= $__unixEpochFrom()::bigint*1000000\r\n    AND \"timestamp\" <= $__unixEpochTo()::bigint*1000000\r\n    AND profile_id NOT IN (select profile_id from ignored_profile_ids)\r\n  GROUP BY\r\n    profile_id\r\n  ORDER BY\r\n    trade_count DESC\r\n  LIMIT\r\n    50\r\n), ops AS (\r\n  SELECT\r\n    id as profile_id,\r\n    wallet\r\n  FROM\r\n    app_profile\r\n)\r\nSELECT\r\n  trade.profile_id,\r\n  trade.trade_count,\r\n  trade.trade_notional,\r\n  trade.fee_paid,\r\n  ops.wallet\r\nFROM\r\n  trade,\r\n  ops\r\nWHERE\r\n  trade.profile_id = ops.profile_id\r\nORDER BY\r\n  trade.trade_count DESC;",
+          "refId": "A",
+          "sql": {
+            "columns": [
+              {
+                "name": "COUNT",
+                "parameters": [
+                  {
+                    "name": "*",
+                    "type": "functionParameter"
+                  }
+                ],
+                "type": "function"
+              }
+            ],
+            "groupBy": [
+              {
+                "property": {
+                  "name": "profile_id",
+                  "type": "string"
+                },
+                "type": "groupBy"
+              }
+            ],
+            "limit": 50
+          },
+          "table": "app_fill"
+        }
+      ],
+      "title": "Biggest Traders",
+      "type": "table"
+    },
+    {
+      "datasource": {
+        "type": "postgres",
+        "uid": "8PO0bcxVz"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "custom": {
+            "align": "auto",
+            "cellOptions": {
+              "type": "auto"
+            },
+            "inspect": false
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "trade_notional"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "currencyUSD"
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 17,
+        "w": 12,
+        "x": 12,
+        "y": 0
+      },
+      "id": 2,
+      "options": {
+        "cellHeight": "sm",
+        "footer": {
+          "countRows": false,
+          "fields": "",
+          "reducer": [
+            "sum"
+          ],
+          "show": false
+        },
+        "showHeader": true,
+        "sortBy": [
+          {
+            "desc": true,
+            "displayName": "trade_notional"
+          }
+        ]
+      },
+      "pluginVersion": "10.0.0-preview",
+      "targets": [
+        {
+          "datasource": {
+            "type": "postgres",
+            "uid": "8PO0bcxVz"
+          },
+          "editorMode": "code",
+          "format": "table",
+          "key": "Q-c82b1272-b061-4efb-aa07-ba165e162fdb-0",
+          "rawQuery": true,
+          "rawSql": "SELECT\r\n  market_id,\r\n  sum(cnt) as trade_count,\r\n  sum(volume) as trade_notional,\r\n  sum(fee) as fee_paid\r\nFROM\r\n  app_fill_market_1h\r\nWHERE\r\n  \"timestamp\" >= $__unixEpochFrom()::bigint*1000000\r\n  AND \"timestamp\" <= $__unixEpochTo()::bigint*1000000    \r\nGROUP BY\r\n  market_id\r\nORDER BY\r\n  trade_count DESC\r\nLIMIT\r\n  50\r\n",
+          "refId": "A",
+          "sql": {
+            "columns": [
+              {
+                "name": "COUNT",
+                "parameters": [
+                  {
+                    "name": "*",
+                    "type": "functionParameter"
+                  }
+                ],
+                "type": "function"
+              }
+            ],
+            "groupBy": [
+              {
+                "property": {
+                  "name": "profile_id",
+                  "type": "string"
+                },
+                "type": "groupBy"
+              }
+            ],
+            "limit": 50
+          },
+          "table": "app_fill"
+        }
+      ],
+      "title": "Most Popular Markets",
+      "type": "table"
+    }
+  ],
+  "refresh": "",
+  "schemaVersion": 38,
+  "style": "dark",
+  "tags": [],
+  "templating": {
+    "list": []
+  },
+  "time": {
+    "from": "now-2d",
+    "to": "now"
+  },
+  "timepicker": {},
+  "timezone": "",
+  "title": "User Research",
+  "uid": "f26353b6-4975-40b8-a0ee-57ae3a8cea79",
+  "version": 7,
+  "weekStart": ""
+}

@@ -1,0 +1,130 @@
+{
+  "annotations": {
+    "list": [
+      {
+        "builtIn": 1,
+        "datasource": {
+          "type": "grafana",
+          "uid": "-- Grafana --"
+        },
+        "enable": true,
+        "hide": true,
+        "iconColor": "rgba(0, 211, 255, 1)",
+        "name": "Annotations & Alerts",
+        "type": "dashboard"
+      }
+    ]
+  },
+  "editable": true,
+  "fiscalYearStartMonth": 0,
+  "graphTooltip": 0,
+  "id": 41,
+  "links": [],
+  "liveNow": false,
+  "panels": [
+    {
+      "datasource": {
+        "type": "postgres",
+        "uid": "8PO0bcxVz"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "custom": {
+            "align": "auto",
+            "cellOptions": {
+              "type": "auto"
+            },
+            "inspect": false
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 0,
+        "y": 0
+      },
+      "id": 2,
+      "options": {
+        "cellHeight": "sm",
+        "footer": {
+          "countRows": false,
+          "fields": "",
+          "reducer": [
+            "sum"
+          ],
+          "show": false
+        },
+        "showHeader": true
+      },
+      "pluginVersion": "10.0.0-preview",
+      "targets": [
+        {
+          "datasource": {
+            "type": "postgres",
+            "uid": "8PO0bcxVz"
+          },
+          "editorMode": "code",
+          "format": "table",
+          "rawQuery": true,
+          "rawSql": "SELECT \n  DATE_PART('year', p.ts) AS \"YEAR\",\n  DATE_PART('week', p.ts) AS \"WEEK\",\n  w.total_unique AS \"TOTAL UNIQUE WALLETS CONNECTED\",\n  o.total_unique AS \"TOTAL UNIQUE ORDERERS\",\n  t.total_unique AS \"TOTAL UNIQUE TRADERS\",\n  w.total AS \"TOTAL WALLET CONNECTIONS\",\n  o.total AS \"TOTAL ORDERS\",\n  t.total AS \"TOTAL FILLS\"\nFROM analytic_event_week p\nLEFT JOIN analytic_event_wallet_1w as w on w.ts=p.ts\nLEFT JOIN analytic_event_order_1w as o on o.ts=p.ts\nLEFT JOIN (\n  SELECT \n    time_bucket('1week', to_timestamp(timestamp/1e6)) as ts, \n    total,\n    total_unique\n  from app_fill_1w \n) as t on t.ts=p.ts\nORDER BY p.ts DESC\nLIMIT 10;\n",
+          "refId": "A",
+          "sql": {
+            "columns": [
+              {
+                "parameters": [],
+                "type": "function"
+              }
+            ],
+            "groupBy": [
+              {
+                "property": {
+                  "type": "string"
+                },
+                "type": "groupBy"
+              }
+            ],
+            "limit": 50
+          }
+        }
+      ],
+      "title": "Weekly KPIs",
+      "type": "table"
+    }
+  ],
+  "refresh": "",
+  "schemaVersion": 38,
+  "style": "dark",
+  "tags": [],
+  "templating": {
+    "list": []
+  },
+  "time": {
+    "from": "now-6h",
+    "to": "now"
+  },
+  "timepicker": {},
+  "timezone": "",
+  "title": "05. [TBD] KPIs over time",
+  "uid": "c52fb4c9-3e29-49bc-8579-bc92f48ad4f0",
+  "version": 5,
+  "weekStart": "monday"
+}

@@ -1,0 +1,26 @@
+resources:
+  - ../../base/
+
+patchesJson6902:
+  - target:
+      kind: Deployment
+      name: timescaledb
+    patch: |-
+      - op: replace
+        path: /spec/template/spec/containers/0/image
+        value: 763292132769.dkr.ecr.ap-northeast-1.amazonaws.com/rabbitx-dev-apn1-testnet-timescaledb
+      - op: add
+        path: /spec/template/spec/nodeSelector
+        value:
+          topology.kubernetes.io/zone: ap-northeast-1d
+      - op: replace
+        path: /spec/template/spec/volumes
+        value:
+          - name: timescaledb-pv
+            awsElasticBlockStore:
+              fsType: ext4
+              volumeID: aws://ap-northeast-1d/vol-01bb359dbc52326aa
+          - name: dshm
+            emptyDir:
+              sizeLimit: 4Gi
+              medium: Memory

@@ -1,0 +1,37 @@
+resources:
+  - ../../base/
+
+patchesJson6902:
+  - target:
+      kind: Deployment
+      name: go-settlementservice
+    patch: |-
+      - op: replace
+        path: /spec/template/spec/containers/0/image
+        value: 618528691313.dkr.ecr.ap-northeast-1.amazonaws.com/rabbitx/go-settlementservice-prod
+
+  - target:
+      kind: SecretProviderClass
+      name: aws-secrets-go-settlement
+    patch: |-
+      - op: replace
+        path: /spec/parameters/objects
+        value: |
+          - objectName: "arn:aws:secretsmanager:ap-northeast-1:618528691313:secret:prod/settlement-21UD5J"
+            objectType: "secretsmanager"
+            jmesPath:
+                - path: "L1_OWNER_PRIVATE_KEY"
+                  objectAlias: "L1_OWNER_PRIVATE_KEY"
+                - path: "ALCHEMY_URL"
+                  objectAlias: "ALCHEMY_URL"
+                - path: "L2_SETTLER_ADDRESS"
+                  objectAlias: "L2_SETTLER_ADDRESS"
+                - path: "L2_SETTLER_PRIVATE_KEY"
+                  objectAlias: "L2_SETTLER_PRIVATE_KEY"
+  - target:
+      kind: ServiceAccount
+      name: settlement-service
+    patch: |-
+      - op: replace
+        path: /metadata/annotations/eks.amazonaws.com~1role-arn
+        value: arn:aws:iam::618528691313:role/settlement-service-role-prod

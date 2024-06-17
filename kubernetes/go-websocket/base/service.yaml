@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: go-websocket
+  name: go-websocket
+spec:
+  ports:
+    - protocol: TCP
+      port: 7778
+      targetPort: 7778
+  selector:
+    app: go-websocket
+  type: ClusterIP

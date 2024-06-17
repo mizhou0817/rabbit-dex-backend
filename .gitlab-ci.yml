@@ -1,0 +1,319 @@
+stages:
+  - test
+  - build
+  - push
+  - deploy
+
+# Gitlab ci predefined variables https://docs.gitlab.com/ee/ci/variables/predefined_variables.html
+workflow:
+  name: '$PIPELINE_NAME'
+  rules:
+    - if: '($CI_COMMIT_BRANCH != "testnet" && $CI_COMMIT_BRANCH != "mainnet" && ($CI_COMMIT_MESSAGE =~ /^deploy:.*/i)) || ( $CI_MERGE_REQUEST_TITLE =~ /^Draft:.*/ && $CI_COMMIT_BRANCH && $CI_OPEN_MERGE_REQUESTS && ($CI_COMMIT_MESSAGE =~ /^deploy:.*/i) )'
+      variables:
+        PIPELINE_NAME: 'FEATURE: $CI_COMMIT_MESSAGE by $CI_COMMIT_AUTHOR'
+    - if: '$CI_PIPELINE_SOURCE == "merge_request_event" && $CI_OPEN_MERGE_REQUESTS && $CI_MERGE_REQUEST_TITLE !~ /^Draft:.*/ && ($CI_MERGE_REQUEST_TARGET_BRANCH_NAME == "testnet" || $CI_MERGE_REQUEST_TARGET_BRANCH_NAME == "mainnet")'
+      variables:
+        PIPELINE_NAME: 'MERGE REQUEST CREATED: "$CI_MERGE_REQUEST_TITLE" -> "$CI_MERGE_REQUEST_TARGET_BRANCH_NAME"'
+    - if: '$CI_PIPELINE_SOURCE == "push" && ($CI_COMMIT_REF_NAME == "testnet" || $CI_COMMIT_REF_NAME == "mainnet")'
+      variables:
+        PIPELINE_NAME: 'MERGE REQUEST PUSHED: $CI_COMMIT_MESSAGE'
+    - if: '$CI_COMMIT_BRANCH && $CI_OPEN_MERGE_REQUESTS'
+      when: never
+    - if: '$CI_COMMIT_TAG'
+      when: never
+
+# Global environment variables list
+variables:
+  GLOBAL_PROJECT: "rabbitx"
+  GLOBAL_AWS_SHORT_REGION: "apn1"
+  GLOBAL_AWS_ACCOUNT_ID_MAINNET: 618528691313
+  GLOBAL_AWS_ACCOUNT_ID_TESTNET: 763292132769
+  GLOBAL_BUILD_REPOSITORY_DEX_CONFIG_DEV: "rabbit-dex-config"
+  GLOBAL_BUILD_REPOSITORY_DEX_CONFIG_TESTNET: "rabbit-dex-config"
+  GLOBAL_BUILD_REPOSITORY_DEX_CONFIG_MAINNET: "rabbit-dex-config-prod"
+  GLOBAL_CONFIGS_FOLDER: "_configs"
+  GLOBAL_AWS_REGION: "ap-northeast-1"
+  GLOBAL_AWS_REGION_SHORT: "apn1"
+  GLOBAL_GO_VERSION: 1.21.5
+  GLOBAL_AWS_ENVIRONMENT_DEV: "dev" # logically splitting different AWS accounts
+  GLOBAL_SUB_ENVIRONMENT_TESTNET: "testnet" # logically splitting different clusters in one aws account
+  GLOBAL_GITLAB_AGENT_EKS_TESTNET: "rabbitx-dev-apn1-testnet-eks"
+  GLOBAL_K8S_NAMESPACE: "rabbitx"
+  GLOBAL_PLATFORM: "linux/amd64"
+  GLOBAL_FLAG_TEST_CODE: "false"
+  GLOBAL_IS_CICD_JOB_FLAG: "true"
+
+############# Test step start block #############
+#NOTE: I disabled the test stage because we have no any unit tests or linters for our code yet.
+
+test:
+  extends: .test_template
+  stage: test
+
+############# Test step end block #############
+
+
+############# Build step start block #############
+
+build_image_testnet:
+  extends: .build_image_ci_template
+  parallel:
+    matrix:
+      - APP:
+        - tarantool
+        - timescaledb
+        - centrifugo
+        - go-fundingservice
+        - go-insengine
+        - go-liqengine
+        - go-pricingservice
+        - go-settlementservice
+        - go-websocket
+        - go-archiver
+        - go-api
+        - grafana
+        - go-slipstopper
+        - go-referralservice
+        - go-dashboards
+  rules:
+    - if: $CI_MERGE_REQUEST_TARGET_BRANCH_NAME == "testnet"
+  tags:
+    - tokiorunner
+  variables:
+    # NOTE: now we store DEV and TESTNET envs on the RABBITX-MAINNET AWS ACCOUNT.
+    # When we migrate to a test env specific RABBITX-TESTNET AWS ACCOUNT we need to change
+    # the CURRENT_AWS_ACCOUNT_ID env variable
+    CURRENT_AWS_ENVIRONMENT: $GLOBAL_AWS_ENVIRONMENT_DEV
+    CURRENT_AWS_ACCOUNT_ID: $GLOBAL_AWS_ACCOUNT_ID_TESTNET
+    CURRENT_AWS_REGION_LONG: $GLOBAL_AWS_REGION
+    CURRENT_PROJECT: $GLOBAL_PROJECT
+    CURRENT_AWS_SHORT_REGION: $GLOBAL_AWS_REGION_SHORT
+    CURRENT_SUB_ENVIRONMENT: $GLOBAL_SUB_ENVIRONMENT_TESTNET
+    CURRENT_BUILD_REPOSITORY_DEX_CONFIG: $GLOBAL_BUILD_REPOSITORY_DEX_CONFIG_TESTNET
+    APPS: ${APP}
+
+#---------------------- push ----------------------#
+
+push_feature_image_testnet:
+  extends: .push_image_template
+  parallel:
+    matrix:
+      - APP:
+        - tarantool
+        - timescaledb
+        - centrifugo
+        - go-fundingservice
+        - go-insengine
+        - go-liqengine
+        - go-pricingservice
+        - go-settlementservice
+        - go-websocket
+        - go-archiver
+        - go-api
+        - grafana
+        - go-slipstopper
+        - go-referralservice
+        - go-dashboards
+  tags:
+    - tokiorunner
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "push" && $CI_COMMIT_BRANCH && ($CI_COMMIT_MESSAGE =~ /^deploy:.*/i)
+  variables:
+    # NOTE: now we store DEV and TESTNET envs on the RABBITX-MAINNET AWS ACCOUNT.
+    # When we migrate to a test env specific RABBITX-TESTNET AWS ACCOUNT we need to change
+    # the CURRENT_AWS_ACCOUNT_ID env variable
+    CURRENT_AWS_ENVIRONMENT: $GLOBAL_AWS_ENVIRONMENT_DEV
+    CURRENT_AWS_ACCOUNT_ID: $GLOBAL_AWS_ACCOUNT_ID_TESTNET
+    CURRENT_AWS_REGION_LONG: $GLOBAL_AWS_REGION
+    CURRENT_PROJECT: $GLOBAL_PROJECT
+    CURRENT_AWS_SHORT_REGION: $GLOBAL_AWS_REGION_SHORT
+    CURRENT_SUB_ENVIRONMENT: $GLOBAL_SUB_ENVIRONMENT_TESTNET
+    CURRENT_BUILD_REPOSITORY_DEX_CONFIG: $GLOBAL_BUILD_REPOSITORY_DEX_CONFIG_TESTNET
+    APPS: ${APP}
+
+push_image_testnet:
+  extends: .push_image_template
+  parallel:
+    matrix:
+      - APP:
+        - tarantool
+        - timescaledb
+        - centrifugo
+        - go-fundingservice
+        - go-insengine
+        - go-liqengine
+        - go-pricingservice
+        - go-settlementservice
+        - go-websocket
+        - go-archiver
+        - go-api
+        - grafana
+        - go-slipstopper
+        - go-referralservice
+        - go-dashboards
+  tags:
+    - tokiorunner
+  only:
+    - testnet
+  variables:
+    # NOTE: now we store DEV and TESTNET envs on the RABBITX-MAINNET AWS ACCOUNT.
+    # When we migrate to a test env specific RABBITX-TESTNET AWS ACCOUNT we need to change
+    # the CURRENT_AWS_ACCOUNT_ID env variable
+    CURRENT_AWS_ENVIRONMENT: $GLOBAL_AWS_ENVIRONMENT_DEV
+    CURRENT_AWS_ACCOUNT_ID: $GLOBAL_AWS_ACCOUNT_ID_TESTNET
+    CURRENT_AWS_REGION_LONG: $GLOBAL_AWS_REGION
+    CURRENT_PROJECT: $GLOBAL_PROJECT
+    CURRENT_AWS_SHORT_REGION: $GLOBAL_AWS_REGION_SHORT
+    CURRENT_SUB_ENVIRONMENT: $GLOBAL_SUB_ENVIRONMENT_TESTNET
+    CURRENT_BUILD_REPOSITORY_DEX_CONFIG: $GLOBAL_BUILD_REPOSITORY_DEX_CONFIG_TESTNET
+    APPS: ${APP}
+
+############# Build step end block #############
+
+
+############# Deploy step start block #############
+
+deploy_feature_testnet:
+  extends: .deploy_template
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "push" && $CI_COMMIT_BRANCH && ($CI_COMMIT_MESSAGE =~ /^deploy:.*/i)
+  variables:
+    CURRENT_GITLAB_AGENT_EKS: $GLOBAL_GITLAB_AGENT_EKS_TESTNET
+    CURRENT_AWS_ENVIRONMENT: $GLOBAL_AWS_ENVIRONMENT_DEV
+    CURRENT_AWS_SHORT_REGION: $GLOBAL_AWS_REGION_SHORT
+    CURRENT_SUB_ENVIRONMENT: $GLOBAL_SUB_ENVIRONMENT_TESTNET
+    CURRENT_K8S_NAMESPACE: $GLOBAL_K8S_NAMESPACE
+
+
+deploy_testnet:
+  extends: .deploy_template
+  only:
+    - testnet
+  variables:
+    CURRENT_GITLAB_AGENT_EKS: $GLOBAL_GITLAB_AGENT_EKS_TESTNET
+    CURRENT_AWS_ENVIRONMENT: $GLOBAL_AWS_ENVIRONMENT_DEV
+    CURRENT_AWS_SHORT_REGION: $GLOBAL_AWS_REGION_SHORT
+    CURRENT_SUB_ENVIRONMENT: $GLOBAL_SUB_ENVIRONMENT_TESTNET
+    CURRENT_K8S_NAMESPACE: $GLOBAL_K8S_NAMESPACE
+
+############# Deploy step end block #############
+
+
+############################################################
+#                 Templates start blocks                   #
+############################################################
+
+.test_template:
+  image: golang:$GLOBAL_GO_VERSION-alpine
+  services:
+    - docker:dind
+  tags:
+    - tokiorunner
+  script:
+    - make test-ci-cd
+
+
+.build_image_ci_template:
+  stage: build
+  variables:
+    CURRENT_AWS_ENVIRONMENT: ""
+    CURRENT_AWS_ACCOUNT_ID: ""
+    CURRENT_AWS_REGION_LONG: ""
+    CURRENT_PROJECT: ""
+    CURRENT_AWS_SHORT_REGION: ""
+    CURRENT_SUB_ENVIRONMENT: ""
+    CURRENT_BUILD_REPOSITORY_DEX_CONFIG: ""
+    APPS: ""
+  services:
+    - docker:dind
+  #    - docker info
+  script:
+    - pwd
+    - cd kubernetes
+    # get dev config from rabbit-dex-config repo. I have to use CI/CD because I don't want to specify access key to the repo
+    - git clone -b $CURRENT_SUB_ENVIRONMENT https://gitlab-ci-token:$CI_JOB_TOKEN@gitlab.com/stripsdev/$CURRENT_BUILD_REPOSITORY_DEX_CONFIG.git --depth 1 $GLOBAL_CONFIGS_FOLDER
+    - make build
+      CURRENT_AWS_ACCOUNT_ID=$CURRENT_AWS_ACCOUNT_ID
+      AWS_REGION=$CURRENT_AWS_REGION_LONG
+      GLOBAL_PROJECT=$CURRENT_PROJECT
+      GLOBAL_ENV=$CURRENT_AWS_ENVIRONMENT
+      GLOBAL_AWS_SHORT_REGION=$CURRENT_AWS_SHORT_REGION
+      GLOBAL_SUB_ENVIRONMENT=$CURRENT_SUB_ENVIRONMENT
+      GO_VERSION=$GLOBAL_GO_VERSION
+      PLATFORM=$GLOBAL_PLATFORM
+      CONFIGS_FOLDER=$GLOBAL_CONFIGS_FOLDER
+      IS_CICD_JOB=$GLOBAL_IS_CICD_JOB_FLAG
+      GIT_SHA=$CI_COMMIT_SHORT_SHA
+      APPS=$APPS
+
+.push_image_template:
+  stage: push
+  variables:
+    CURRENT_AWS_ENVIRONMENT: ""
+    CURRENT_AWS_ACCOUNT_ID: ""
+    CURRENT_AWS_REGION_LONG: ""
+    CURRENT_PROJECT: ""
+    CURRENT_AWS_SHORT_REGION: ""
+    CURRENT_SUB_ENVIRONMENT: ""
+    CURRENT_BUILD_REPOSITORY_DEX_CONFIG: ""
+    ENVIRONMENT_FOR_DEPLOY: ""
+    BUILD_REPOSITORY_DEX_CONFIG: ""
+    APPS: ""
+  services:
+    - docker:dind
+  before_script:
+    - aws ecr get-login-password | docker login --username AWS --password-stdin $CURRENT_AWS_ACCOUNT_ID.dkr.ecr.$GLOBAL_AWS_REGION.amazonaws.com
+  script:
+    - cd kubernetes
+    # get dev config from rabbit-dex-config repo. I have to use CI/CD because I don't want to specify access key to the repo
+    - git clone -b $CURRENT_SUB_ENVIRONMENT https://gitlab-ci-token:$CI_JOB_TOKEN@gitlab.com/stripsdev/$CURRENT_BUILD_REPOSITORY_DEX_CONFIG.git --depth 1 $GLOBAL_CONFIGS_FOLDER
+    - make build
+      CURRENT_AWS_ACCOUNT_ID=$CURRENT_AWS_ACCOUNT_ID
+      AWS_REGION=$CURRENT_AWS_REGION_LONG
+      GLOBAL_PROJECT=$CURRENT_PROJECT
+      GLOBAL_ENV=$CURRENT_AWS_ENVIRONMENT
+      GLOBAL_AWS_SHORT_REGION=$CURRENT_AWS_SHORT_REGION
+      GLOBAL_SUB_ENVIRONMENT=$CURRENT_SUB_ENVIRONMENT
+      GO_VERSION=$GLOBAL_GO_VERSION
+      PLATFORM=$GLOBAL_PLATFORM
+      CONFIGS_FOLDER=$GLOBAL_CONFIGS_FOLDER
+      IS_CICD_JOB=$GLOBAL_IS_CICD_JOB_FLAG
+      GIT_SHA=$CI_COMMIT_SHORT_SHA
+      APPS=$APPS
+    - make push
+      CURRENT_AWS_ACCOUNT_ID=$CURRENT_AWS_ACCOUNT_ID
+      AWS_REGION=$CURRENT_AWS_REGION_LONG
+      GLOBAL_PROJECT=$CURRENT_PROJECT
+      GLOBAL_ENV=$CURRENT_AWS_ENVIRONMENT
+      GLOBAL_AWS_SHORT_REGION=$CURRENT_AWS_SHORT_REGION
+      GLOBAL_SUB_ENVIRONMENT=$CURRENT_SUB_ENVIRONMENT
+      GIT_SHA=$CI_COMMIT_SHORT_SHA
+      APPS=$APPS
+
+.deploy_template:
+  stage: deploy
+  variables:
+    CURRENT_GITLAB_AGENT_EKS: ""
+    CURRENT_AWS_ENVIRONMENT: ""
+    CURRENT_AWS_SHORT_REGION: ""
+    CURRENT_SUB_ENVIRONMENT: ""
+    CURRENT_K8S_NAMESPACE: ""
+  image:
+    name: alpine/k8s:1.24.10
+  before_script:
+    - apk add --update make
+  script:
+    - cd kubernetes
+    - kubectl config get-contexts
+    - kubectl config use-context stripsdev/rabbit-dex-backend:$CURRENT_GITLAB_AGENT_EKS-agent
+    - kubectl get pods
+    - make deploy
+      GLOBAL_SUB_ENVIRONMENT=$CURRENT_SUB_ENVIRONMENT
+      GLOBAL_ENV=$CURRENT_AWS_ENVIRONMENT
+      GLOBAL_AWS_SHORT_REGION=$CURRENT_AWS_SHORT_REGION
+      GLOBAL_SUB_ENVIRONMENT=$CURRENT_SUB_ENVIRONMENT
+      K8S_NAMESPACE=$CURRENT_K8S_NAMESPACE
+
+############################################################
+#                    Templates end blocks                  #
+############################################################

@@ -1,0 +1,297 @@
+{
+  "annotations": {
+    "list": [
+      {
+        "builtIn": 1,
+        "datasource": {
+          "type": "grafana",
+          "uid": "-- Grafana --"
+        },
+        "enable": true,
+        "hide": true,
+        "iconColor": "rgba(0, 211, 255, 1)",
+        "name": "Annotations & Alerts",
+        "target": {
+          "limit": 100,
+          "matchAny": false,
+          "tags": [],
+          "type": "dashboard"
+        },
+        "type": "dashboard"
+      }
+    ]
+  },
+  "editable": true,
+  "fiscalYearStartMonth": 0,
+  "graphTooltip": 0,
+  "id": 29,
+  "links": [],
+  "liveNow": false,
+  "panels": [
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "SPq4dC94z"
+      },
+      "gridPos": {
+        "h": 7,
+        "w": 24,
+        "x": 0,
+        "y": 0
+      },
+      "id": 5,
+      "options": {
+        "code": {
+          "language": "plaintext",
+          "showLineNumbers": false,
+          "showMiniMap": false
+        },
+        "content": "![rabbitxlogo](https://d1muf25xaso8hp.cloudfront.net/https%3A%2F%2F3918ead037b1d3dc3ed05287664aeaed.cdn.bubble.io%2Ff1666004349524x352592312465465700%2Flogo_dark_transparent.png?w=256&h=65&auto=compress&fit=crop&dpr=1.75)\r\n# Trading Competition Leaderboard\r\n### 27 October - 10 November\r\n\r\n##### Top 10 Volume and top 10 P&L traders will receive 1,000 RBX tokens and a free RabbitX Swag Pack! Biggest losers will also receive a consolation prize ;)",
+        "mode": "markdown"
+      },
+      "pluginVersion": "10.0.0-preview",
+      "type": "text"
+    },
+    {
+      "datasource": {
+        "type": "postgres",
+        "uid": "8PO0bcxVz"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "custom": {
+            "align": "auto",
+            "cellOptions": {
+              "type": "auto"
+            },
+            "inspect": false
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "volume"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "currencyUSD"
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 26,
+        "w": 12,
+        "x": 0,
+        "y": 7
+      },
+      "id": 3,
+      "options": {
+        "cellHeight": "sm",
+        "footer": {
+          "countRows": false,
+          "fields": "",
+          "reducer": [
+            "sum"
+          ],
+          "show": false
+        },
+        "showHeader": true,
+        "sortBy": [
+          {
+            "desc": true,
+            "displayName": "volume"
+          }
+        ]
+      },
+      "pluginVersion": "10.0.0-preview",
+      "targets": [
+        {
+          "datasource": {
+            "type": "postgres",
+            "uid": "8PO0bcxVz"
+          },
+          "editorMode": "code",
+          "format": "table",
+          "rawQuery": true,
+          "rawSql": "SELECT row_number() OVER () AS rank, t.* FROM (\r\n\tWITH fills AS (\r\n\t\tSELECT\r\n\t\t\tf.profile_id, sum(f.price*f.size) as notional\r\n\t\tFROM\r\n\t\t\tapp_fill f\r\n\t\tWHERE\r\n\t\t\tf.timestamp > $__unixEpochFrom()::bigint*1000000 AND f.timestamp < $__unixEpochTo()::bigint*1000000\r\n\t\t\t\tAND f.profile_id NOT IN (0, 19, 20, 14910, 14919)\r\n\t\tGROUP BY\r\n\t\t\tf.profile_id\r\n\t\tORDER BY\r\n\t\t\tnotional DESC\r\n\t\tLIMIT 50\r\n\t), ops AS (\r\n\t\tSELECT id as profile_id, wallet \r\n\t\tFROM app_profile \r\n\t\tWHERE id IN (SELECT profile_id FROM fills) \r\n\t)\r\n\tSELECT o.wallet, f.notional as volume FROM fills f, ops o WHERE f.profile_id=o.profile_id ORDER BY f.notional DESC\r\n) t;\r\n",
+          "refId": "A",
+          "sql": {
+            "columns": [
+              {
+                "parameters": [
+                  {
+                    "name": "*",
+                    "type": "functionParameter"
+                  }
+                ],
+                "type": "function"
+              }
+            ],
+            "groupBy": [
+              {
+                "property": {
+                  "type": "string"
+                },
+                "type": "groupBy"
+              }
+            ],
+            "limit": 50
+          },
+          "table": "app_fill"
+        }
+      ],
+      "title": "Volume Leaderboard",
+      "type": "table"
+    },
+    {
+      "datasource": {
+        "type": "postgres",
+        "uid": "8PO0bcxVz"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "custom": {
+            "align": "auto",
+            "cellOptions": {
+              "type": "auto"
+            },
+            "inspect": false
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "pnl"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "currencyUSD"
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 26,
+        "w": 12,
+        "x": 12,
+        "y": 7
+      },
+      "id": 2,
+      "options": {
+        "cellHeight": "sm",
+        "footer": {
+          "countRows": false,
+          "fields": "",
+          "reducer": [
+            "sum"
+          ],
+          "show": false
+        },
+        "showHeader": true,
+        "sortBy": [
+          {
+            "desc": true,
+            "displayName": "pnl"
+          }
+        ]
+      },
+      "pluginVersion": "10.0.0-preview",
+      "targets": [
+        {
+          "datasource": {
+            "type": "postgres",
+            "uid": "8PO0bcxVz"
+          },
+          "editorMode": "code",
+          "format": "table",
+          "rawQuery": true,
+          "rawSql": "SELECT\r\n  row_number() over () AS rank,\r\n  t.*\r\nFROM\r\n  (\r\n    WITH balance_ops AS (\r\n      SELECT\r\n        b.profile_id,\r\n        sum(b.amount) as realised_pnl\r\n      FROM\r\n        app_balance_operation b\r\n      WHERE\r\n        b.ops_type = 'pnl'\r\n        AND b.timestamp > 1698364800000000\r\n        AND b.timestamp < 1699574400000000\r\n        AND b.profile_id NOT IN (13,14,15,19,20,1561,2104,11002,704,11007,11831,12071,12072,12483,13436,12472,12505,14910,14919,15679,16510,16955,17217)\r\n      GROUP BY\r\n        b.profile_id\r\n    ),\r\n    unrealised AS (\r\n      SELECT\r\n        profile_id,\r\n        sum(unrealized_pnl) as unrealized_pnl\r\n      FROM\r\n        app_position\r\n      WHERE\r\n        profile_id NOT IN (13,14,15,19,20,1561,2104,11002,704,11007,11831,12071,12072,12483,13436,12472,12505,14910,14919,15679,16510,16955,17217)\r\n        AND archive_timestamp IN (\r\n          (\r\n            SELECT\r\n              MAX(archive_timestamp)\r\n            FROM\r\n              app_position\r\n            WHERE\r\n              shard_id = 'BTC-USD'\r\n              AND archive_timestamp < 1699574400000000\r\n          ),\r\n          (\r\n            SELECT\r\n              MAX(archive_timestamp)\r\n            FROM\r\n              app_position\r\n            WHERE\r\n              shard_id = 'ETH-USD'\r\n              AND archive_timestamp < 1699574400000000\r\n          ),\r\n          (\r\n            SELECT\r\n              MAX(archive_timestamp)\r\n            FROM\r\n              app_position\r\n            WHERE\r\n              shard_id = 'SOL-USD'\r\n              AND archive_timestamp < 1699574400000000\r\n          ),\r\n          (\r\n            SELECT\r\n              MAX(archive_timestamp)\r\n            FROM\r\n              app_position\r\n            WHERE\r\n              shard_id = 'ARB-USD'\r\n              AND archive_timestamp < 1699574400000000\r\n          ),\r\n          (\r\n            SELECT\r\n              MAX(archive_timestamp)\r\n            FROM\r\n              app_position\r\n            WHERE\r\n              shard_id = 'LDO-USD'\r\n              AND archive_timestamp < 1699574400000000\r\n          ),\r\n          (\r\n            SELECT\r\n              MAX(archive_timestamp)\r\n            FROM\r\n              app_position\r\n            WHERE\r\n              shard_id = 'DOGE-USD'\r\n              AND archive_timestamp < 1699574400000000\r\n          ),\r\n          (\r\n            SELECT\r\n              MAX(archive_timestamp)\r\n            FROM\r\n              app_position\r\n            WHERE\r\n              shard_id = 'SUI-USD'\r\n              AND archive_timestamp < 1699574400000000\r\n          ),\r\n          (\r\n            SELECT\r\n              MAX(archive_timestamp)\r\n            FROM\r\n              app_position\r\n            WHERE\r\n              shard_id = 'PEPE1000-USD'\r\n              AND archive_timestamp < 1699574400000000\r\n          ),\r\n          (\r\n            SELECT\r\n              MAX(archive_timestamp)\r\n            FROM\r\n              app_position\r\n            WHERE\r\n              shard_id = 'BCH-USD'\r\n              AND archive_timestamp < 1699574400000000\r\n          ),\r\n          (\r\n            SELECT\r\n              MAX(archive_timestamp)\r\n            FROM\r\n              app_position\r\n            WHERE\r\n              shard_id = 'XRP-USD'\r\n              AND archive_timestamp < 1699574400000000\r\n          ),\r\n          (\r\n            SELECT\r\n              MAX(archive_timestamp)\r\n            FROM\r\n              app_position\r\n            WHERE\r\n              shard_id = 'WLD-USD'\r\n              AND archive_timestamp < 1699574400000000\r\n          ),\r\n          (\r\n            SELECT\r\n              MAX(archive_timestamp)\r\n            FROM\r\n              app_position\r\n            WHERE\r\n              shard_id = 'TON-USD'\r\n              AND archive_timestamp < 1699574400000000\r\n          ),\r\n          (\r\n            SELECT\r\n              MAX(archive_timestamp)\r\n            FROM\r\n              app_position\r\n            WHERE\r\n              shard_id = 'STX-USD'\r\n              AND archive_timestamp < 1699574400000000\r\n          ),\r\n          (\r\n            SELECT\r\n              MAX(archive_timestamp)\r\n            FROM\r\n              app_position\r\n            WHERE\r\n              shard_id = 'MATIC-USD'\r\n              AND archive_timestamp < 1699574400000000\r\n          ),\r\n          (\r\n            SELECT\r\n              MAX(archive_timestamp)\r\n            FROM\r\n              app_position\r\n            WHERE\r\n              shard_id = 'TRB-USD'\r\n              AND archive_timestamp < 1699574400000000\r\n          ),\r\n          (\r\n            SELECT\r\n              MAX(archive_timestamp)\r\n            FROM\r\n              app_position\r\n            WHERE\r\n              shard_id = 'APT-USD'\r\n              AND archive_timestamp < 1699574400000000\r\n          ),\r\n          (\r\n            SELECT\r\n              MAX(archive_timestamp)\r\n            FROM\r\n              app_position\r\n            WHERE\r\n              shard_id = 'INJ-USD'\r\n              AND archive_timestamp < 1699574400000000\r\n          ),\r\n          (\r\n            SELECT\r\n              MAX(archive_timestamp)\r\n            FROM\r\n              app_position\r\n            WHERE\r\n              shard_id = 'AAVE-USD'\r\n              AND archive_timestamp < 1699574400000000\r\n          ),\r\n          (\r\n            SELECT\r\n              MAX(archive_timestamp)\r\n            FROM\r\n              app_position\r\n            WHERE\r\n              shard_id = 'LINK-USD'\r\n              AND archive_timestamp < 1699574400000000\r\n          ),\r\n          (\r\n            SELECT\r\n              MAX(archive_timestamp)\r\n            FROM\r\n              app_position\r\n            WHERE\r\n              shard_id = 'BNB-USD'\r\n              AND archive_timestamp < 1699574400000000\r\n          ),\r\n          (\r\n            SELECT\r\n              MAX(archive_timestamp)\r\n            FROM\r\n              app_position\r\n            WHERE\r\n              shard_id = 'RNDR-USD'\r\n              AND archive_timestamp < 1699574400000000\r\n          ),\r\n          (\r\n            SELECT\r\n              MAX(archive_timestamp)\r\n            FROM\r\n              app_position\r\n            WHERE\r\n              shard_id = 'MKR-USD'\r\n              AND archive_timestamp < 1699574400000000\r\n          ),\r\n          (\r\n            SELECT\r\n              MAX(archive_timestamp)\r\n            FROM\r\n              app_position\r\n            WHERE\r\n              shard_id = 'RLB-USD'\r\n              AND archive_timestamp < 1699574400000000\r\n          ),\r\n          (\r\n            SELECT\r\n              MAX(archive_timestamp)\r\n            FROM\r\n              app_position\r\n            WHERE\r\n              shard_id = 'ORDI-USD'\r\n              AND archive_timestamp < 1699574400000000\r\n          ),\r\n          (\r\n            SELECT\r\n              MAX(archive_timestamp)\r\n            FROM\r\n              app_position\r\n            WHERE\r\n              shard_id = 'STG-USD'\r\n              AND archive_timestamp < 1699574400000000\r\n          ),\r\n          (\r\n            SELECT\r\n              MAX(archive_timestamp)\r\n            FROM\r\n              app_position\r\n            WHERE\r\n              shard_id = 'SATS1000000-USD'\r\n              AND archive_timestamp < 1699574400000000\r\n          )\r\n        )\r\n      GROUP BY\r\n        profile_id\r\n    )\r\n    SELECT\r\n      b.profile_id,\r\n      b.realised_pnl + u.unrealized_pnl as pnl\r\n    FROM\r\n      balance_ops b,\r\n      unrealised u\r\n    WHERE\r\n      b.profile_id = u.profile_id\r\n      AND b.realised_pnl + u.unrealized_pnl > 0\r\n    ORDER BY\r\n      pnl DESC\r\n  ) t;",
+          "refId": "A",
+          "sql": {
+            "columns": [
+              {
+                "parameters": [
+                  {
+                    "name": "*",
+                    "type": "functionParameter"
+                  }
+                ],
+                "type": "function"
+              }
+            ],
+            "groupBy": [
+              {
+                "property": {
+                  "type": "string"
+                },
+                "type": "groupBy"
+              }
+            ],
+            "limit": 50
+          },
+          "table": "app_balance_operation"
+        }
+      ],
+      "title": "P&L Leaderboard",
+      "type": "table"
+    }
+  ],
+  "refresh": "",
+  "schemaVersion": 38,
+  "style": "dark",
+  "tags": [],
+  "templating": {
+    "list": []
+  },
+  "time": {
+    "from": "2023-10-27T00:00:00.000Z",
+    "to": "2023-11-10T00:00:00.000Z"
+  },
+  "timepicker": {},
+  "timezone": "",
+  "title": "Trading Competition Leaderboard",
+  "uid": "oE8wv064k",
+  "version": 31,
+  "weekStart": ""
+}

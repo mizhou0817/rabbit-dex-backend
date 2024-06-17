@@ -1,0 +1,22 @@
+resources:
+  - ../../base/
+
+patchesJson6902:
+  - target:
+      kind: Deployment
+      name: grafana
+    patch: |-
+      - op: replace
+        path: /spec/template/spec/containers/0/image
+        value: 763292132769.dkr.ecr.ap-northeast-1.amazonaws.com/rabbitx-dev-apn1-testnet-grafana
+      - op: add
+        path: /spec/template/spec/nodeSelector
+        value:
+          topology.kubernetes.io/zone: ap-northeast-1d
+      - op: replace
+        path: /spec/template/spec/volumes
+        value:
+          - name: grafana-pv
+            awsElasticBlockStore:
+              fsType: ext4
+              volumeID: aws://ap-northeast-1d/vol-0731312c9e0abbf50

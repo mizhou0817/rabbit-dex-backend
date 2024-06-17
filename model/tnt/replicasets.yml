@@ -1,0 +1,516 @@
+btc-market:
+  instances:
+  - btc-market
+  - btc-market-2
+  roles:
+  - market-btc
+  - dev
+  weight: 1
+  all_rw: false
+
+eth-market:
+  instances:
+  - eth-market
+  - eth-market-2
+  roles:
+  - market-eth
+  - dev
+  weight: 1
+  all_rw: false
+
+sol-market:
+  instances:
+  - sol-market
+  - sol-market-2
+  roles:
+  - market-sol
+  - dev
+  weight: 1
+  all_rw: false
+
+arb-market:
+  instances:
+  - arb-market
+  - arb-market-2
+  roles:
+  - market-arb
+  - dev
+  weight: 1
+  all_rw: false
+
+doge-market:
+  instances:
+  - doge-market
+  - doge-market-2
+  roles:
+  - market-doge
+  - dev
+  weight: 1
+  all_rw: false
+
+ldo-market:
+  instances:
+  - ldo-market
+  - ldo-market-2
+  roles:
+  - market-ldo
+  - dev
+  weight: 1
+  all_rw: false
+
+sui-market:
+  instances:
+  - sui-market
+  - sui-market-2
+  roles:
+  - market-sui
+  - dev
+  weight: 1
+  all_rw: false
+
+pepe-market:
+  instances:
+  - pepe1000-market
+  - pepe1000-market-2
+  roles:
+  - market-pepe
+  - dev
+  weight: 1
+  all_rw: false
+
+bch-market:
+  instances:
+  - bch-market
+  - bch-market-2
+  roles:
+  - market-bch
+  - dev
+  weight: 1
+  all_rw: false
+
+xrp-market:
+  instances:
+  - xrp-market
+  - xrp-market-2
+  roles:
+  - market-xrp
+  - dev
+  weight: 1
+  all_rw: false
+
+wld-market:
+  instances:
+  - wld-market
+  - wld-market-2
+  roles:
+  - market-wld
+  - dev
+  weight: 1
+  all_rw: false
+
+ton-market:
+  instances:
+  - ton-market
+  - ton-market-2
+  roles:
+  - market-ton
+  - dev
+  weight: 1
+  all_rw: false
+
+stx-market:
+  instances:
+  - stx-market
+  - stx-market-2
+  roles:
+  - market-stx
+  - dev
+  weight: 1
+  all_rw: false
+
+matic-market:
+  instances:
+  - matic-market
+  - matic-market-2
+  roles:
+  - market-matic
+  - dev
+  weight: 1
+  all_rw: false
+
+trb-market:
+  instances:
+  - trb-market
+  - trb-market-2
+  roles:
+  - market-trb
+  - dev
+  weight: 1
+  all_rw: false
+
+apt-market:
+  instances:
+  - apt-market
+  - apt-market-2
+  roles:
+  - market-apt
+  - dev
+  weight: 1
+  all_rw: false
+
+inj-market:
+  instances:
+  - inj-market
+  - inj-market-2
+  roles:
+  - market-inj
+  - dev
+  weight: 1
+  all_rw: false
+
+aave-market:
+  instances:
+  - aave-market
+  - aave-market-2
+  roles:
+  - market-aave
+  - dev
+  weight: 1
+  all_rw: false
+
+link-market:
+  instances:
+  - link-market
+  - link-market-2
+  roles:
+  - market-link
+  - dev
+  weight: 1
+  all_rw: false
+
+bnb-market:
+  instances:
+  - bnb-market
+  - bnb-market-2
+  roles:
+  - market-bnb
+  - dev
+  weight: 1
+  all_rw: false
+
+rndr-market:
+  instances:
+  - rndr-market
+  - rndr-market-2
+  roles:
+  - market-rndr
+  - dev
+  weight: 1
+  all_rw: false
+
+mkr-market:
+  instances:
+  - mkr-market
+  - mkr-market-2
+  roles:
+  - market-mkr
+  - dev
+  weight: 1
+  all_rw: false
+
+rlb-market:
+  instances:
+  - rlb-market
+  - rlb-market-2
+  roles:
+  - market-rlb
+  - dev
+  weight: 1
+  all_rw: false
+
+ordi-market:
+  instances:
+  - ordi-market
+  - ordi-market-2
+  roles:
+  - market-ordi
+  - dev
+  weight: 1
+  all_rw: false
+
+stg-market:
+  instances:
+  - stg-market
+  - stg-market-2
+  roles:
+  - market-stg
+  - dev
+  weight: 1
+  all_rw: false
+
+sats-market:
+  instances:
+  - sats1000000-market
+  - sats1000000-market-2
+  roles:
+  - market-sats
+  - dev
+  weight: 1
+  all_rw: false
+
+tia-market:
+  instances:
+  - tia-market
+  - tia-market-2
+  roles:
+  - market-tia
+  - dev
+  weight: 1
+  all_rw: false
+
+blur-market:
+  instances:
+  - blur-market
+  - blur-market-2
+  roles:
+  - market-blur
+  - dev
+  weight: 1
+  all_rw: false
+
+jto-market:
+  instances:
+  - jto-market
+  - jto-market-2
+  roles:
+  - market-jto
+  - dev
+  weight: 1
+  all_rw: false
+
+meme-market:
+  instances:
+  - meme-market
+  - meme-market-2
+  roles:
+  - market-meme
+  - dev
+  weight: 1
+  all_rw: false
+
+sei-market:
+  instances:
+  - sei-market
+  - sei-market-2
+  roles:
+  - market-sei
+  - dev
+  weight: 1
+  all_rw: false
+
+yes-market:
+  instances:
+  - yes-market
+  - yes-market-2
+  roles:
+  - market-yes
+  - dev
+  weight: 1
+  all_rw: false
+
+wif-market:
+  instances:
+  - wif-market
+  - wif-market-2
+  roles:
+  - market-wif
+  - dev
+  weight: 1
+  all_rw: false
+
+strk-market:
+  instances:
+  - strk-market
+  - strk-market-2
+  roles:
+  - market-strk
+  - dev
+  weight: 1
+  all_rw: false
+
+shib-market:
+  instances:
+  - shib1000-market
+  - shib1000-market-2
+  roles:
+  - market-shib
+  - dev
+  weight: 1
+  all_rw: false
+
+bome-market:
+  instances:
+  - bome-market
+  - bome-market-2
+  roles:
+  - market-bome
+  - dev
+  weight: 1
+  all_rw: false
+
+slerf-market:
+  instances:
+  - slerf-market
+  - slerf-market-2
+  roles:
+  - market-slerf
+  - dev
+  weight: 1
+  all_rw: false
+
+w-market:
+  instances:
+  - w-market
+  - w-market-2
+  roles:
+  - market-w
+  - dev
+  weight: 1
+  all_rw: false
+
+ena-market:
+  instances:
+  - ena-market
+  - ena-market-2
+  roles:
+  - market-ena
+  - dev
+  weight: 1
+  all_rw: false
+
+pac-market:
+  instances:
+  - pac-market
+  - pac-market-2
+  roles:
+  - market-pac
+  - dev
+  weight: 1
+  all_rw: false
+
+maga-market:
+  instances:
+  - maga-market
+  - maga-market-2
+  roles:
+  - market-maga
+  - dev
+  weight: 1
+  all_rw: false
+
+trump-market:
+  instances:
+  - trump-market
+  - trump-market-2
+  roles:
+  - market-trump
+  - dev
+  weight: 1
+  all_rw: false
+
+mog-market:
+  instances:
+  - mog1000-market
+  - mog1000-market-2
+  roles:
+  - market-mog
+  - dev
+  weight: 1
+  all_rw: false
+
+not-market:
+  instances:
+  - not-market
+  - not-market-2
+  roles:
+  - market-not
+  - dev
+  weight: 1
+  all_rw: false
+
+mother-market:
+  instances:
+  - mother-market
+  - mother-market-2
+  roles:
+  - market-mother
+  - dev
+  weight: 1
+  all_rw: false
+
+bonk-market:
+  instances:
+  - bonk1000-market
+  - bonk1000-market-2
+  roles:
+  - market-bonk
+  - dev
+  weight: 1
+  all_rw: false
+
+taiko-market:
+  instances:
+  - taiko-market
+  - taiko-market-2
+  roles:
+  - market-taiko
+  - dev
+  weight: 1
+  all_rw: false
+
+floki-market:
+  instances:
+  - floki1000-market
+  - floki1000-market-2
+  roles:
+  - market-floki
+  - dev
+  weight: 1
+  all_rw: false
+
+api-gateway:
+  instances:
+  - api-gateway
+  roles:
+  - gateway
+  - dev
+  weight: 1
+  all_rw: false
+
+profile:
+  instances:
+  - profile
+  roles:
+  - profile
+  - test_debug
+  - dev
+  weight: 1
+  all_rw: false
+
+auth:
+  instances:
+  - auth
+  roles:
+  - auth
+  - dev
+  weight: 1
+  all_rw: false
+
+pubsub:
+  instances:
+  - pubsub
+  roles:
+  - pubsub
+  - dev
+  weight: 1
+  all_rw: false

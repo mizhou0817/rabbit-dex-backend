@@ -1,0 +1,55 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: go-settlementservice
+  name: go-settlementservice
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: go-settlementservice
+  template:
+    metadata:
+      labels:
+        app: go-settlementservice
+    spec:
+      serviceAccountName: settlement-service
+      volumes:
+        - name: secrets-store-inline
+          csi:
+            driver: secrets-store.csi.k8s.io
+            readOnly: true
+            volumeAttributes:
+              secretProviderClass: "aws-secrets-go-settlement"
+      containers:
+        - image: 618528691313.dkr.ecr.ap-northeast-1.amazonaws.com/rabbitx/go-settlementservice
+          imagePullPolicy: Always
+          command: ["/usr/bin/go-settlementservice"]
+          name: go-settlementservice
+          resources: {}
+          volumeMounts:
+            - name: secrets-store-inline
+              mountPath: "/mnt/secrets-store"
+              readOnly: true
+          env:
+            - name: L1_OWNER_PRIVATE_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: settlement-secrets
+                  key: L1_OWNER_PRIVATE_KEY
+            - name: ALCHEMY_URL
+              valueFrom:
+                secretKeyRef:
+                  name: settlement-secrets
+                  key: ALCHEMY_URL
+            - name: L2_SETTLER_ADDRESS
+              valueFrom:
+                secretKeyRef:
+                  name: settlement-secrets
+                  key: L2_SETTLER_ADDRESS
+            - name: L2_SETTLER_PRIVATE_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: settlement-secrets
+                  key: L2_SETTLER_PRIVATE_KEY

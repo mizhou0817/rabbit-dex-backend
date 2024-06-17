@@ -1,0 +1,30 @@
+luatest.log
+dummyconsumer
+dummyproducer
+rabbit-dex-backend
+playground_test.go
+.DS_Store
+notes.txt
+build
+*.remove
+trades_trace.json
+fills_trace.json
+app.log
+tmp
+.rocks
+trace.json
+processingops.json
+# this will be dynamic, so we keep it outside of git.
+kubernetes/_configs
+kubernetes/.buildinfo-rabbitx
+
+# JetBrains IDE
+.idea/
+*.iml
+
+# VSCode
+.vscode/
+
+# envs
+.env_*
+.env

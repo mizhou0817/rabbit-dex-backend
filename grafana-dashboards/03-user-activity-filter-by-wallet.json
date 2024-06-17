@@ -1,0 +1,745 @@
+{
+  "annotations": {
+    "list": [
+      {
+        "builtIn": 1,
+        "datasource": {
+          "type": "grafana",
+          "uid": "-- Grafana --"
+        },
+        "enable": true,
+        "hide": true,
+        "iconColor": "rgba(0, 211, 255, 1)",
+        "name": "Annotations & Alerts",
+        "type": "dashboard"
+      }
+    ]
+  },
+  "editable": true,
+  "fiscalYearStartMonth": 0,
+  "graphTooltip": 0,
+  "id": 36,
+  "links": [],
+  "liveNow": false,
+  "panels": [
+    {
+      "datasource": {
+        "type": "postgres",
+        "uid": "8PO0bcxVz"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "custom": {
+            "align": "auto",
+            "cellOptions": {
+              "type": "auto"
+            },
+            "inspect": false
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "VOLUME"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 227
+              },
+              {
+                "id": "unit",
+                "value": "currencyUSD"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "FEES"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "currencyUSD"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "WALLET"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 387
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 24,
+        "x": 0,
+        "y": 0
+      },
+      "id": 1,
+      "options": {
+        "cellHeight": "sm",
+        "footer": {
+          "countRows": false,
+          "fields": "",
+          "reducer": [
+            "sum"
+          ],
+          "show": false
+        },
+        "showHeader": true,
+        "sortBy": []
+      },
+      "pluginVersion": "10.0.0-preview",
+      "targets": [
+        {
+          "datasource": {
+            "type": "postgres",
+            "uid": "8PO0bcxVz"
+          },
+          "editorMode": "code",
+          "format": "table",
+          "rawQuery": true,
+          "rawSql": "SELECT\n  --p.timestamp AS \"TIME\",\n  p.wallet AS \"WALLET\",\n  p.profile_id AS \"PROFILE_ID\",\n  p.utm_source AS \"SOURCE\",\n  p.utm_medium AS \"MEDIUM\",\n  p.utm_campaign AS \"CAMPAIGN\",\n  SUM(a.volume) AS \"VOLUME\",\n  SUM(a.fee) AS \"FEES\"\nFROM\n  onboarding_profile_view p\nLEFT JOIN\n  app_fill_1d a ON a.profile_id = p.profile_id\n--LEFT JOIN\n  --analytic_event e ON ((e.event->>'response_body')::jsonb->'result'->0->'profile'->>'id')::bigint = p.profile_id\nWHERE\n  p.wallet IN ($wallet_address)\n  --profile_id IN ($profile_id)\nGROUP BY\n  1,2,3,4,5\nORDER BY\n  2 ASC;\n--LIMIT 100;",
+          "refId": "A",
+          "sql": {
+            "columns": [
+              {
+                "parameters": [],
+                "type": "function"
+              }
+            ],
+            "groupBy": [
+              {
+                "property": {
+                  "type": "string"
+                },
+                "type": "groupBy"
+              }
+            ],
+            "limit": 50
+          }
+        }
+      ],
+      "title": "WALLETS CONNECTED = UNIQUE USERS",
+      "type": "table"
+    },
+    {
+      "datasource": {
+        "type": "postgres",
+        "uid": "8PO0bcxVz"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "custom": {
+            "align": "auto",
+            "cellOptions": {
+              "type": "auto"
+            },
+            "inspect": false
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "PRICE"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "currencyUSD"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "VOLUME"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "currencyUSD"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "TIME"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 203
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "WALLET"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 369
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "SIDE"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 89
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 24,
+        "x": 0,
+        "y": 8
+      },
+      "id": 2,
+      "options": {
+        "cellHeight": "sm",
+        "footer": {
+          "countRows": false,
+          "fields": "",
+          "reducer": [
+            "sum"
+          ],
+          "show": false
+        },
+        "showHeader": true,
+        "sortBy": []
+      },
+      "pluginVersion": "10.0.0-preview",
+      "targets": [
+        {
+          "datasource": {
+            "type": "postgres",
+            "uid": "8PO0bcxVz"
+          },
+          "editorMode": "code",
+          "format": "table",
+          "rawQuery": true,
+          "rawSql": "SELECT\n  p.timestamp AS \"TIME\",\n  p.wallet AS \"WALLET\",\n  --p.profile_id AS \"PROFILE_ID\",\n  --p.utm_source AS \"SOURCE\",\n  --p.utm_medium AS \"MEDIUM\",\n  --p.utm_campaign AS \"CAMPAIGN\",\n  a.market_id AS \"MARKET\",\n  a.side AS \"SIDE\",\n  a.order_type AS \"ORDER TYPE\",\n  a.status AS \"STATUS\",\n  a.price AS \"PRICE\",\n  a.size AS \"SIZE\",\n  a.size*a.price AS \"VOLUME\"\n  --a.initial_size AS \"INITIAL SIZE\",\n  --a.total_filled_size AS \"FILLED SIZE\",\n  --a.reason AS \"REASON\"\nFROM\n  onboarding_profile_view p\nINNER JOIN\n  app_order a ON a.profile_id = p.profile_id\nWHERE\n  wallet IN ($wallet_address)\n--ORDER BY\n  --1 DESC\nLIMIT 100;",
+          "refId": "A",
+          "sql": {
+            "columns": [
+              {
+                "parameters": [],
+                "type": "function"
+              }
+            ],
+            "groupBy": [
+              {
+                "property": {
+                  "type": "string"
+                },
+                "type": "groupBy"
+              }
+            ],
+            "limit": 50
+          }
+        }
+      ],
+      "title": "ORDERS",
+      "type": "table"
+    },
+    {
+      "datasource": {
+        "type": "postgres",
+        "uid": "8PO0bcxVz"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "custom": {
+            "align": "auto",
+            "cellOptions": {
+              "type": "auto"
+            },
+            "inspect": false
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "PRICE"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "currencyUSD"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "VOLUME"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "currencyUSD"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "FEE"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "currencyUSD"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "WALLET"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 366
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "TIME"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 196
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 24,
+        "x": 0,
+        "y": 16
+      },
+      "id": 3,
+      "options": {
+        "cellHeight": "sm",
+        "footer": {
+          "countRows": false,
+          "fields": "",
+          "reducer": [
+            "sum"
+          ],
+          "show": false
+        },
+        "showHeader": true,
+        "sortBy": []
+      },
+      "pluginVersion": "10.0.0-preview",
+      "targets": [
+        {
+          "datasource": {
+            "type": "postgres",
+            "uid": "8PO0bcxVz"
+          },
+          "editorMode": "code",
+          "format": "table",
+          "rawQuery": true,
+          "rawSql": "SELECT\n  p.timestamp AS \"TIME\",\n  p.wallet AS \"WALLET\",\n  --p.profile_id AS \"PROFILE_ID\",\n  --p.utm_source AS \"SOURCE\",\n  --p.utm_medium AS \"MEDIUM\",\n  --p.utm_campaign AS \"CAMPAIGN\",\n  a.market_id AS \"MARKET\",\n  a.side AS \"SIDE\",\n  a.is_maker AS \"IS MAKER\",\n  a.price AS \"PRICE\",\n  a.size AS \"SIZE\",\n  a.size*a.price AS \"VOLUME\",\n  a.fee AS \"FEES\",\n  a.liquidation AS \"LIQUIDATION\"\nFROM\n  onboarding_profile_view p\nINNER JOIN\n  app_fill a ON a.profile_id = p.profile_id\nWHERE\n  p.wallet IN ($wallet_address)\nORDER BY\n  1 DESC\nLIMIT 100;",
+          "refId": "A",
+          "sql": {
+            "columns": [
+              {
+                "parameters": [],
+                "type": "function"
+              }
+            ],
+            "groupBy": [
+              {
+                "property": {
+                  "type": "string"
+                },
+                "type": "groupBy"
+              }
+            ],
+            "limit": 50
+          }
+        }
+      ],
+      "title": "FILLS",
+      "type": "table"
+    },
+    {
+      "datasource": {
+        "type": "postgres",
+        "uid": "8PO0bcxVz"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "custom": {
+            "align": "auto",
+            "cellOptions": {
+              "type": "auto"
+            },
+            "inspect": false
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "AMOUNT"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "currencyUSD"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "TIME"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 184
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "WALLET"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 365
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 0,
+        "y": 24
+      },
+      "id": 4,
+      "options": {
+        "cellHeight": "sm",
+        "footer": {
+          "countRows": false,
+          "fields": "",
+          "reducer": [
+            "sum"
+          ],
+          "show": false
+        },
+        "showHeader": true,
+        "sortBy": []
+      },
+      "pluginVersion": "10.0.0-preview",
+      "targets": [
+        {
+          "datasource": {
+            "type": "postgres",
+            "uid": "8PO0bcxVz"
+          },
+          "editorMode": "code",
+          "format": "table",
+          "rawQuery": true,
+          "rawSql": "SELECT\n  p.timestamp AS \"TIME\",\n  p.wallet AS \"WALLET\",\n  --p.profile_id AS \"PROFILE_ID\",\n  --p.utm_source AS \"SOURCE\",\n  --p.utm_medium AS \"MEDIUM\",\n  --p.utm_campaign AS \"CAMPAIGN\",\n  a.amount AS \"AMOUNT\",\n  a.status AS \"STATUS\"\nFROM\n  onboarding_profile_view p\nINNER JOIN\n  app_balance_operation a ON a.profile_id = p.profile_id\nWHERE\n  a.ops_type = 'deposit' AND\n  p.wallet IN ($wallet_address)\nORDER BY\n  1 DESC\nLIMIT 100;",
+          "refId": "A",
+          "sql": {
+            "columns": [
+              {
+                "parameters": [],
+                "type": "function"
+              }
+            ],
+            "groupBy": [
+              {
+                "property": {
+                  "type": "string"
+                },
+                "type": "groupBy"
+              }
+            ],
+            "limit": 50
+          }
+        }
+      ],
+      "title": "DEPOSITS",
+      "type": "table"
+    },
+    {
+      "datasource": {
+        "type": "postgres",
+        "uid": "8PO0bcxVz"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "custom": {
+            "align": "auto",
+            "cellOptions": {
+              "type": "auto"
+            },
+            "inspect": false
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "AMOUNT"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "currencyUSD"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "TIME"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 188
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "WALLET"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 368
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 12,
+        "y": 24
+      },
+      "id": 5,
+      "options": {
+        "cellHeight": "sm",
+        "footer": {
+          "countRows": false,
+          "fields": "",
+          "reducer": [
+            "sum"
+          ],
+          "show": false
+        },
+        "showHeader": true,
+        "sortBy": []
+      },
+      "pluginVersion": "10.0.0-preview",
+      "targets": [
+        {
+          "datasource": {
+            "type": "postgres",
+            "uid": "8PO0bcxVz"
+          },
+          "editorMode": "code",
+          "format": "table",
+          "rawQuery": true,
+          "rawSql": "SELECT\n  p.timestamp AS \"TIME\",\n  p.wallet AS \"WALLET\",\n  --p.profile_id AS \"PROFILE_ID\",\n  --p.utm_source AS \"SOURCE\",\n  --p.utm_medium AS \"MEDIUM\",\n  --p.utm_campaign AS \"CAMPAIGN\",\n  a.amount AS \"AMOUNT\",\n  a.status AS \"STATUS\"\nFROM\n  onboarding_profile_view p\nINNER JOIN\n  app_balance_operation a ON a.profile_id = p.profile_id\nWHERE\n  a.ops_type = 'withdrawal' AND\n  p.wallet IN ($wallet_address)\nORDER BY\n  1 DESC\nLIMIT 100;",
+          "refId": "A",
+          "sql": {
+            "columns": [
+              {
+                "parameters": [],
+                "type": "function"
+              }
+            ],
+            "groupBy": [
+              {
+                "property": {
+                  "type": "string"
+                },
+                "type": "groupBy"
+              }
+            ],
+            "limit": 50
+          }
+        }
+      ],
+      "title": "WITHDRAWALS",
+      "type": "table"
+    }
+  ],
+  "refresh": "",
+  "schemaVersion": 38,
+  "style": "dark",
+  "tags": [],
+  "templating": {
+    "list": [
+      {
+        "current": {
+          "selected": false,
+          "text": "All",
+          "value": "$__all"
+        },
+        "datasource": {
+          "type": "postgres",
+          "uid": "8PO0bcxVz"
+        },
+        "definition": "SELECT wallet FROM onboarding_profile_view;",
+        "hide": 0,
+        "includeAll": true,
+        "label": "wallet_address",
+        "multi": true,
+        "name": "wallet_address",
+        "options": [],
+        "query": "SELECT wallet FROM onboarding_profile_view;",
+        "refresh": 1,
+        "regex": "",
+        "skipUrlSync": false,
+        "sort": 1,
+        "type": "query"
+      }
+    ]
+  },
+  "time": {
+    "from": "now-6h",
+    "to": "now"
+  },
+  "timepicker": {},
+  "timezone": "",
+  "title": "03. User Activity (Filter by Wallet)",
+  "uid": "dc3a7dd1-b83e-4d12-9427-a6388ea51768",
+  "version": 46,
+  "weekStart": "monday"
+}

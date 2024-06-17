@@ -1,0 +1,22 @@
+resources:
+  - ../../base/
+
+patchesJson6902:
+  - target:
+      kind: Deployment
+      name: tarantool
+    patch: |-
+      - op: replace
+        path: /spec/template/spec/containers/0/image
+        value: 763292132769.dkr.ecr.ap-northeast-1.amazonaws.com/rabbitx-dev-apn1-testnet-tarantool
+      - op: add
+        path: /spec/template/spec/nodeSelector
+        value:
+          topology.kubernetes.io/zone: ap-northeast-1c
+      - op: replace
+        path: /spec/template/spec/volumes
+        value:
+        - name: tarantool-pv
+          awsElasticBlockStore:
+            fsType: ext4
+            volumeID: aws://ap-northeast-1c/vol-047ce8b341d388795

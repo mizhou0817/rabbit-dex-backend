@@ -1,0 +1,11 @@
+resources:
+  - ../../base/
+
+patchesJson6902:
+  - target:
+      kind: Deployment
+      name: go-archiver
+    patch: |-
+      - op: replace
+        path: /spec/template/spec/containers/0/image
+        value: 618528691313.dkr.ecr.ap-northeast-1.amazonaws.com/rabbitx/go-archiver-prod

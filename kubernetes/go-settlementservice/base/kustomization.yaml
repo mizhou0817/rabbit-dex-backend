@@ -1,0 +1,4 @@
+resources:
+  - secretproviderclass.yaml
+  - serviceaccount.yaml
+  - deployment.yaml
