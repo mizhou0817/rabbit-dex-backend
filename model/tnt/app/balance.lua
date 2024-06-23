@@ -35,8 +35,8 @@ local function _do_notif_profile(profile_id, ops_table)
         balance_operations = ops_table
     }
 
-    local json_update = json.encode({ data = update })
-    rpc.callrw_pubsub_publish(channel, json_update, 0, 0, 0)
+    local json_update = json.encode(update)
+    pubsub_publish(channel, json_update)
 
     update = nil
 

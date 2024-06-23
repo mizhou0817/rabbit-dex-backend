@@ -48,6 +48,9 @@ end
 
 return {
     role_name = 'gateway',
+    dependencies = {
+        'app.roles.pubsub',
+    },
     init = init,
     stop = stop,
     validate_config = validate_config,

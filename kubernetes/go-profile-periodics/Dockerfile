@@ -2,19 +2,14 @@ ARG GO_VERSION=1.21.5
 ARG TARGETOS TARGETARCH
 FROM --platform=$BUILDPLATFORM  golang:${GO_VERSION} as builder
 
-RUN mkdir $HOME/.rabbit
-
 WORKDIR /usr/src/app
-
-COPY go.mod go.sum ./
-RUN go mod download && go mod verify
 
 COPY go.mod go.sum ./
 RUN --mount=type=cache,target=/gomod-cache go mod download && go mod verify
 
 COPY . .
 
-RUN --mount=type=cache,target=/gomod-cache --mount=type=cache,target=/go-cache GOOS=$TARGETOS GOARCH=$TARGETARCH go build -tags=go_tarantool_msgpack_v5 -o /usr/bin/go-profile-periodics cmd/api/main.go
+RUN --mount=type=cache,target=/gomod-cache --mount=type=cache,target=/go-cache GOOS=$TARGETOS GOARCH=$TARGETARCH go build -tags=go_tarantool_msgpack_v5 -o /usr/bin/go-profile-periodics cmd/profile/periodics/main.go
 
 # production
 FROM ubuntu:24.04

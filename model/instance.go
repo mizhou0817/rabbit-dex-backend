@@ -60,3 +60,8 @@ func (ig *InstanceGetter) ByTitle(title string) (*InstanceConfig, error) {
 		return i.Title == title
 	})
 }
+
+func ReadOnly(name string) string {
+    // hardcoded to the first (and currently the only) replica
+    return name + ".2"
+}

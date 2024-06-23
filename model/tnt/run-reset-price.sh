@@ -1,9 +1,13 @@
 #!/bin/zsh -e
 
-rm -rf tmp/*
-#rm -rf .rocks
+export LD_LIBRARY_PATH=$PWD:$LD_LIBRARY_PATH
 
-#cartridge build
+rm -rf tmp/*
+rm -rf .rocks
+
+make lib
+
+cartridge build
 
 (
     sleep 20 && cartridge replicasets setup --cfg ./instances.yml --file ./replicasets.yml --bootstrap-vshard

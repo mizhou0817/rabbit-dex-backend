@@ -35,11 +35,11 @@ local g = t.group('engine.private_matching')
 local work_dir = fio.tempdir()
 
 local mock_rpc = {call={}}
-function mock_rpc.callrw_pubsub_publish(channel, json_data, ttl, size, meta_ttl)
+function pubsub_publish(channel, json_data, ttl, size, meta_ttl)
     table.insert(mock_rpc.call, {channel, json_data})
 end
 
-function mock_rpc.callrw_profile(func_name, params)
+function mock_rpc.callro_profile(func_name, params)
     return cache.get_cache_and_meta(params[1], params[2])
 end
 
@@ -138,7 +138,7 @@ t.before_suite(function()
         work_dir = work_dir,
     }
 
-    rpc.test_set_mock_callrw_profile(mock_rpc.callrw_profile)
+    rpc.test_set_mock_callro_profile(mock_rpc.callro_profile)
     notif._test_set_rpc(mock_rpc)
     notif._test_set_time(mock_time)
     o._test_set_time(mock_time)
@@ -154,7 +154,6 @@ t.after_suite(function()
 end)
 
 g.before_each(function(cg)
-    
     t.assert_is_not(a.init_sequencer('shard'), nil)
     balance.init_spaces("BTC-USD")
     local MIN_TICK = ONE
@@ -294,7 +293,11 @@ g.test_private_matching = function(cg)
 end
 
 g.test_multiple_cache = function(cg)
-    local res = cache.get_cache_and_meta({1,2, 3}, "BTC-USD")
+    for id in ipairs({1,2,3,4,5,6}) do
+        cache.ensure_cache(id)
+    end
+
+    local res = cache.get_cache_and_meta({1,2,3}, "BTC-USD")
 
     local profile_data, err = cm_get.handle_get_cache_and_meta(nil, {1,2,3}, "BTC-USD", 2)
     t.assert_is(err, nil)
@@ -312,8 +315,6 @@ g.test_multiple_cache = function(cg)
 
     t.assert_is(router.get_profile_data(5).cache[1], 5)
     t.assert_is(router.get_profile_data(6).cache[1], 6)
-
-
 end
 
 

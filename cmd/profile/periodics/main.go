@@ -53,10 +53,14 @@ func main() {
 	}
 	api := model.NewApiModel(broker)
 
-	notifyClient := profile.NewNotifyClient(api, profile.NotifyClientOptions{
+	notifyClient, err := profile.NewNotifyClient(cfg.Service.Notify.GrpcAddress, profile.NotifyClientOptions{
 		Retries:    cfg.Service.Notify.Retries,
 		RetryDelay: cfg.Service.Notify.RetryDelay,
 	})
+	if err != nil {
+		logrus.Error(errors.Wrap(err, "NewNotifyClient"))
+		return
+	}
 
 	marketsClient := profile.NewMarketsClient(api, cfg.Service.Markets.Ids, profile.MarketsClientOptions{
 		Workers:    cfg.Service.Markets.Workers,
@@ -102,6 +106,7 @@ func main() {
 
 	g.Go(func() error {
 		options := cache.PeriodicsOptions{
+			MetaOnly:          cfg.Service.Cache.MetaOnly,
 			PeriodicsInterval: cfg.Service.Cache.PeriodicsInterval,
 			ParallelWorkers:   cfg.Service.Cache.ParallelWorkers,
 			BatchSize:         cfg.Service.Cache.BatchSize,

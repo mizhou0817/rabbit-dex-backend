@@ -120,8 +120,8 @@ function rpc.is_role_present(rolename)
 end
 
 
-function rpc.test_set_mock_callrw_profile(_profile_func)
-    rpc.callrw_profile = _profile_func
+function rpc.test_set_mock_callro_profile(_profile_func)
+    rpc.callro_profile = _profile_func
 end
 
 return rpc

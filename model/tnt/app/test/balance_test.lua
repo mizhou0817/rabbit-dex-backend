@@ -10,6 +10,9 @@ local ddl = require('app.ddl')
 local m = require('migrations.common.eid_balance_migrations')
 local wdm = require('app.wdm')
 
+function pubsub_publish(channel, json_data)
+end
+
 local z = decimal.new(0)
 require('app.config.constants')
 

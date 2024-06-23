@@ -17,7 +17,6 @@ require('app.config.constants')
 
 local ProfileError = errors.new_class("PROFILE")
 
-local CACHE_INVALIDATE_DIFF = 5e6  -- 5 sec
 local SELECT_META_LIMIT = 1000000
 local YIELD_LIMIT = 1000
 
@@ -39,9 +38,8 @@ function getters.get_profile_data(profile_id)
     end
 
     local res = box.space.profile_cache:get(profile_id)
-    if res == nil or (time.now() - res.last_update) > CACHE_INVALIDATE_DIFF then
-        cache.update(profile_id)
-        res = box.space.profile_cache:get(profile_id)
+    if res == nil then
+        return {res = nil, error = "PROFILE_CACHE_NOT_FOUND"}
     end 
     res = res:totable()
 
@@ -73,9 +71,8 @@ function getters.get_extended_profile_data(profile_id)
     end
 
     local res = box.space.profile_cache:get(profile_id)
-    if res == nil or (time.now() - res.last_update) > CACHE_INVALIDATE_DIFF then
-        cache.update(profile_id)
-        res = box.space.profile_cache:get(profile_id)
+    if res == nil  then
+        return {res = nil, error = "PROFILE_CACHE_NOT_FOUND"}
     end
     res = res:totable()
 

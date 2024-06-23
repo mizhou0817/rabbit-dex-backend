@@ -23,13 +23,13 @@ type ProfileSpecialTier struct {
 }
 
 func (api *ApiModel) GetTradingTiers(ctx context.Context) ([]Tier, error) {
-	tiers, err := DataResponse[[]Tier]{}.Request(ctx, PROFILE_INSTANCE, api.broker, "getters.get_tiers", []any{})
+	tiers, err := DataResponse[[]Tier]{}.Request(ctx, ReadOnly(PROFILE_INSTANCE), api.broker, "getters.get_tiers", []any{})
 
 	return tiers, err
 }
 
 func (api *ApiModel) GetAffiliateProfilesTiers(ctx context.Context, profilesIds ...uint) ([]AffiliateProfileTier, error) {
-	tiers, err := DataResponse[[]AffiliateProfileTier]{}.Request(ctx, PROFILE_INSTANCE, api.broker, "getters.get_affiliate_profiles_tiers", []any{
+	tiers, err := DataResponse[[]AffiliateProfileTier]{}.Request(ctx, ReadOnly(PROFILE_INSTANCE), api.broker, "getters.get_affiliate_profiles_tiers", []any{
 		profilesIds,
 	})
 
@@ -37,7 +37,7 @@ func (api *ApiModel) GetAffiliateProfilesTiers(ctx context.Context, profilesIds 
 }
 
 func (api *ApiModel) GetProfilesSpecialTiers(ctx context.Context) ([]ProfileSpecialTier, error) {
-	tiers, err := DataResponse[[]ProfileSpecialTier]{}.Request(ctx, PROFILE_INSTANCE, api.broker, "getters.get_profiles_special_tiers", []any{})
+	tiers, err := DataResponse[[]ProfileSpecialTier]{}.Request(ctx, ReadOnly(PROFILE_INSTANCE), api.broker, "getters.get_profiles_special_tiers", []any{})
 
 	return tiers, err
 }

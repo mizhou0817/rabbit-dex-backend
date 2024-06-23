@@ -142,15 +142,13 @@ spec:
             # profile/auth etc..
             - containerPort: 3003
             - containerPort: 3004
+            - containerPort: 3104
             - containerPort: 3005
             # profile/auth http expose (metrics)
             - containerPort: 8003
             - containerPort: 8004
+            - containerPort: 8104
             - containerPort: 8005
-            - containerPort: 8006
-            # centrifugo
-            - containerPort: 9001
-              protocol: TCP
           resources: {}
           volumeMounts:
             - mountPath: /usr/src/app/tmp

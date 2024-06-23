@@ -34,8 +34,8 @@ function notif.notify_profiles(profiles)
     iter(
         function(profile_id, cache)
             local channel = "account@" .. tostring(profile_id)
-            local json_update = json.encode({data=cache:tomap({names_only=true})})
-            rpc.callrw_pubsub_publish(channel, json_update, 0, 0, 0)
+            local json_update = json.encode(cache:tomap({names_only=true}))
+            pubsub_publish(channel, json_update)
             json_update = nil
         end)
 end

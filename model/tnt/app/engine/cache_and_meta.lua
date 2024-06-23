@@ -9,7 +9,7 @@ local CMERROR = errors.new_class("cache_and_meta")
 
 return {
     handle_get_cache_and_meta = function(router, profile_ids, market_id, return_data_for_id)
-        local data = rpc.callrw_profile("get_cache_and_meta", {profile_ids, market_id})
+        local data = rpc.callro_profile("get_cache_and_meta", {profile_ids, market_id})
         if data["error"] ~= nil then
             log.error(CMERROR:new(data["error"]))
             return nil, data["error"]

@@ -395,10 +395,10 @@ tnt.profile:
   advertise_uri: localhost:3004
   http_port: 8004
 
+tnt.profile-2:
+  advertise_uri: localhost:3104
+  http_port: 8104
+
 tnt.auth:
   advertise_uri: localhost:3005
   http_port: 8005
-
-tnt.pubsub:
-  advertise_uri: localhost:9001
-  http_port: 8006

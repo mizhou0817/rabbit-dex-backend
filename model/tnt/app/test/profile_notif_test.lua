@@ -14,7 +14,7 @@ local g = t.group('profile.notif')
 local work_dir = fio.tempdir()
 
 local mock_rpc = {call=nil}
-function mock_rpc.callrw_pubsub_publish(channel, json_data, ttl, size, meta_ttl)
+function pubsub_publish(channel, json_data, ttl, size, meta_ttl)
     mock_rpc.call = {channel, json_data}
 end
 
@@ -55,7 +55,7 @@ g.after_each(function(cg)
 end)
 
 g.test_all_profiles = function(cg)
-    local expected = {"account@1", '{"data":{"account_leverage":"1","shard_id":"shard","id":1,"profile_type":"trader","total_position_margin":"1","leverage":{"BTC-USD":"1"},"cum_unrealized_pnl":"1","total_notional":"1","status":"active","cum_trading_volume":"1","account_equity":"1","withdrawable_balance":"1","last_liq_check":234567,"balance":"1","wallet":"0xabcdef","last_update":123456,"health":"1","account_margin":"1","archive_id":2,"total_order_margin":"1"}}'}
+    local expected = {"account@1", '{"data":{"account_leverage":"1","shard_id":"shard","id":1,"profile_type":"trader","total_position_margin":"1","leverage":{"BTC-USD":"1"},"cum_unrealized_pnl":"1","total_notional":"1","status":"active","cum_trading_volume":"1","account_equity":"1","withdrawable_balance":"1","last_liq_check":234567,"balance":"1","wallet":"0xabcdef","last_update":123456,"health":"1","account_margin":"1","archive_id":3,"total_order_margin":"1"}}'}
     notif.notify_profiles({})
     t.assert_equals(mock_rpc.call, expected)
 end

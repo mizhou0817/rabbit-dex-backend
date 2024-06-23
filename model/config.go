@@ -18,7 +18,6 @@ const (
 	AUTH_INSTANCE      = "auth"
 	PROFILE_INSTANCE   = "profile"
 	MARKET_INSTANCE    = "market-instance"
-	PUBSUB_INSTANCE    = "pubsub"
 )
 
 type InstanceConfig struct {

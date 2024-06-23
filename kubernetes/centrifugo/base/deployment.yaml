@@ -26,4 +26,8 @@ spec:
           ports:
             - containerPort: 8000
               protocol: TCP
+              name: http
+            - containerPort: 10000
+              protocol: TCP
+              name: grpc
           resources: {}

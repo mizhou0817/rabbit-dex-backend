@@ -1,11 +1,35 @@
-#apiVersion: v1
-#kind: PersistentVolumeClaim
-#metadata:
-#  name: timescaledb-pvc
-#spec:
-#  accessModes:
-#    - ReadWriteOnce
-#  storageClassName: ebs-sc-gp2
-#  resources:
-#    requests:
-#      storage: 1000Gi
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: timescaledb-pvc
+spec:
+  accessModes:
+    - ReadWriteOnce
+  storageClassName: gp2
+  resources:
+    requests:
+      storage: 1000Gi
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: timescaledb-pvc-2
+spec:
+  accessModes:
+    - ReadWriteOnce
+  storageClassName: gp2
+  resources:
+    requests:
+      storage: 5000Gi
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: timescaledb-pvc-3
+spec:
+  accessModes:
+    - ReadWriteOnce
+  storageClassName: gp2
+  resources:
+    requests:
+      storage: 10000Gi

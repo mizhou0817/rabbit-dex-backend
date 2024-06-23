@@ -15,7 +15,7 @@ func (api *ApiModel) IsValidSigner(ctx context.Context, vault, wallet string, re
 	vault = strings.ToLower(vault)
 	wallet = strings.ToLower(wallet)
 
-	isValid, err := DataResponse[bool]{}.Request(ctx, PROFILE_INSTANCE, api.broker, IS_VALID_SIGNER, []interface{}{
+	isValid, err := DataResponse[bool]{}.Request(ctx, ReadOnly(PROFILE_INSTANCE), api.broker, IS_VALID_SIGNER, []interface{}{
 		vault,
 		wallet,
 		requireRole,

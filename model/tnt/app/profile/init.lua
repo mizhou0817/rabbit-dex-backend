@@ -80,7 +80,7 @@ local function init_spaces(opts)
         end
     end
 
-    local profile_cache, err = archiver.create('profile_cache', {temporary=true, if_not_exists = true}, {
+    local profile_cache, err = archiver.create('profile_cache', {if_not_exists = true}, {
         {name = 'id', type = 'unsigned'},
         {name = 'profile_type', type = 'string'},
         {name = 'status', type = 'string'},
@@ -109,6 +109,7 @@ local function init_spaces(opts)
         log.error(ApiSpacesError:new(err))
         error(err)
     end
+    box.space.profile_cache:truncate()
 
     profile_cache:create_index('for_liquidation', {
         unique = false,
@@ -116,7 +117,7 @@ local function init_spaces(opts)
         if_not_exists = true })
 
 
-    local profile_meta = box.schema.space.create('profile_meta', {temporary=true, if_not_exists = true})
+    local profile_meta = box.schema.space.create('profile_meta', {if_not_exists = true})
     profile_meta:format({
         {name = 'profile_id', type = 'unsigned'},
         {name = 'market_id', type = 'string'},
@@ -132,6 +133,7 @@ local function init_spaces(opts)
         {name = 'cum_trading_volume', type = 'decimal'},
         {name = 'timestamp', type = 'number'},
     })
+    box.space.profile_meta:truncate()
 
     profile_meta:create_index('primary', {
         unique = true,
@@ -139,12 +141,13 @@ local function init_spaces(opts)
         if_not_exists = true })
 
 
-    local exchange_total = box.schema.space.create('exchange_total', {temporary=true, if_not_exists = true})
+    local exchange_total = box.schema.space.create('exchange_total', {if_not_exists = true})
     exchange_total:format({
         {name = 'id', type = 'number'},
         {name = 'trading_fee', type = 'decimal'},
         {name = 'total_balance', type = 'decimal'},
     })
+    box.space.exchange_total:truncate()
 
     exchange_total:create_index('primary', {
         unique = true,

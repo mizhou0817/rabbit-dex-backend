@@ -225,7 +225,7 @@ func (api *ApiModel) CreateProfile(ctx context.Context, profile_type, wallet, ex
 }
 
 func (api *ApiModel) GetProfileById(ctx context.Context, profile_id uint) (*Profile, error) {
-	profile, err := DataResponse[*Profile]{}.Request(ctx, PROFILE_INSTANCE, api.broker, GET_PROFILE_BY_ID, []interface{}{
+	profile, err := DataResponse[*Profile]{}.Request(ctx, ReadOnly(PROFILE_INSTANCE), api.broker, GET_PROFILE_BY_ID, []interface{}{
 		profile_id,
 	})
 
@@ -233,7 +233,7 @@ func (api *ApiModel) GetProfileById(ctx context.Context, profile_id uint) (*Prof
 }
 
 func (api *ApiModel) GetProfileByWalletForExchangeId(ctx context.Context, wallet, exchange_id string) (*Profile, error) {
-	profile, err := DataResponse[*Profile]{}.Request(ctx, PROFILE_INSTANCE, api.broker, GET_PROFILE_BY_WALLET_FOR_EXCHANGE_ID, []interface{}{
+	profile, err := DataResponse[*Profile]{}.Request(ctx, ReadOnly(PROFILE_INSTANCE), api.broker, GET_PROFILE_BY_WALLET_FOR_EXCHANGE_ID, []interface{}{
 		wallet,
 		exchange_id,
 	})
@@ -313,6 +313,7 @@ func (api *ApiModel) PayFunding(ctx context.Context,
 }
 
 func (api *ApiModel) GetProfileData(ctx context.Context, profile_id uint) (*ProfileData, error) {
+	// cannot be ReadOnly() because cache can be updated inside tarantool
 	data, err := DataResponse[*ProfileData]{}.Request(ctx, PROFILE_INSTANCE, api.broker, GET_PROFILE_DATA, []interface{}{
 		profile_id,
 	})
@@ -321,6 +322,7 @@ func (api *ApiModel) GetProfileData(ctx context.Context, profile_id uint) (*Prof
 }
 
 func (api *ApiModel) GetExtendedProfileData(ctx context.Context, profile_id uint) (*ExtendedProfileData, error) {
+	// cannot be ReadOnly() because cache can be updated inside tarantool
 	data, err := DataResponse[*ExtendedProfileData]{}.Request(ctx, PROFILE_INSTANCE, api.broker, GET_EXTENDED_PROFILE_DATA, []interface{}{
 		profile_id,
 	})
@@ -370,7 +372,7 @@ func (api *ApiModel) GetAllActivePositions(ctx context.Context, market_id string
 }
 
 func (api *ApiModel) GetOpenPositions(ctx context.Context, profileId uint) ([]*PositionData, error) {
-	data, err := DataResponse[[]*PositionData]{}.Request(ctx, PROFILE_INSTANCE, api.broker, GET_OPEN_POSITIONS, []interface{}{
+	data, err := DataResponse[[]*PositionData]{}.Request(ctx, ReadOnly(PROFILE_INSTANCE), api.broker, GET_OPEN_POSITIONS, []interface{}{
 		profileId,
 	})
 
@@ -378,7 +380,7 @@ func (api *ApiModel) GetOpenPositions(ctx context.Context, profileId uint) ([]*P
 }
 
 func (api *ApiModel) GetRequestedUnstakes(ctx context.Context, profileId uint) ([]*BalanceOps, error) {
-	data, err := DataResponse[[]*BalanceOps]{}.Request(ctx, PROFILE_INSTANCE, api.broker, GET_REQUESTED_UNSTAKES, []interface{}{
+	data, err := DataResponse[[]*BalanceOps]{}.Request(ctx, ReadOnly(PROFILE_INSTANCE), api.broker, GET_REQUESTED_UNSTAKES, []interface{}{
 		profileId,
 	})
 
@@ -391,7 +393,7 @@ func (api *ApiModel) GetAllOrders(ctx context.Context, profile_id uint, marketID
 		return nil, err
 	}
 
-	data, err := DataResponse[[]*OrderData]{}.Request(ctx, instance.Title, api.broker, GET_ALL_ORDERS, []interface{}{
+	data, err := DataResponse[[]*OrderData]{}.Request(ctx, ReadOnly(instance.Title), api.broker, GET_ALL_ORDERS, []interface{}{
 		profile_id,
 		limit,
 	})
@@ -405,7 +407,7 @@ func (api *ApiModel) GetAllOrders(ctx context.Context, profile_id uint, marketID
 		2) actual <profile/getters.get_open_orders> tarantool func has just <profileId> argument and iterates over all available markets, so <marketId> is ignored
 */
 func (api *ApiModel) GetOpenOrders(ctx context.Context, marketId string, profileId uint) ([]*OrderData, error) {
-	data, err := DataResponse[[]*OrderData]{}.Request(ctx, PROFILE_INSTANCE, api.broker, GET_OPEN_ORDERS, []interface{}{
+	data, err := DataResponse[[]*OrderData]{}.Request(ctx, ReadOnly(PROFILE_INSTANCE), api.broker, GET_OPEN_ORDERS, []interface{}{
 		profileId,
 		marketId,
 	})
@@ -419,7 +421,7 @@ func (api *ApiModel) GetPlacedOrders(ctx context.Context, marketID string, profi
 		return nil, err
 	}
 
-	return DataResponse[[]*OrderData]{}.Request(ctx, instance.Title, api.broker, GET_ALL_ORDERS2, []interface{}{
+	return DataResponse[[]*OrderData]{}.Request(ctx, ReadOnly(instance.Title), api.broker, GET_ALL_ORDERS2, []interface{}{
 		profileID,
 		PLACED,
 		nil, // all order types
@@ -427,7 +429,7 @@ func (api *ApiModel) GetPlacedOrders(ctx context.Context, marketID string, profi
 }
 
 func (api *ApiModel) GetCandles(ctx context.Context, market_id string, period uint, time_from, time_to int64) ([]*CandleData, error) {
-	data, err := DataResponse[[]*CandleData]{}.Request(ctx, market_id, api.broker, GET_CANDLES, []interface{}{
+	data, err := DataResponse[[]*CandleData]{}.Request(ctx, ReadOnly(market_id), api.broker, GET_CANDLES, []interface{}{
 		period,
 		time_from,
 		time_to,
@@ -463,13 +465,13 @@ func (api *ApiModel) UpdateLeverage(ctx context.Context, market_id string, profi
 }
 
 func (api *ApiModel) GetExchangeData(ctx context.Context) (*ExchangeData, error) {
-	data, err := DataResponse[*ExchangeData]{}.Request(ctx, PROFILE_INSTANCE, api.broker, GET_EXCHANGE_DATA, []interface{}{})
+	data, err := DataResponse[*ExchangeData]{}.Request(ctx, ReadOnly(PROFILE_INSTANCE), api.broker, GET_EXCHANGE_DATA, []interface{}{})
 
 	return data, err
 }
 
 func (api *ApiModel) GetProfileCache(ctx context.Context, profile_id uint) (*ProfileCache, error) {
-	data, err := DataResponse[*ProfileCache]{}.Request(ctx, PROFILE_INSTANCE, api.broker, GET_PROFILE_CACHE, []interface{}{
+	data, err := DataResponse[*ProfileCache]{}.Request(ctx, ReadOnly(PROFILE_INSTANCE), api.broker, GET_PROFILE_CACHE, []interface{}{
 		profile_id,
 	})
 
@@ -498,13 +500,13 @@ func (api *ApiModel) GetProfilesMetaAfterTs(ctx context.Context, marketId string
 		return nil, err
 	}
 
-	return DataResponse[[]*ProfileMeta]{}.Request(ctx, instance.Title, api.broker, GET_PROFILES_META_AFTER_TS, []interface{}{
+	return DataResponse[[]*ProfileMeta]{}.Request(ctx, ReadOnly(instance.Title), api.broker, GET_PROFILES_META_AFTER_TS, []interface{}{
 		float64(unixMicroTs),
 	})
 }
 
 func (api *ApiModel) GetExtendedProfiles(ctx context.Context, profilesIds ...uint) ([]*ExtendedProfile, error) {
-	return DataResponse[[]*ExtendedProfile]{}.Request(ctx, PROFILE_INSTANCE, api.broker, GET_EXTENDED_PROFILES, []interface{}{
+	return DataResponse[[]*ExtendedProfile]{}.Request(ctx, ReadOnly(PROFILE_INSTANCE), api.broker, GET_EXTENDED_PROFILES, []interface{}{
 		profilesIds,
 	})
 }

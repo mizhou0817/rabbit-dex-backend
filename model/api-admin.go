@@ -73,7 +73,7 @@ function PM.get_profile_tiers()
 
 /* Tiers management */
 func (api *ApiModel) GetTiers(ctx context.Context, marketId string) ([]Tier, error) {
-	title := PROFILE_INSTANCE
+	title := ReadOnly(PROFILE_INSTANCE)
 	if marketId != title {
 		instance, err := GetInstance().ByMarketID(marketId)
 		if err != nil {
@@ -87,7 +87,7 @@ func (api *ApiModel) GetTiers(ctx context.Context, marketId string) ([]Tier, err
 }
 
 func (api *ApiModel) GetSpecialTiers(ctx context.Context, marketId string) ([]SpecialTier, error) {
-	title := PROFILE_INSTANCE
+	title := ReadOnly(PROFILE_INSTANCE)
 	instance, err := GetInstance().ByMarketID(marketId)
 	if marketId != title {
 		if err != nil {
@@ -242,7 +242,7 @@ func (api *ApiModel) RemoveProfileTier(ctx context.Context, marketId string, pro
 func (api *ApiModel) BalanceOpsList(ctx context.Context, profileId uint, offset, limit uint) ([]*BalanceOps, error) {
 	ops, err := DataResponse[[]*BalanceOps]{}.Request(
 		ctx,
-		PROFILE_INSTANCE,
+		ReadOnly(PROFILE_INSTANCE),
 		api.broker,
 		BALANCE_OPS_LIST,
 		[]interface{}{

@@ -29,7 +29,7 @@ function D.push_orderbook(market_id,
     table.insert(update.bids, {bid, bid_size})  
     table.insert(update.asks, {ask, ask_size})
 
-    local json_update = json.encode({data=update})
+    local json_update = json.encode(update)
     
     rpc.callrw_pubsub_publish(channel, json_update, 0, 0, 0)
     update = nil
@@ -46,7 +46,7 @@ function D.push_profile(profile_id)
 
     log.info("publish to channel %s", channel)
 
-    local json_update = json.encode({data=update})
+    local json_update = json.encode(update)
     rpc.callrw_pubsub_publish(channel, json_update, 0, 0, 0)
 
     update = nil

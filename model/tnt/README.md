@@ -1,3 +1,12 @@
+# Rust rbxlib
+
+To compile librbx library on mac aarch64 (m1/m2) need add to ~/.cargo/config.toml
+```[target.aarch64-apple-darwin]
+rustflags = [
+    "-C", "link-arg=-undefined",  "-C", "link-arg=dynamic_lookup"
+]```
+
+
 # Simple Tarantool Cartridge-based application
 
 This a simplest application based on Tarantool Cartridge.

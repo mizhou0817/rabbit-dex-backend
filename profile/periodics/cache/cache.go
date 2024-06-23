@@ -26,6 +26,8 @@ var (
 )
 
 type PeriodicsOptions struct {
+	// Update only caches for updated metas
+	MetaOnly bool
 	// Number of profiles to update with one call
 	BatchSize uint
 	// Number of workers to calculate profiles cache from meta
@@ -127,7 +129,13 @@ func (p *Periodics) RunOnce(ctx context.Context) error {
 		}
 	}
 
-	profiles, err := p.profileService.GetExtendedProfiles(ctx)
+	var profilesIds []profilepkg.ProfileId
+	if p.options.MetaOnly {
+		for profileId := range profilesMeta {
+			profilesIds = append(profilesIds, profileId)
+		}
+	}
+	profiles, err := p.profileService.GetExtendedProfiles(ctx, profilesIds...)
 	if err != nil {
 		return errors.Wrap(err, "GetExtendedProfiles")
 	}

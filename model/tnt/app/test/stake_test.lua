@@ -12,6 +12,9 @@ local time = require('app.lib.time')
 
 require('app.config.constants')
 
+function pubsub_publish(channel, json_data)
+end
+
 local g = t.group('stake')
 local vault_profile_id
 local manager_profile_id = 13

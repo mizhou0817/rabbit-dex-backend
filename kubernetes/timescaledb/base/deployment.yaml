@@ -43,12 +43,22 @@ spec:
           volumeMounts:
             - mountPath: /var/lib/postgresql/data
               name: timescaledb-pv
+            - mountPath: /var/lib/postgresql/data2
+              name: timescaledb-pv-2
+            - mountPath: /var/lib/postgresql/data3
+              name: timescaledb-pv-3
             - mountPath: /dev/shm
               name: dshm
       volumes:
         - name: timescaledb-pv
           persistentVolumeClaim:
             claimName: timescaledb-pvc
+        - name: timescaledb-pv-2
+          persistentVolumeClaim:
+            claimName: timescaledb-pvc-2
+        - name: timescaledb-pv-3
+          persistentVolumeClaim:
+            claimName: timescaledb-pvc-3
         - name: dshm
           emptyDir:
             sizeLimit: 4Gi

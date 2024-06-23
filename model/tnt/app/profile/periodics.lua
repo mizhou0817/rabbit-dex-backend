@@ -87,9 +87,9 @@ function periodics._do_profile_periodics()
             log.warn("no profile for profile_id = %d", profile_cache.id)
         else
             local channel = "account@" .. tostring(profile_id)
-            local json_update = json.encode({ data = profile_cache:tomap({ names_only = true }) })
+            local json_update = json.encode(profile_cache:tomap({ names_only = true }))
 
-            rpc.callrw_pubsub_publish(channel, json_update, 0, 0, 0)
+            pubsub_publish(channel, json_update)
             json_update = nil
 
             count = count + 1

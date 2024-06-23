@@ -4,12 +4,13 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+	"time"
+
 	sq "github.com/Masterminds/squirrel"
 	"github.com/jackc/pgx/v5"
 	"github.com/jackc/pgx/v5/pgxpool"
 	"github.com/shopspring/decimal"
 	"github.com/strips-finance/rabbit-dex-backend/model"
-	"time"
 )
 
 type BlastAssetsLoaded struct {
@@ -31,22 +32,22 @@ type BfxAssetsLoaded struct {
 	ProfileID uint `db:"profile_id" json:"profile_id"`
 	BatchID   uint `db:"batch_id"   json:"batch_id"`
 
-	TradingPoints 		float64 `db:"trading_points"       json:"trading_points"`
-	StakingPoints 		float64 `db:"staking_points"       json:"staking_points"`
-	BonusPoints   		float64 `db:"bonus_points"         json:"bonus_points"`
-	ReferralPoints  	float64 `db:"referral_points"      json:"referral_points"`
-	TotalPoints   		float64 `db:"total_points"         json:"total_points"`
-	VIPExtraBoost 		float64 `db:"vip_extra_boost"      json:"vip_extra_boost"`
-	Wallet        		string  `db:"wallet"               json:"wallet"`
-	Liquidations   		float64 `db:"liquidations"         json:"liquidations"`
-	ReferralBoost  		float64 `db:"referral_boost"       json:"referral_boost"`
-	TradingLevel    	string  `db:"trading_level"        json:"trading_level"`
-	TradingBoost   		float64 `db:"trading_boost"        json:"trading_boost"`
-	CumulativeVolume   	float64 `db:"cumulative_volume"    json:"cumulative_volume"`
-	Timestamp  			uint64  `db:"timestamp"            json:"timestamp"`
+	TradingPoints    float64 `db:"trading_points"       json:"trading_points"`
+	StakingPoints    float64 `db:"staking_points"       json:"staking_points"`
+	BonusPoints      float64 `db:"bonus_points"         json:"bonus_points"`
+	ReferralPoints   float64 `db:"referral_points"      json:"referral_points"`
+	TotalPoints      float64 `db:"total_points"         json:"total_points"`
+	VIPExtraBoost    float64 `db:"vip_extra_boost"      json:"vip_extra_boost"`
+	Wallet           string  `db:"wallet"               json:"wallet"`
+	Liquidations     float64 `db:"liquidations"         json:"liquidations"`
+	ReferralBoost    float64 `db:"referral_boost"       json:"referral_boost"`
+	TradingLevel     string  `db:"trading_level"        json:"trading_level"`
+	TradingBoost     float64 `db:"trading_boost"        json:"trading_boost"`
+	CumulativeVolume float64 `db:"cumulative_volume"    json:"cumulative_volume"`
+	Timestamp        uint64  `db:"timestamp"            json:"timestamp"`
 
-	AveragePositions 		AveragePositions	`db:"-"                 json:"average_positions"`
-	AveragePositionsJSON 	[]byte 			 	`db:"average_positions" json:"-"`
+	AveragePositions     AveragePositions `db:"-"                 json:"average_positions"`
+	AveragePositionsJSON []byte           `db:"average_positions" json:"-"`
 }
 
 type AveragePositions struct {
@@ -71,19 +72,19 @@ type BlastAssets struct {
 }
 
 type BfxPoints struct {
-	ProfileID 		uint    `db:"profile_id"       json:"profile_id"`
-	BatchID   		uint    `db:"batch_id"         json:"batch_id"`
-	ExchangeID      string  `db:"exchange_id"      json:"exchange_id"`
-	BonusPoints   	float64 `db:"bonus_points"     json:"bonus_points"`
-	BfxPointsTotal	float64 `db:"bfx_points_total" json:"bfx_points_total"`
-	Timestamp  		uint64  `db:"timestamp"        json:"timestamp"`
+	ProfileID      uint    `db:"profile_id"       json:"profile_id"`
+	BatchID        uint    `db:"batch_id"         json:"batch_id"`
+	ExchangeID     string  `db:"exchange_id"      json:"exchange_id"`
+	BonusPoints    float64 `db:"bonus_points"     json:"bonus_points"`
+	BfxPointsTotal float64 `db:"bfx_points_total" json:"bfx_points_total"`
+	Timestamp      uint64  `db:"timestamp"        json:"timestamp"`
 
-	BfxPoints24H    float64 `json:"bfx_points_24h"`
+	BfxPoints24H float64 `json:"bfx_points_24h"`
 }
 
 type BfxGetPointsRequest struct {
-	ProfileID 		uint    `json:"profile_id"`
-	BatchID   		uint    `json:"batch_id"`
+	ProfileID uint `json:"profile_id"`
+	BatchID   uint `json:"batch_id"`
 }
 
 type BlastLoadBatchResult struct {
@@ -249,8 +250,8 @@ func BfxLoadAssetsBatch(ctx context.Context, db *pgxpool.Pool, batch []BfxAssets
 				bfxAsset.TradingPoints,
 				bfxAsset.StakingPoints,
 				bfxAsset.BonusPoints,
-				bfxAsset.TotalPoints,
 				bfxAsset.ReferralPoints,
+				bfxAsset.TotalPoints,
 				bfxAsset.VIPExtraBoost,
 				bfxAsset.Wallet,
 				bfxAsset.Liquidations,
@@ -270,6 +271,7 @@ func BfxLoadAssetsBatch(ctx context.Context, db *pgxpool.Pool, batch []BfxAssets
 		sql := fmt.Sprintf(`
 			WITH inserted as NOT MATERIALIZED (
 				%s
+				RETURNING 1
 			)
 			SELECT count(*) FROM inserted`,
 			insertSQL,
@@ -351,7 +353,7 @@ func aggregateAndInsertBfxPoints(ctx context.Context, db *pgxpool.Pool, batch []
 		if bfxPoints, exist := aggregatedData[bfxAsset.ProfileID]; exist {
 			bfxPoints.BonusPoints += bfxAsset.BonusPoints
 			bfxPoints.BfxPointsTotal += bfxAsset.TotalPoints
-			if bfxAsset.Timestamp < bfxPoints.Timestamp {
+			if bfxAsset.Timestamp > bfxPoints.Timestamp {
 				bfxPoints.Timestamp = bfxAsset.Timestamp
 			}
 			aggregatedData[bfxAsset.ProfileID] = bfxPoints
@@ -813,11 +815,11 @@ func calculateBfxPoints24H(ctx context.Context, db *pgxpool.Pool, profileID uint
 	var bfxPoints24H float64
 
 	// Calculate the timestamp for 24 hours ago
-	oneDayAgo := time.Now().Add(-24 * time.Hour).Unix()
+	oneDayAgo := uint(time.Now().Add(-24 * time.Hour).Unix())
 
 	query := sq.StatementBuilder.PlaceholderFormat(sq.Dollar).
-		Select("COALESCE(SUM(bfx_points_total), 0)").
-		From("app_bfx_points").
+		Select("COALESCE(SUM(total_points), 0)").
+		From("app_bfx_game_assets").
 		Where(sq.And{
 			sq.Eq{"profile_id": profileID},
 			sq.GtOrEq{"timestamp": oneDayAgo},
@@ -825,13 +827,13 @@ func calculateBfxPoints24H(ctx context.Context, db *pgxpool.Pool, profileID uint
 
 	sql, args, err := query.ToSql()
 	if err != nil {
-		return 0, fmt.Errorf("failed to build query for app_bfx_points 24H: %w", err)
+		return 0, fmt.Errorf("failed to build query for app_bfx_game_assets 24H: %w", err)
 	}
 
 	row := db.QueryRow(ctx, sql, args...)
 	err = row.Scan(&bfxPoints24H)
 	if err != nil {
-		return 0, fmt.Errorf("failed to scan app_bfx_points 24H: %w", err)
+		return 0, fmt.Errorf("failed to scan app_bfx_game_assets 24H: %w", err)
 	}
 
 	return bfxPoints24H, nil

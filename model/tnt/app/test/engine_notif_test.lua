@@ -18,7 +18,7 @@ local g = t.group('engine.notif')
 local work_dir = fio.tempdir()
 
 local mock_rpc = {call={}}
-function mock_rpc.callrw_pubsub_publish(channel, json_data, ttl, size, meta_ttl)
+function pubsub_publish(channel, json_data, ttl, size, meta_ttl)
     table.insert(mock_rpc.call, {channel, json_data})
 end
 

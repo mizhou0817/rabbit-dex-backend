@@ -490,6 +490,7 @@ api-gateway:
 profile:
   instances:
   - profile
+  - profile-2
   roles:
   - profile
   - test_debug
@@ -502,15 +503,6 @@ auth:
   - auth
   roles:
   - auth
-  - dev
-  weight: 1
-  all_rw: false
-
-pubsub:
-  instances:
-  - pubsub
-  roles:
-  - pubsub
   - dev
   weight: 1
   all_rw: false

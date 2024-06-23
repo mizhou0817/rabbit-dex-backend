@@ -91,7 +91,7 @@ function p.new_order(
     matching_meta
 )
     checks('number', 'string', 'string', 'string', '?decimal', '?decimal', '?string', '?decimal', '?decimal', '?string', '?string', '?table|matching_meta')
-    local res, err, profile, market
+    local res, err
 
     deadman.touch(profile_id)
 
@@ -100,26 +100,41 @@ function p.new_order(
         return {task = nil, order = nil, error = tostring(res["error"])}
     end
 
-    rpc.callrw_profile("ensure_cache", {profile_id})
+    -- Check that client_order_id was not used:
+    if is_client_order_id_available(profile_id, client_order_id) == false then
+        return {task = nil, order = nil, error = ERR_CLIENT_ORDER_ID_DUPLICATE}
+    end
+    -- PUT ORDER TO THE QUEUE --
 
+    res = equeue.which_qname(market_id, config.sys.QUEUE_TYPE.MARKET)
+    if res["error"] ~= nil then
+        log.error(PublicAPIError:new(res["error"]))
+        return {task = nil, order = nil, error = tostring(res["error"])}
+    end
+    local qname = res["res"]
+
+    res = equeue.check_queue_limit(qname)
+    if res["error"] ~= nil then
+        return {task = nil, order = nil, error = tostring(res["error"])}
+    end
+
+    local profile, market
     profile, market, err = getters.load_profile_and_market(profile_id, market_id)
     if err ~= nil then
+        log.error(PublicAPIError:new(err))
         return {task = nil, order = nil, error = tostring(err)}
     end
 
     err = risk.check_profile(profile)
     if err ~= nil then
+        log.error(PublicAPIError:new(err))
         return {task = nil, order = nil, error = tostring(err)}
     end
 
     err = risk.check_market(market)
     if err ~= nil then
+        log.error(PublicAPIError:new(err))
         return {task = nil, order = nil, error = tostring(err)}
-    end
-
-    -- Check that client_order_id was not used:
-    if is_client_order_id_available(profile_id, client_order_id) == false then
-        return {task = nil, order = nil, error = ERR_CLIENT_ORDER_ID_DUPLICATE}
     end
 
     local order_req = { -- make it later as api_create_order struct 
@@ -140,19 +155,6 @@ function p.new_order(
         return {task = nil, order = nil, error = tostring(err)}
     end
 
-    -- PUT ORDER TO THE QUEUE --
-
-    res = equeue.which_qname(market_id, config.sys.QUEUE_TYPE.MARKET)
-    if res["error"] ~= nil then
-        log.error(PublicAPIError:new(res["error"]))
-        return {task = nil, order = nil, error = tostring(res["error"])}
-    end
-    local qname = res["res"]
-
-    res = equeue.check_queue_limit(qname)
-    if res["error"] ~= nil then
-        return {task = nil, order = nil, error = tostring(res["error"])}
-    end
 
     local order_id = custom_order_id
     if order_id == nil or order_id == '' then
@@ -230,33 +232,11 @@ function p.cancel_order(
             return {task = nil, order = nil, error = "ORDER_ID_OR_CLIENT_ORDER_ID_REQUIRED"}
     end
 
-    local res, e, profile, market, task, qname
+    local res, e, task, qname
 
     res = equeue.check_limit(profile_id)
     if res["error"] ~= nil then
         return {task = nil, order = nil, error = res["error"]}
-    end
-
-    rpc.callrw_profile("ensure_cache", {profile_id})
-
-    profile, market, e = getters.load_profile_and_market(profile_id, market_id)
-    if e ~= nil then
-        log.error(PublicAPIError:new(e))
-        return {task = nil, order = nil, error = e}
-    end
-
-    -- We allowed to cancel when market is not active
-    --[[
-    e = risk.check_market(market)
-    if e ~= nil then
-        return {task = nil, order = nil, error = e}
-    end
-    --]]
-
-
-    e = risk.check_profile(profile)
-    if e ~= nil then
-        return {task = nil, order = nil, error = tostring(e)}
     end
 
     -- IF ORDER STILL IN THE QUEUE - cancel it --
@@ -327,6 +307,23 @@ function p.cancel_order(
         return {task = nil, order = nil, error = "duplicated cancel action"}
     end
 
+    local profile
+    profile, e = getters.get_profile(profile_id)
+    if e ~= nil then
+        log.error(PublicAPIError:new(e))
+        return {task = nil, order = nil, error = tostring(e)}
+    end
+    if profile == nil then
+        local text = "profile_id=" .. tostring(profile_id) .. "not found"
+        log.error(PublicAPIError:new(text))
+        return {task = nil, order = nil, error = text}
+    end
+
+    e = risk.check_profile(profile)
+    if e ~= nil then
+        log.error(PublicAPIError:new(e))
+        return {task = nil, order = nil, error = tostring(e)}
+    end
 
     local order, task_data = action.pack_cancel(profile_id, market_id, order_id, client_order_id)
 
@@ -371,26 +368,6 @@ function p.amend_order(
         return {task = nil, order = nil, error = tostring(res["error"])}
     end
 
-    rpc.callrw_profile("ensure_cache", {profile_id})
-
-    profile, market, err = getters.load_profile_and_market(profile_id, market_id)
-    if err ~= nil then
-        log.error(PublicAPIError:new(err))
-        return {task = nil, order = nil, error = tostring(err)}
-    end
-
-    err = risk.check_market(market)
-    if err ~= nil then
-        log.error(PublicAPIError:new(err))
-        return {task = nil, order = nil, error = tostring(err)}
-    end
-
-    err = risk.check_profile(profile)
-    if err ~= nil then
-        log.error(PublicAPIError:new(err))
-        return {task = nil, order = nil, error = tostring(err)}
-    end
-
     -- FIND ORDER and CHECK PARAMS
     res = rpc.callro_engine(market_id, "get_order_by_id", {order_id})
     if res["error"] ~= nil then
@@ -402,20 +379,6 @@ function p.amend_order(
     end
     if profile_id ~= curr_order.profile_id then
         return {task = nil, order = nil, error = ERR_NOT_YOUR_ORDER}
-    end
-
-    local order_req = { -- make it later as api_amend_order struct 
-        profile_id = profile_id,
-        market_id = market_id,
-        price = new_price,
-        size = new_size,
-        trigger_price = new_trigger_price,
-        size_percent = new_size_percent,
-    }
-    err = risk.pre_amend_order(order_req, curr_order, market)
-    if err ~= nil then
-        log.error(PublicAPIError:new(err))
-        return {task = nil, order = nil, error = tostring(err)}
     end
 
     -- IF ORDER STILL IN THE QUEUE - it can't be amended --
@@ -440,6 +403,39 @@ function p.amend_order(
     res = equeue.find_task(qname, tostring(profile_id), order_task_id)
     if res["res"] ~= nil then
         return {task = nil, order = nil, error = "Duplicate amend action"}
+    end
+
+    local profile, market
+    profile, market, err = getters.load_profile_and_market(profile_id, market_id)
+    if err ~= nil then
+        log.error(PublicAPIError:new(err))
+        return {task = nil, order = nil, error = tostring(err)}
+    end
+
+    err = risk.check_profile(profile)
+    if err ~= nil then
+        log.error(PublicAPIError:new(err))
+        return {task = nil, order = nil, error = tostring(err)}
+    end
+
+    err = risk.check_market(market)
+    if err ~= nil then
+        log.error(PublicAPIError:new(err))
+        return {task = nil, order = nil, error = tostring(err)}
+    end
+
+    local order_req = { -- make it later as api_amend_order struct 
+        profile_id = profile_id,
+        market_id = market_id,
+        price = new_price,
+        size = new_size,
+        trigger_price = new_trigger_price,
+        size_percent = new_size_percent,
+    }
+    err = risk.pre_amend_order(order_req, curr_order, market)
+    if err ~= nil then
+        log.error(PublicAPIError:new(err))
+        return {task = nil, order = nil, error = tostring(err)}
     end
 
     -- ORDER NOT IN THE QUEUE - let's create the task ----

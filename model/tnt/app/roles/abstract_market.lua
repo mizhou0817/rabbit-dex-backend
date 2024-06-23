@@ -79,6 +79,9 @@ local function new(role_name, market_config)
 
     return {
         role_name = role_name,
+        dependencies = {
+            'app.roles.pubsub',
+        },
         init = function(opts)
             checks('?table')
             return init(opts, market_config)

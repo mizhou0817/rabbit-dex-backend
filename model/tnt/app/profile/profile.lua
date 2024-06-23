@@ -44,7 +44,7 @@ function profile.create(profile_type, status, wallet, exchange_id)
         })
         return { res = nil, error = "CANT_INSERT_PROFILE" }
     end
-    
+
     local success, err = pcall(balance.resolve_all_unknown, res.id, l_wallet, l_exchange_id)
     if not success then
         log.error({
@@ -53,6 +53,8 @@ function profile.create(profile_type, status, wallet, exchange_id)
         })
         return { res = nil, error = tostring(err) }
     end
+
+    cache.ensure_cache(res.id)
 
     return { res = res, error = nil }
 end

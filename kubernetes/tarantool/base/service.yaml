@@ -594,18 +594,18 @@ spec:
     - name: profile-http
       port: 8004
       targetPort: 8004
+    - name: profile-2
+      port: 3104
+      targetPort: 3104
+    - name: profile-2-http
+      port: 8104
+      targetPort: 8104
     - name: auth
       port: 3005
       targetPort: 3005
     - name: auth-http
       port: 8005
       targetPort: 8005
-    - name: pubsub
-      port: 9001
-      targetPort: 9001
-    - name: pubsub-http
-      port: 8006
-      targetPort: 8006
   selector:
     app: tarantool
   type: ClusterIP

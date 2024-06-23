@@ -13,8 +13,6 @@ local util = require('app.util')
 
 local err = errors.new_class("notif_error")
 
-local channel_size = 1000
-
 local conditional_orders = {
     config.params.ORDER_TYPE.STOP_LOSS,
     config.params.ORDER_TYPE.TAKE_PROFIT,
@@ -40,10 +38,8 @@ local function send_conditional_order(order)
 
     if util.is_value_in(order.order_type, conditional_orders) then
         local channel = "conditional:" .. order.market_id
-        local json_update = json.encode({
-            data = {orders = {order}},
-        })
-        rpc.callrw_pubsub_publish(channel, json_update, 0, 0, 0)
+        local json_update = json.encode({orders = {order}})
+        pubsub_publish(channel, json_update)
     end
 end
 
@@ -163,9 +159,9 @@ function notif.notify_market(market_id)
     end
 
     local channel = "market:" .. tostring(market_id)
-    local json_update = json.encode({data=market:tomap({names_only=true})})
+    local json_update = json.encode(market:tomap({names_only=true}))
     
-    rpc.callrw_pubsub_publish(channel, json_update, 0, 0, 0)
+    pubsub_publish(channel, json_update)
     
     json_update = nil
 end
@@ -205,15 +201,15 @@ function notif.notify_account(market_id)
 
     for profile_id, data in pairs(id_to_data) do
         local channel = "account@" .. tostring(profile_id)
-        local json_update = json.encode({data=data})
-        rpc.callrw_pubsub_publish(channel, json_update, 0, 0, 0)
+        local json_update = json.encode(data)
+        pubsub_publish(channel, json_update)
     end
 
     --TODO: move conditional part to some common part
     if #conditional.orders > 0 then
         local channel = "conditional:" .. market_id
-        local json_update = json.encode({data=conditional})
-        rpc.callrw_pubsub_publish(channel, json_update, 0, 0, 0)
+        local json_update = json.encode(conditional)
+        pubsub_publish(channel, json_update)
         conditional.orders = {}
     end
 end
@@ -274,20 +270,20 @@ function notif.notify_from_table(notifications, market_id)
         if nf.orderbook ~= nil and (#nf.orderbook.bids > 0 or #nf.orderbook.asks > 0) then
             channel = "orderbook:" .. market_id
 
-            json_update = json.encode({data=nf.orderbook})
-            rpc.callrw_pubsub_publish(channel, json_update, 100, channel_size, 100)
+            json_update = json.encode(nf.orderbook)
+            pubsub_publish(channel, json_update)
         end
 
         if nf.trades ~= nil and #nf.trades > 0 then
             channel = "trade:" .. market_id
-            json_update = json.encode({data=nf.trades})
-            rpc.callrw_pubsub_publish(channel, json_update, 100, channel_size, 100)
+            json_update = json.encode(nf.trades)
+            pubsub_publish(channel, json_update)
         end
 
         if nf.market ~= nil and next(nf.market) ~= nil then
             channel = "market:" .. market_id    
-            json_update = json.encode({data=nf.market})
-            rpc.callrw_pubsub_publish(channel, json_update, 0, 0, 0)
+            json_update = json.encode(nf.market)
+            pubsub_publish(channel, json_update)
         end
     end
 end
@@ -320,8 +316,8 @@ function notif.notify(market_id, sequence)
         table.insert(update.asks, ask:totable())
     end
 
-    local json_update = json.encode({data=update})
-    rpc.callrw_pubsub_publish(channel, json_update, 100, channel_size, 100)
+    local json_update = json.encode(update)
+    pubsub_publish(channel, json_update)
     update = nil
 
     update = {}
@@ -331,8 +327,8 @@ function notif.notify(market_id, sequence)
 
     if #update > 0 then
         channel = "trade:" .. market_id
-        json_update = json.encode({data=update})
-        rpc.callrw_pubsub_publish(channel, json_update, 100, channel_size, 100)
+        json_update = json.encode(update)
+        pubsub_publish(channel, json_update)
     end
     update = nil
 
@@ -352,8 +348,8 @@ function notif.notify(market_id, sequence)
             adv = market.average_daily_volume
         }
 
-        json_update = json.encode({data=update})
-        rpc.callrw_pubsub_publish(channel, json_update, 0, 0, 0)
+        json_update = json.encode(update)
+        pubsub_publish(channel, json_update)
         update = nil
     end
 
@@ -373,8 +369,8 @@ function notif.notify_position(profile_id, position_id)
         positions = {exist:tomap({names_only=true})}
     }
 
-    local json_update = json.encode({data=update})
-    rpc.callrw_pubsub_publish(channel, json_update, 0, 0, 0)
+    local json_update = json.encode(update)
+    pubsub_publish(channel, json_update)
 
     update = nil
 
@@ -395,9 +391,9 @@ function notif.notify_order(profile_id, order_id)
         id = profile_id,
         orders = {order}
     }
-    local json_update = json.encode({data=update})
+    local json_update = json.encode(update)
 
-    rpc.callrw_pubsub_publish(channel, json_update, 0, 0, 0)
+    pubsub_publish(channel, json_update)
     update = nil
 
     send_conditional_order(order)
@@ -428,9 +424,9 @@ function notif.send_profile_notification(profile_id, n_type, n_title, n_descript
             description = n_description    
         }}
     }
-    local json_update = json.encode({data=update})
+    local json_update = json.encode(update)
 
-    rpc.callrw_pubsub_publish(channel, json_update, 0, 0, 0)
+    pubsub_publish(channel, json_update)
     update = nil
 
     return nil
@@ -477,9 +473,9 @@ function notif.send_profile_notification_with_order(profile_id, n_type, n_title,
         id = profile_id,
         orders = {order:tomap({names_only=true})}
     }
-    local json_update = json.encode({data=update})
+    local json_update = json.encode(update)
 
-    rpc.callrw_pubsub_publish(channel, json_update, 0, 0, 0)
+    pubsub_publish(channel, json_update)
     update = nil
 
     if order ~= nil then

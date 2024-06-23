@@ -218,48 +218,30 @@ end
 function cache.get_cache_and_meta(profile_ids, market_id)
     checks("table", "string")
 
-    local _ensure_cache = function (profile_id)
-        local exist = box.space.profile_cache:get(profile_id)
-        if exist == nil then
-            local err = cache.update(profile_id)
-            if err ~= nil then
-                return {res=nil, error=err}
-            end
-        
-            exist = box.space.profile_cache:get(profile_id)
-            if exist == nil then
-                local text = "NO_CACHE_FOR_PROFILE_" .. tostring(profile_id)
-                return {res=nil, error=text}
-            end
-        end
-        
-        return {res=exist, error=nil}
-    end
-
     local res = {}
-    for _, pid in pairs(profile_ids) do
-        local _res = _ensure_cache(pid)
-        
-        local _err = _res["error"]
-        local _cache = _res["res"]
-        if _err == nil then
-            local _meta = cache.get_meta(pid, market_id)
-            table.insert(res, {
-                profile_id = pid,
-                cache = _cache,
-                meta = _meta
-            })
-        else
+    for _, profile_id in pairs(profile_ids) do
+        local pc = box.space.profile_cache:get(profile_id)
+        if pc == nil then
+            local text = "NO_CACHE_FOR_PROFILE_" .. tostring(profile_id)
             log.error({
                 message = string.format(
-                    "%s: : pid=%s error=%s",
+                    "%s: profile_id=%s error=%s",
                     ERR_GET_CACHE,
-                    tostring(pid),
-                    tostring(_err)
+                    tostring(profile_id),
+                    text
                 ),
                 [ALERT_TAG] = ALERT_CRIT,
             })
+            return {res=nil, error=text}
         end
+
+        local mt = cache.get_meta(profile_id, market_id)
+
+        table.insert(res, {
+            profile_id = profile_id,
+            cache = pc,
+            meta = mt,
+        })
     end
 
     return {res=res, error=nil}
@@ -270,16 +252,8 @@ function cache.get_cache(profile_id)
 
     local exist = box.space.profile_cache:get(profile_id)
     if exist == nil then
-        local err = cache.update(profile_id)
-        if err ~= nil then
-            return {res=nil, error=err}
-        end
-    
-        exist = box.space.profile_cache:get(profile_id)
-        if exist == nil then
-            local text = "NO_CACHE_FOR_PROFILE_" .. tostring(profile_id)
-            return {res=nil, error=text}
-        end
+        local text = "NO_CACHE_FOR_PROFILE_" .. tostring(profile_id)
+        return {res=nil, error=text}
     end
 
     return {res = exist, error = nil}
@@ -336,9 +310,9 @@ function cache.invalidate_cache_and_notify(profile_id)
     local updated_cache = res["res"]
     if updated_cache ~= nil then
         local channel = "account@" .. tostring(profile_id)        
-        local json_update = json.encode({data=updated_cache:tomap({names_only=true})})
+        local json_update = json.encode(updated_cache:tomap({names_only=true}))
         
-        rpc.callrw_pubsub_publish(channel, json_update, 0, 0, 0)
+        pubsub_publish(channel, json_update)
         json_update = nil
     end
 

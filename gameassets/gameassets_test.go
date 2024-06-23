@@ -4,6 +4,7 @@ import (
 	"context"
 	"strconv"
 	"testing"
+	"time"
 
 	sq "github.com/Masterminds/squirrel"
 	"github.com/stretchr/testify/require"
@@ -200,8 +201,8 @@ func (s *gameAssetsTestSuite) TestBlastAssets() {
 			s.addBalanceOp("withdraw", invitee, 12345)
 			s.addBalanceOp("stake", invitee, 5000)
 			s.addBalanceOp("unstake", invitee, 10)
-			s.addProfile(invitee, "0x12345")
-			s.addProfile(inviter, "0x1")
+			s.addProfile(invitee, "0x12345", "exchangeid")
+			s.addProfile(inviter, "0x1", "exchangeid")
 		}
 		{
 			inviter := 1000001
@@ -241,9 +242,9 @@ func (s *gameAssetsTestSuite) TestBlastLeaderboard() {
 	ctx := context.Background()
 
 	{ // setup
-		s.addProfile(0, "wallet0")
-		s.addProfile(1, "wallet1")
-		s.addProfile(2, "wallet2")
+		s.addProfile(0, "wallet0", "exchangeid")
+		s.addProfile(1, "wallet1", "exchangeid")
+		s.addProfile(2, "wallet2", "exchangeid")
 		inviter, invitee := 1, 2
 		s.addReferralLink(inviter, invitee)
 		s.addFill(map[string]any{"profile_id": 2, "price": 2222, "size": 1})
@@ -343,14 +344,14 @@ func (s *gameAssetsTestSuite) addReferralLink(inviter int, invitee int) {
 	s.insert("app_referral_link", row)
 }
 
-func (s *gameAssetsTestSuite) addProfile(profileId int, wallet string) {
+func (s *gameAssetsTestSuite) addProfile(profileId int, wallet string, exchangeId string) {
 	row := map[string]any{
 		"id":                profileId,
 		"profile_type":      "profile_type",
 		"status":            "status",
 		"wallet":            wallet,
 		"created_at":        1712664891 + nextId(),
-		"exchange_id":       "exchange_id",
+		"exchange_id":       exchangeId,
 		"shard_id":          "1",
 		"archive_id":        nextId(),
 		"archive_timestamp": 1712664891 + nextId(),
@@ -445,4 +446,207 @@ func (s *gameAssetsTestSuite) TestBatchTooLarge() {
 	res, err := gameassets.BlastLoadAssetsBatch(ctx, s.GetDB(), records)
 	require.ErrorContains(err, "batch size exceeds 1000 records")
 	require.Nil(res)
+}
+
+func (s *gameAssetsTestSuite) TestBfxLoadAssetsBatch() {
+	require := s.Require()
+	ctx := context.Background()
+
+	// Create a batch with the same batch_id and multiple records for the same profile_id
+	batchID := uint(1)
+	profileID := uint(123)
+	batch := []gameassets.BfxAssetsLoaded{
+		{
+			ProfileID:        profileID,
+			BatchID:          batchID,
+			TradingPoints:    10.0,
+			StakingPoints:    20.0,
+			BonusPoints:      5.0,
+			ReferralPoints:   2.0,
+			TotalPoints:      37.0,
+			VIPExtraBoost:    1.0,
+			Wallet:           "wallet1",
+			Liquidations:     0.0,
+			ReferralBoost:    0.0,
+			TradingLevel:     "level1",
+			TradingBoost:     0.0,
+			CumulativeVolume: 100.0,
+			Timestamp:        uint64(time.Now().Unix()),
+			AveragePositions: gameassets.AveragePositions{
+				Positions: map[string]float64{"BTC": 0.5},
+			},
+		},
+		{
+			ProfileID:        profileID,
+			BatchID:          batchID,
+			TradingPoints:    15.0,
+			StakingPoints:    25.0,
+			BonusPoints:      10.0,
+			ReferralPoints:   5.0,
+			TotalPoints:      55.0,
+			VIPExtraBoost:    2.0,
+			Wallet:           "wallet2",
+			Liquidations:     0.0,
+			ReferralBoost:    0.0,
+			TradingLevel:     "level2",
+			TradingBoost:     0.0,
+			CumulativeVolume: 200.0,
+			Timestamp:        uint64(time.Now().Unix()),
+			AveragePositions: gameassets.AveragePositions{
+				Positions: map[string]float64{"ETH": 1.0},
+			},
+		},
+	}
+
+	s.addProfile(int(profileID), "wallet1", "exchangeid123")
+
+	// Test basic functionality
+	result, err := gameassets.BfxLoadAssetsBatch(ctx, s.GetDB(), batch)
+	require.NoError(err)
+	require.NotNil(result)
+	require.Equal(2, result.InsertedRecordCount)
+	// Verify aggregated data in app_bfx_points table
+	row := s.GetDB().QueryRow(ctx, `
+		SELECT exchange_id, bonus_points, bfx_points_total
+		FROM app_bfx_points
+		WHERE profile_id = $1 AND batch_id = $2
+	`, profileID, batchID)
+	var exchangeId string
+	var bonusPoints, bfxPointsTotal float64
+	err = row.Scan(&exchangeId, &bonusPoints, &bfxPointsTotal)
+	require.NoError(err)
+	require.Equal("exchangeid123", exchangeId)
+	require.Equal(15.0, bonusPoints)
+	require.Equal(92.0, bfxPointsTotal)
+	// Test batch size limit
+	largeBatch := make([]gameassets.BfxAssetsLoaded, gameassets.BFX_LOAD_ASSETS_MAX_BATCH_LEN+1)
+	for i := range largeBatch {
+		largeBatch[i] = batch[0]
+	}
+	_, err = gameassets.BfxLoadAssetsBatch(ctx, s.GetDB(), largeBatch)
+	require.Error(err)
+	require.Contains(err.Error(), "bfx batch size exceeds 1000 records")
+	// Test performance with a large batch
+	performanceBatch := make([]gameassets.BfxAssetsLoaded, gameassets.BFX_LOAD_ASSETS_MAX_BATCH_LEN)
+	for i := range performanceBatch {
+		performanceBatch[i] = batch[0]
+	}
+	startTime := time.Now()
+	_, err = gameassets.BfxLoadAssetsBatch(ctx, s.GetDB(), performanceBatch)
+	require.NoError(err)
+	duration := time.Since(startTime)
+	require.Less(duration.Seconds(), 5.0, "Performance test should complete within 5 seconds")
+	// Test concurrent processing
+	concurrency := 10
+	ch := make(chan error, concurrency)
+	for i := 0; i < concurrency; i++ {
+		go func() {
+			_, err := gameassets.BfxLoadAssetsBatch(ctx, s.GetDB(), batch)
+			ch <- err
+		}()
+	}
+	for i := 0; i < concurrency; i++ {
+		err := <-ch
+		require.NoError(err)
+	}
+}
+
+func (s *gameAssetsTestSuite) TestBfxGetPoints() {
+	require := s.Require()
+	ctx := context.Background()
+	// Step 1: Insert test data using BfxLoadAssetsBatch
+	profileID := uint(123)
+	batchID := uint(1)
+	now := time.Now()
+	batch := []gameassets.BfxAssetsLoaded{
+		{
+			ProfileID:        profileID,
+			BatchID:          batchID,
+			TradingPoints:    10.0,
+			StakingPoints:    20.0,
+			BonusPoints:      5.0,
+			ReferralPoints:   2.0,
+			TotalPoints:      37.0,
+			VIPExtraBoost:    1.0,
+			Wallet:           "wallet1",
+			Liquidations:     0.0,
+			ReferralBoost:    0.0,
+			TradingLevel:     "level1",
+			TradingBoost:     0.0,
+			CumulativeVolume: 100.0,
+			Timestamp:        uint64(now.Unix()),
+			AveragePositions: gameassets.AveragePositions{
+				Positions: map[string]float64{"BTC": 0.5},
+			},
+		},
+		{
+			ProfileID:        profileID,
+			BatchID:          batchID,
+			TradingPoints:    15.0,
+			StakingPoints:    25.0,
+			BonusPoints:      10.0,
+			ReferralPoints:   5.0,
+			TotalPoints:      55.0,
+			VIPExtraBoost:    2.0,
+			Wallet:           "wallet2",
+			Liquidations:     0.0,
+			ReferralBoost:    0.0,
+			TradingLevel:     "level2",
+			TradingBoost:     0.0,
+			CumulativeVolume: 200.0,
+			Timestamp:        uint64(now.Add(-23 * time.Hour).Unix()), // within 24 hours
+			AveragePositions: gameassets.AveragePositions{
+				Positions: map[string]float64{"ETH": 1.0},
+			},
+		},
+		{
+			ProfileID:        profileID,
+			BatchID:          batchID,
+			TradingPoints:    5.0,
+			StakingPoints:    10.0,
+			BonusPoints:      2.0,
+			ReferralPoints:   1.0,
+			TotalPoints:      18.0,
+			VIPExtraBoost:    0.5,
+			Wallet:           "wallet3",
+			Liquidations:     0.0,
+			ReferralBoost:    0.0,
+			TradingLevel:     "level3",
+			TradingBoost:     0.0,
+			CumulativeVolume: 50.0,
+			Timestamp:        uint64(now.Add(-25 * time.Hour).Unix()), // outside 24 hours
+			AveragePositions: gameassets.AveragePositions{
+				Positions: map[string]float64{"LTC": 0.3},
+			},
+		},
+	}
+	// Insert profile for the given profileID
+	s.addProfile(int(profileID), "wallet1", "exchangeid123")
+	// Load the batch into the database
+	result, err := gameassets.BfxLoadAssetsBatch(ctx, s.GetDB(), batch)
+	require.NoError(err)
+	require.NotNil(result)
+	require.Equal(3, result.InsertedRecordCount)
+	// Step 2: Call BfxGetPoints to retrieve the calculated points
+	request := gameassets.BfxGetPointsRequest{
+		ProfileID: profileID,
+		BatchID:   batchID,
+	}
+	points, err := gameassets.BfxGetPoints(ctx, s.GetDB(), request)
+	require.NoError(err)
+
+	// Step 3: Validate the total points calculated in the last 24 hours from all records for the profile id
+	expectedTotalPoints24H := 37.0 + 55.0
+	require.Equal(expectedTotalPoints24H, points.BfxPoints24H)
+
+	// Step 4: Validate other fields
+	expectedTotalPoints := 37.0 + 55.0 + 18.0 // Total points for the batch id + profile id
+	expectedBonusPoints := 5.0 + 10.0 + 2.0   // Total bonus points for the batch id + profile id
+	expectedTimestamp := uint64(now.Unix())
+	require.Equal(profileID, points.ProfileID)
+	require.Equal(batchID, points.BatchID)
+	require.Equal("exchangeid123", points.ExchangeID)
+	require.Equal(expectedTotalPoints, points.BfxPointsTotal)
+	require.Equal(expectedBonusPoints, points.BonusPoints)
+	require.Equal(expectedTimestamp, points.Timestamp)
 }

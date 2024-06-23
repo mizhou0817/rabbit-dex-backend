@@ -45,12 +45,14 @@ local function init(opts) -- luacheck: no unused args
                     error(err)
                 end
             end
-
-            periodics.start()
         else
             log.warn("*** SYNC MODE for profile role")
         end
+
+    -- this periodics have no any async bizlogic activity
+    periodics.start()
     end
+
     rawset(_G, 'profile', profile)
     rawset(_G, 'getters', getters)
     rawset(_G, 'setters', setters)
@@ -68,6 +70,9 @@ end
 
 return {
     role_name = 'profile',
+    dependencies = {
+        'app.roles.pubsub',
+    },
     init = init,
     stop = stop,
     utils = {

@@ -64,7 +64,7 @@ func (api *ApiModel) CreateAirdrop(ctx context.Context, title string, start_time
 }
 
 func (api *ApiModel) GetProfileAirdrops(ctx context.Context, profile_id uint) ([]*ProfileAirdrop, error) {
-	return DataResponse[[]*ProfileAirdrop]{}.Request(ctx, PROFILE_INSTANCE, api.broker, GET_PROFILE_AIRDROPS, []interface{}{
+	return DataResponse[[]*ProfileAirdrop]{}.Request(ctx, ReadOnly(PROFILE_INSTANCE), api.broker, GET_PROFILE_AIRDROPS, []interface{}{
 		profile_id,
 	})
 }
@@ -144,7 +144,7 @@ func (api *ApiModel) TestCreateClaimOps(ctx context.Context, profile_id uint, ai
 }
 
 func (api *ApiModel) TestGetClaimOps(ctx context.Context, ops_id uint) (*AirdropClaimOps, error) {
-	return DataResponse[*AirdropClaimOps]{}.Request(ctx, PROFILE_INSTANCE, api.broker, TEST_GET_CLAIM_OPS, []interface{}{
+	return DataResponse[*AirdropClaimOps]{}.Request(ctx, ReadOnly(PROFILE_INSTANCE), api.broker, TEST_GET_CLAIM_OPS, []interface{}{
 		ops_id,
 	})
 }

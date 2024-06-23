@@ -16,7 +16,7 @@ local api_public = api.public
 local work_dir = fio.tempdir()
 
 local mock_rpc = {call={}}
-function mock_rpc.callrw_pubsub_publish(channel, json_data, ttl, size, meta_ttl)
+function pubsub_publish(channel, json_data, ttl, size, meta_ttl)
     t.assert_is_not(json_data, nil)
   --  log.info(json_data)
 end

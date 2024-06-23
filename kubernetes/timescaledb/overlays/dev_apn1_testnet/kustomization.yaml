@@ -20,6 +20,12 @@ patchesJson6902:
             awsElasticBlockStore:
               fsType: ext4
               volumeID: aws://ap-northeast-1d/vol-01bb359dbc52326aa
+          - name: timescaledb-pv-2
+            persistentVolumeClaim:
+              claimName: timescaledb-pvc-2
+          - name: timescaledb-pv-3
+            persistentVolumeClaim:
+              claimName: timescaledb-pvc-3
           - name: dshm
             emptyDir:
               sizeLimit: 4Gi

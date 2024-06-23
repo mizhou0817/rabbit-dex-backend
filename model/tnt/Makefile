@@ -1,3 +1,9 @@
+.PHONY: lib
+lib:
+	cargo build --manifest-path rbx/Cargo.toml \
+	&& ls rbx/target/debug | egrep '\.(so|dylib)' | xargs -I{} cp -f rbx/target/debug/{} . \
+	&& mkdir -p .rocks/share/tarantool/rbx && cp -fR rbx/lua/* .rocks/share/tarantool/rbx/
+
 .PHONY: build
 build:
 	cartridge build

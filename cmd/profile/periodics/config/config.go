@@ -15,6 +15,7 @@ type Config struct {
 		TimescaledbConnectionURI string `yaml:"timescaledb_connection_uri"`
 
 		Cache struct {
+			MetaOnly          bool          `yaml:meta_only`
 			PeriodicsInterval time.Duration `yaml:"periodics_interval"`
 			ParallelWorkers   uint          `yaml:"parallel_workers"`
 			BatchSize         uint          `yaml:"batch_size"`
@@ -36,8 +37,9 @@ type Config struct {
 		} `yaml:"tier"`
 
 		Notify struct {
-			Retries    uint          `yaml:"retries"`
-			RetryDelay time.Duration `yaml:"retry_delay"`
+			GrpcAddress string        `yaml:"grpc_address"`
+			Retries     uint          `yaml:"retries"`
+			RetryDelay  time.Duration `yaml:"retry_delay"`
 		} `yaml:"notify"`
 
 		Markets struct {

@@ -18,7 +18,7 @@ CREATE TABLE app_bfx_game_assets (
     trading_boost       FLOAT8  NOT NULL,
     cumulative_volume   FLOAT8  NOT NULL,
     timestamp           BIGINT  NOT NULL,
-    average_positions   JSONB   NOT NULL,
+    average_positions   JSONB   NOT NULL
 );
 
 CREATE INDEX app_bfx_game_assets_blockchain_profile_id_batch_id ON app_bfx_game_assets (blockchain, profile_id, batch_id desc);

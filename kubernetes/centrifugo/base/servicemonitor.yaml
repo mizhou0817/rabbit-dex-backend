@@ -1,0 +1,19 @@
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  labels:
+    release: monitoring
+  name: centrifugo
+  namespace: monitoring
+spec:
+  attachMetadata:
+    node: false
+  endpoints:
+  - port: http
+    scheme: http
+  namespaceSelector:
+    matchNames:
+    - rabbitx
+  selector:
+    matchLabels:
+      app: centrifugo
